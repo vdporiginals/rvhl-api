@@ -14,6 +14,7 @@ const AdvertiseSchema = new mongoose.Schema({
     type: mongoose.Schema.ObjectId,
     ref: 'Image'
   },
+  seo: String,
   createdAt: { type: Date, default: Date.now }
   //   destination: {
   //     type: mongoose.Schema.ObjectId,
@@ -25,6 +26,11 @@ const AdvertiseSchema = new mongoose.Schema({
   //     ref: 'Bootcamp',
   //     required: true
   //   }
+});
+
+AdvertiseSchema.pre('save', function(next) {
+  this.seo = slug(this.name, '-');
+  next();
 });
 
 module.exports = mongoose.model('Advertise', AdvertiseSchema);

@@ -9,10 +9,16 @@ const BlogSchema = new mongoose.Schema({
   content: {
     type: String
   },
+  seo: String,
   images: {
     type: mongoose.Schema.ObjectId,
     ref: 'Image'
   }
+});
+
+BlogSchema.pre('save', function(next) {
+  this.seo = slug(this.name, '-');
+  next();
 });
 
 module.exports = new mongoose.model('Blog', BlogSchema);
