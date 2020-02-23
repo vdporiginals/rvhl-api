@@ -1,5 +1,5 @@
 {
-  "name": "reviewhalong-app_server",
+  "name": "reviewhalong-app_api",
   "version": "1.0.0",
   "description": "Review Ha long backend API",
   "main": "server.js",
