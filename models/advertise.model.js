@@ -15,6 +15,10 @@ const AdvertiseSchema = new mongoose.Schema({
     ref: 'Image'
   },
   seo: String,
+  status: {
+    type: Boolean,
+    default: false
+  },
   createdAt: { type: Date, default: Date.now }
   //   destination: {
   //     type: mongoose.Schema.ObjectId,

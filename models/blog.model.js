@@ -10,9 +10,12 @@ const BlogSchema = new mongoose.Schema({
     type: String
   },
   seo: String,
-  images: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Image'
+  status: {
+    type: Boolean,
+    default: false
+  },
+  image: {
+    type: String
   }
 });
 
