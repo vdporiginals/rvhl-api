@@ -21,7 +21,8 @@ const BlogSchema = new mongoose.Schema({
     default: false
   },
   image: {
-    type: String
+    type: String,
+    default: 'no-photo.jpg'
   }
 });
 

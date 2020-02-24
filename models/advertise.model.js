@@ -4,15 +4,15 @@ const AdvertiseSchema = new mongoose.Schema({
   title: {
     type: String,
     trim: true,
-    required: [true, 'Xin hay them tieu de']
+    required: [true, 'Please add a title']
   },
   description: {
     type: String,
-    required: [true, 'Xin hay them mo ta']
+    required: [true, 'Please add a description']
   },
-  images: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'Image'
+  image: {
+    type: String,
+    default: 'no-photo.jpg'
   },
   seo: String,
   status: {

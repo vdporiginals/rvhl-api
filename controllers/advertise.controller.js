@@ -1,17 +1,17 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/errorResponse');
+const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const Advertise = require('../models/advertise.model');
 
 //@desciption   Get all advertise
 //@route        GET  /api/advertises
 //@access       Public
-exports.getBlogs = asyncHandler(async (req, res, next) => {
+exports.getAdvertises = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
 //@desciption   Get single advertise
-//@route        GET  /api/advertise/:id
+//@route        GET  /api/advertises/:id
 //@access       Public
 exports.getAdvertise = asyncHandler(async (req, res, next) => {
   const advertise = await Advertise.findById(req.params.id);
@@ -50,7 +50,7 @@ exports.createAdvertise = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   Update advertise
-//@route        PUT  /api/advertise/:id
+//@route        PUT  /api/advertises/:id
 //@access       Private
 exports.updateAdvertise = asyncHandler(async (req, res, next) => {
   const advertise = await Advertise.findByIdAndUpdate(req.params.id, req.body, {
@@ -68,7 +68,7 @@ exports.updateAdvertise = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   Delete advertise
-//@route        DELETE  /api/advertise/:id
+//@route        DELETE  /api/advertises/:id
 //@access       Private
 exports.deleteAdvertise = asyncHandler(async (req, res, next) => {
   const advertise = await Advertise.findById(req.params.id);

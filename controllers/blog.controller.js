@@ -34,7 +34,7 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 //@access       Private
 exports.createBlog = asyncHandler(async (req, res, next) => {
   //add user to req.body
-  req.body.user = req.user.id;
+  // req.body.user = req.user.id;
 
   const blog = await Blog.create(req.body);
 

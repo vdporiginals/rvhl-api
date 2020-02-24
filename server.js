@@ -3,7 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
-const fileUpload = require('express-fileupload');
+// const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/database');
@@ -17,7 +17,7 @@ connectDB();
 
 //route
 const blogs = require('./routes/client/blog.client');
-// const advertises = require('./routes/client/advertise.client');
+const advertises = require('./routes/client/advertise.client');
 // const auth = require('./routes/client/auth');
 
 const app = express();
@@ -40,7 +40,7 @@ if (process.env.NODE_ENV === 'development') {
 
 //mount router
 app.use('/api/blogs', blogs);
-// app.use('/api/advertise', advertises);
+app.use('/api/advertises', advertises);
 // app.use('/api/v1/auth', auth);
 app.use(errorHandler);
 
