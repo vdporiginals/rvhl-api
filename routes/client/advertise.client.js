@@ -12,6 +12,7 @@ const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
 
+const { protect, authorize } = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
@@ -19,12 +20,12 @@ const router = express.Router();
 router
   .route('/')
   .get(advancedResults(Advertise, null), getAdvertises)
-  .post(createAdvertise);
+  .post(protect, authorize('admin'), createAdvertise);
 
 router
   .route('/:id')
   .get(getAdvertise)
-  .put(updateAdvertise)
-  .delete(deleteAdvertise);
+  .put(protect, authorize('admin'), updateAdvertise)
+  .delete(protect, authorize('admin'), deleteAdvertise);
 
 module.exports = router;

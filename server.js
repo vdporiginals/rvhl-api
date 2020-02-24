@@ -3,8 +3,14 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
-// const fileUpload = require('express-fileupload');
+const fileupload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+// const mongoSanitize = require('express-mongo-sanitize');
+// const helmet = require('helmet');
+// const xss = require('xss-clean');
+// const rateLimit = require('express-rate-limit');
+// const hpp = require('hpp');
+// const cors = require('cors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/database');
 //load env
@@ -18,7 +24,8 @@ connectDB();
 //route
 const blogs = require('./routes/client/blog.client');
 const advertises = require('./routes/client/advertise.client');
-// const auth = require('./routes/client/auth');
+const auth = require('./routes/client/auth.client');
+const users = require('./routes/client/user.client');
 
 const app = express();
 //Body parser
@@ -41,7 +48,8 @@ if (process.env.NODE_ENV === 'development') {
 //mount router
 app.use('/api/blogs', blogs);
 app.use('/api/advertises', advertises);
-// app.use('/api/v1/auth', auth);
+app.use('/api/auth', auth);
+app.use('/api/users', users);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;

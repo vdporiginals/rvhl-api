@@ -34,15 +34,18 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 //@access       Private
 exports.createBlog = asyncHandler(async (req, res, next) => {
   //add user to req.body
-  // req.body.user = req.user.id;
+  req.body.user = req.user.id;
 
-  const blog = await Blog.create(req.body);
-
-  if (!blog) {
+  if (req.user.role !== 'admin') {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `The user with ID ${req.user.id} has no permission to create new blog`,
+        400
+      )
     );
   }
+
+  const blog = await Blog.create(req.body);
 
   res.status(201).json({
     success: true,

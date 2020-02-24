@@ -1,5 +1,5 @@
-const ErrorResponse = require('../middleware/errorResponse');
-const asyncHandler = require('../middleware/async');
+const ErrorResponse = require('../middleware/utils/errorResponse');
+const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/user.model');
 
 //@desciption   Register user

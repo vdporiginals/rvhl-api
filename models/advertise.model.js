@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-
+const slug = require('../config/slug');
 const AdvertiseSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -33,7 +33,7 @@ const AdvertiseSchema = new mongoose.Schema({
 });
 
 AdvertiseSchema.pre('save', function(next) {
-  this.seo = slug(this.name, '-');
+  this.seo = slug(this.title, '-');
   next();
 });
 
