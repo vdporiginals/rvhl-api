@@ -1,13 +1,19 @@
 const mongoose = require('mongoose');
+const slug = require('../config/slug');
 
 const BlogSchema = new mongoose.Schema({
   title: {
     type: String,
     trim: true,
-    required: [true, 'Xin hay them tieu de cho tin']
+    required: [true, 'Please add description']
   },
   content: {
-    type: String
+    type: String,
+    required: [true, 'Please add content']
+  },
+  description: {
+    type: String,
+    required: [true, 'Please add description']
   },
   seo: String,
   status: {
@@ -20,7 +26,7 @@ const BlogSchema = new mongoose.Schema({
 });
 
 BlogSchema.pre('save', function(next) {
-  this.seo = slug(this.name, '-');
+  this.seo = slug(this.title, '-');
   next();
 });
 

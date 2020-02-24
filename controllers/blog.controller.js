@@ -1,7 +1,7 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/errorResponse');
+const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
-const geocoder = require('../middleware/geocoder');
+const geocoder = require('../middleware/utils/geocoder');
 const Blog = require('../models/blog.model');
 
 //@desciption   Get all Blogs
@@ -12,7 +12,7 @@ exports.getBlogs = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   Get single blog
-//@route        GET  /api/blog/:id
+//@route        GET  /api/blogs/:id
 //@access       Public
 exports.getBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
@@ -51,9 +51,9 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   Update Blog
-//@route        PUT  /api/blog/:id
+//@route        PUT  /api/blogs/:id
 //@access       Private
-exports.updateBootcamp = asyncHandler(async (req, res, next) => {
+exports.updateBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
     runValidators: true
@@ -69,7 +69,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   Delete Blog
-//@route        DELETE  /api/blog/:id
+//@route        DELETE  /api/blogs/:id
 //@access       Private
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
