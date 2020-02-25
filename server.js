@@ -63,7 +63,7 @@ app.use(litmiter);
 app.use(hpp());
 
 // Enable cors
-app.use(cors);
+app.use(cors());
 
 //set  static folder
 // app.use(express.static(path.join(__dirname, 'public')));
