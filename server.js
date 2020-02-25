@@ -5,12 +5,12 @@ const morgan = require('morgan');
 const colors = require('colors');
 const fileupload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
-// const mongoSanitize = require('express-mongo-sanitize');
-// const helmet = require('helmet');
-// const xss = require('xss-clean');
-// const rateLimit = require('express-rate-limit');
-// const hpp = require('hpp');
-// const cors = require('cors');
+const mongoSanitize = require('express-mongo-sanitize');
+const helmet = require('helmet');
+const xss = require('xss-clean');
+const rateLimit = require('express-rate-limit');
+const hpp = require('hpp');
+const cors = require('cors');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/database');
 //load env
@@ -41,6 +41,29 @@ if (process.env.NODE_ENV === 'development') {
 
 //file uploading
 // app.use(fileUpload());
+
+//Santize data
+app.use(mongoSanitize());
+
+//set security header
+app.use(helmet());
+
+//Prevent xss attack
+app.use(xss());
+
+//rate limiting
+const litmiter = rateLimit({
+  windowMs: 10 * 60 * 1000, //10 minute
+  max: 200
+});
+
+app.use(litmiter);
+
+//prevent http param pollution
+app.use(hpp());
+
+// Enable cors
+app.use(cors);
 
 //set  static folder
 // app.use(express.static(path.join(__dirname, 'public')));
