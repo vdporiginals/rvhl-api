@@ -4,8 +4,8 @@
   "description": "Review Ha long backend API",
   "main": "server.js",
   "scripts": {
-    "start": "node server",
-    "dev": "nodemon server",
+    "start": "NODE_ENV=production node server",
+    "dev": "nodemon server.js",
     "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
