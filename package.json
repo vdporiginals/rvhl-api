@@ -4,8 +4,9 @@
   "description": "Review Ha long backend API",
   "main": "server.js",
   "scripts": {
-    "start": "SET NODE_ENV=production & node server",
+    "start": "node server",
     "dev": "nodemon server",
+    "build": "gulp build",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Vi Duy Phuong",
