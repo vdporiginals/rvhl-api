@@ -66,7 +66,7 @@ app.use(hpp());
 app.use(cors());
 
 //set  static folder
-// app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public')));
 
 //mount router
 app.use('/api/blogs', blogs);
