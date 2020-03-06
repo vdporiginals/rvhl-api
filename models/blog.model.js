@@ -21,6 +21,7 @@ const BlogSchema = new mongoose.Schema({
   },
   address: String,
   seo: String,
+  createdAt: { type: Date, default: Date.now },
   status: {
     type: Boolean,
     default: false
