@@ -24,16 +24,6 @@ const AdvertiseSchema = new mongoose.Schema({
     enum: ['banner', 'video', 'about', 'other']
   },
   createdAt: { type: Date, default: Date.now }
-  //   destination: {
-  //     type: mongoose.Schema.ObjectId,
-  //     ref: 'Bootcamp',
-  //     required: true
-  //   },
-  //   place: {
-  //     type: mongoose.Schema.ObjectId,
-  //     ref: 'Bootcamp',
-  //     required: true
-  //   }
 });
 
 AdvertiseSchema.pre('save', function(next) {

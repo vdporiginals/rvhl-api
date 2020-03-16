@@ -19,10 +19,11 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     enum: ['schedule', 'restaurant', 'place', 'other']
   },
-  tags: {
-    type: String,
-    enum: []
-  },
+  // comment: {},
+  // tags: {
+  //     type: mongoose.Schema.ObjectId,
+  //     ref: 'Tags'
+  // },
   address: String,
   seo: String,
   createdAt: { type: Date, default: Date.now },
