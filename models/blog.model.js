@@ -15,9 +15,13 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add description']
   },
-  tags: {
+  category: {
     type: String,
     enum: ['schedule', 'restaurant', 'place', 'other']
+  },
+  tags: {
+    type: String,
+    enum: []
   },
   address: String,
   seo: String,

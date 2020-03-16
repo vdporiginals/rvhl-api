@@ -19,6 +19,10 @@ const AdvertiseSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  category: {
+    type: String,
+    enum: ['banner', 'video', 'about', 'other']
+  },
   createdAt: { type: Date, default: Date.now }
   //   destination: {
   //     type: mongoose.Schema.ObjectId,
