@@ -1,18 +1,18 @@
-const mongoose = require('mongoose');
-const slug = require('../config/slug');
+const mongoose = require("mongoose");
+const slug = require("../config/slug");
 const AdvertiseSchema = new mongoose.Schema({
   title: {
     type: String,
     trim: true,
-    required: [true, 'Please add a title']
+    required: [true, "Please add a title"]
   },
   description: {
     type: String,
-    required: [true, 'Please add a description']
+    required: [true, "Please add a description"]
   },
   image: {
     type: String,
-    default: 'no-photo.jpg'
+    default: "no-photo.jpg"
   },
   seo: String,
   status: {
@@ -21,14 +21,14 @@ const AdvertiseSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['banner', 'video', 'about', 'other']
+    enum: ["banner", "video", "about", "page", "other"]
   },
   createdAt: { type: Date, default: Date.now }
 });
 
-AdvertiseSchema.pre('save', function(next) {
-  this.seo = slug(this.title, '-');
+AdvertiseSchema.pre("save", function(next) {
+  this.seo = slug(this.title, "-");
   next();
 });
 
-module.exports = mongoose.model('Advertise', AdvertiseSchema);
+module.exports = mongoose.model("Advertise", AdvertiseSchema);
