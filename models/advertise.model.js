@@ -21,7 +21,16 @@ const AdvertiseSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ["banner", "video", "about", "page", "other"]
+    enum: [
+      "bannerBlog",
+      "bannerTour",
+      "bannerSchedule",
+      "bannerFood",
+      "video",
+      "about",
+      "slider",
+      "other"
+    ]
   },
   createdAt: { type: Date, default: Date.now }
 });

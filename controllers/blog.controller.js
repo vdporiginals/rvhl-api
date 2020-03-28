@@ -16,6 +16,7 @@ exports.getBlogs = asyncHandler(async (req, res, next) => {
 //@access       Public
 exports.getBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
+  const user = await User.findById(blog.user);
 
   if (!blog) {
     return next(
@@ -25,7 +26,8 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: blog
+    data: blog,
+    user: user.name
   });
 });
 
@@ -36,7 +38,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   //add user to req.body
   req.body.user = req.user.id;
 
-  if (req.user.role !== "moderator") {
+  if (req.user.role !== "moderator" && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `The user with ID ${req.user.id} has no permission to create new blog`,
@@ -86,9 +88,10 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 //@route        DELETE  /api/blogs/:id
 //@access       Private
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.userId);
+  const blog = await Blog.findById(req.params.id);
+  const user = await User.findById(blog.user);
 
-  if (user.user.toString() !== req.user.id && req.user.role !== "admin") {
+  if (user._id.toString() !== req.user.id && req.user.role !== "admin") {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete this blog ${user._id}`,
@@ -96,8 +99,6 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
       )
     );
   }
-
-  const blog = await Blog.findById(req.params.id);
 
   if (!blog) {
     return next(

@@ -15,9 +15,14 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     required: [true, "Please add description"]
   },
+  user: {
+    type: mongoose.Schema.ObjectId,
+    ref: "User",
+    required: true
+  },
   category: {
     type: String,
-    enum: ["schedule", "food", "other"]
+    enum: ["Schedule", "Food", "Other"]
   },
   // comment: {},
   // tags: {
@@ -31,12 +36,10 @@ const BlogSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
-  images: [
-    {
-      type: String,
-      default: "no-photo.jpg"
-    }
-  ]
+  images: {
+    type: [String],
+    default: "no-photo.jpg"
+  }
 });
 
 BlogSchema.pre("save", function(next) {

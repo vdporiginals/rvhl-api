@@ -1,31 +1,37 @@
 [{
-        "title": "Test ADvertise 1",
+        "title": "Slider Advertise 1",
         "description": "Đây là 1 quảng cáo hình ảnh",
-        "image": "https://i1-thethao.vnecdn.net/2020/02/24/4387671-qXi-9988-1582528110.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=frTXmgLH_9LWG6eUuCFN2Q"
+        "image": "https://i.imgur.com/Z5AVcvy.jpg",
+        "category": "slider"
     },
     {
-        "title": "Test ADvertise 2",
+        "title": "Slider Advertise 2",
         "description": "Đây là 2 quảng cáo hình ảnh",
-        "image": "https://i1-thethao.vnecdn.net/2020/02/24/4387671-qXi-9988-1582528110.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=frTXmgLH_9LWG6eUuCFN2Q"
+        "image": "https://i.imgur.com/V2WcaSp.jpg",
+        "category": "slider"
     },
     {
-        "title": "Test ADvertise 3",
+        "title": "Slider Advertise 3",
         "description": "Đây là 3 quảng cáo hình ảnh",
-        "image": "https://i1-thethao.vnecdn.net/2020/02/24/4387671-qXi-9988-1582528110.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=frTXmgLH_9LWG6eUuCFN2Q"
+        "image": "https://i.imgur.com/T11mJwE.jpg",
+        "category": "slider"
     },
     {
-        "title": "Test ADvertise 4",
-        "description": "Đây là 4 quảng cáo hình ảnh",
-        "image": "https://i1-thethao.vnecdn.net/2020/02/24/4387671-qXi-9988-1582528110.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=frTXmgLH_9LWG6eUuCFN2Q"
+        "title": "Banner page ADvertise 1",
+        "description": "Đây là 1 Banner hình ảnh",
+        "image": "https://i.imgur.com/yg4L34x.png",
+        "category": "banner"
     },
     {
-        "title": "Test ADvertise 5",
-        "description": "Đây là 5 quảng cáo hình ảnh",
-        "image": "https://i1-thethao.vnecdn.net/2020/02/24/4387671-qXi-9988-1582528110.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=frTXmgLH_9LWG6eUuCFN2Q"
+        "title": "Banner page ADvertise 2",
+        "description": "Đây là 2 Banner hình ảnh",
+        "image": "https://i.imgur.com/yg4L34x.png",
+        "category": "banner"
     },
     {
-        "title": "Test ADvertise 6",
-        "description": "Đây là 6 quảng cáo hình ảnh",
-        "image": "https://i1-thethao.vnecdn.net/2020/02/24/4387671-qXi-9988-1582528110.jpg?w=1200&h=0&q=100&dpr=1&fit=crop&s=frTXmgLH_9LWG6eUuCFN2Q"
+        "title": "Banner page ADvertise 2",
+        "description": "Đây là 2 Banner hình ảnh",
+        "image": "https://i.imgur.com/yg4L34x.png",
+        "category": "banner"
     }
 ]
