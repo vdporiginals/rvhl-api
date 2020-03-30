@@ -20,18 +20,18 @@
         "title": "Banner page ADvertise 1",
         "description": "Đây là 1 Banner hình ảnh",
         "image": "https://i.imgur.com/yg4L34x.png",
-        "category": "banner"
+        "category": "bannerBlog"
     },
     {
         "title": "Banner page ADvertise 2",
         "description": "Đây là 2 Banner hình ảnh",
         "image": "https://i.imgur.com/yg4L34x.png",
-        "category": "banner"
+        "category": "bannerTour"
     },
     {
         "title": "Banner page ADvertise 2",
         "description": "Đây là 2 Banner hình ảnh",
         "image": "https://i.imgur.com/yg4L34x.png",
-        "category": "banner"
+        "category": "bannerSchedule"
     }
 ]

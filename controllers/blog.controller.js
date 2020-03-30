@@ -1,9 +1,9 @@
-const path = require("path");
-const ErrorResponse = require("../middleware/utils/errorResponse");
-const asyncHandler = require("../middleware/asyncHandler");
-const geocoder = require("../middleware/utils/geocoder");
-const Blog = require("../models/blog.model");
-const User = require("../models/user.model");
+const path = require('path');
+const ErrorResponse = require('../middleware/utils/errorResponse');
+const asyncHandler = require('../middleware/asyncHandler');
+const geocoder = require('../middleware/utils/geocoder');
+const Blog = require('../models/blog.model');
+const User = require('../models/user.model');
 //@desciption   Get all Blogs
 //@route        GET  /api/blogs
 //@access       Public
@@ -27,7 +27,11 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: blog,
-    user: user.name
+    user: {
+      name: user.name,
+      avatar: user.avatar,
+      description: user.description
+    }
   });
 });
 
@@ -38,7 +42,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   //add user to req.body
   req.body.user = req.user.id;
 
-  if (req.user.role !== "moderator" && req.user.role !== "admin") {
+  if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `The user with ID ${req.user.id} has no permission to create new blog`,
@@ -61,7 +65,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.params.userId);
 
-  if (user.user.toString() !== req.user.id && req.user.role !== "admin") {
+  if (user.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to update this blog ${user._id}`,
@@ -89,12 +93,11 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 //@access       Private
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
-  const user = await User.findById(blog.user);
 
-  if (user._id.toString() !== req.user.id && req.user.role !== "admin") {
+  if (blog.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to delete this blog ${user._id}`,
+        `User ${req.user.id} is not authorized to delete course ${course._id}`,
         401
       )
     );
