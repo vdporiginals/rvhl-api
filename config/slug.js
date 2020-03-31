@@ -8,6 +8,7 @@ const slug = (str, separator) => {
     .replace(/ù|ú|ụ|ủ|ũ|ư|ừ|ứ|ự|ử|ữ/g, 'u')
     .replace(/ỳ|ý|ỵ|ỷ|ỹ/g, 'y')
     .replace(/đ/g, 'd')
+    .replace(/đị/g, 'di')
     .replace(/\s+/g, '-')
     .replace(/[^A-Za-z0-9_-]/g, '')
     .replace(/-+/g, '-');
