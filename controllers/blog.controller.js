@@ -11,6 +11,28 @@ exports.getBlogs = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
+//@desciption   Get all category
+//@route        GET  /api/category
+//@access       Public
+exports.getBlogCategory = asyncHandler(async (req, res, next) => {
+  const results = await Blog.find().select('category');
+
+  const uniqueRes = results.filter((val, index) => {
+    const _val = JSON.stringify(val.category);
+    return (
+      index ===
+      results.findIndex((obj) => {
+        return JSON.stringify(obj.category) === _val;
+      })
+    );
+  });
+
+  res.status(200).json({
+    success: true,
+    data: uniqueRes,
+  });
+});
+
 //@desciption   Get single blog
 //@route        GET  /api/blogs/:id
 //@access       Public
@@ -30,8 +52,8 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
     user: {
       name: user.name,
       avatar: user.avatar,
-      description: user.description
-    }
+      description: user.description,
+    },
   });
 });
 
@@ -55,7 +77,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: blog
+    data: blog,
   });
 });
 
@@ -82,7 +104,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 
   const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   res.status(200).json({ success: true, data: blog });

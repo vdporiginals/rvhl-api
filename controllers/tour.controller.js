@@ -85,7 +85,7 @@ exports.updateTour = asyncHandler(async (req, res, next) => {
 //@desciption   Delete Blog
 //@route        DELETE  /api/tour/:id
 //@access       Private
-exports.deleteBlog = asyncHandler(async (req, res, next) => {
+exports.deleteTour = asyncHandler(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
 
   if (tour.user.toString() !== req.user.id && req.user.role !== 'admin') {

@@ -4,7 +4,8 @@ const {
   getBlog,
   createBlog,
   updateBlog,
-  deleteBlog
+  deleteBlog,
+  getBlogCategory,
 } = require('../../controllers/blog.controller');
 
 const Blog = require('../../models/blog.model');
@@ -22,11 +23,13 @@ router
   .get(
     advancedResults(Blog, {
       path: 'user',
-      select: 'name avatar description'
+      select: 'name avatar description',
     }),
     getBlogs
   )
   .post(protect, authorize('moderator', 'admin'), createBlog);
+
+router.route('/category').get(getBlogCategory);
 
 router
   .route('/:id')

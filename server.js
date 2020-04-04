@@ -15,7 +15,7 @@ const errorHandler = require('./middleware/error');
 const connectDB = require('./config/database');
 //load env
 dotenv.config({
-  path: './config/config.env'
+  path: './config/config.env',
 });
 
 //connect database
@@ -54,7 +54,7 @@ app.use(xss());
 //rate limiting
 const litmiter = rateLimit({
   windowMs: 10 * 60 * 1000, //10 minute
-  max: 200
+  max: 200,
 });
 
 app.use(litmiter);
