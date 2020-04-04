@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'please add a name']
+    required: [true, 'please add a name'],
   },
   email: {
     type: String,
@@ -13,68 +13,75 @@ const UserSchema = new mongoose.Schema({
     unique: [true, 'Only one account per Email!'],
     match: [
       /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/,
-      'Please add a valid email'
-    ]
+      'Please add a valid email',
+    ],
+  },
+  facebookProvider: {
+    type: {
+      id: String,
+      token: String,
+    },
+    select: false,
   },
   role: {
     type: String,
     enum: ['user', 'moderator', 'admin'],
-    default: 'user'
+    default: 'user',
   },
   password: {
     type: String,
     required: [true, 'please add a password'],
     minlength: 6,
-    select: false
+    select: false,
   },
   description: {
     type: String,
     maxlength: 100,
-    default: 'Không có mô tả về User'
+    default: 'Không có mô tả về User',
   },
   avatar: {
     type: String,
-    default: 'no-photo.jpg'
+    default: 'no-photo.jpg',
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
   createdAt: {
     type: Date,
-    default: Date.now
-  }
+    default: Date.now,
+  },
 });
 
 //Encrypt pass
-UserSchema.pre('save', async function(next) {
+UserSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
 
 //Sign JWT
-UserSchema.methods.signedJWT = function() {
+UserSchema.methods.signedJWT = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: process.env.JWT_EXPIRE,
   });
 };
 
 //compare enter password is in database
-UserSchema.methods.comparePassword = async function(enteredPw) {
+UserSchema.methods.comparePassword = async function (enteredPw) {
   return await bcrypt.compare(enteredPw, this.password);
 };
 
 // Sign JWT and return
-UserSchema.methods.getSignedJwtToken = function() {
+UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE
+    expiresIn: process.env.JWT_EXPIRE,
   });
 };
 
-UserSchema.methods.matchPassword = async function(enteredPassword) {
+UserSchema.methods.matchPassword = async function (enteredPassword) {
   return await bcrypt.compare(enteredPassword, this.password);
 };
 
 // Generate and hash password token
-UserSchema.methods.getResetPasswordToken = function() {
+UserSchema.methods.getResetPasswordToken = function () {
   // Generate token
   const resetToken = crypto.randomBytes(20).toString('hex');
 
@@ -88,6 +95,42 @@ UserSchema.methods.getResetPasswordToken = function() {
   this.resetPasswordExpire = Date.now() + 10 * 60 * 1000;
 
   return resetToken;
+};
+
+//FacebookLogin create user
+UserSchema.statics.upsertFbUser = function (
+  accessToken,
+  refreshToken,
+  profile,
+  cb
+) {
+  var that = this;
+  console.log(profile);
+  return this.findOne({ 'facebookProvider.id': profile.id }, function (
+    err,
+    user
+  ) {
+    // no user was found, lets create a new one
+    if (!user) {
+      var newUser = new that({
+        name: profile.name[0].value,
+        email: profile.emails[0].value,
+        facebookProvider: {
+          id: profile.id,
+          token: accessToken,
+        },
+      });
+
+      newUser.save(function (error, savedUser) {
+        if (error) {
+          console.log(error);
+        }
+        return cb(error, savedUser);
+      });
+    } else {
+      return cb(err, user);
+    }
+  });
 };
 
 module.exports = mongoose.model('User', UserSchema);
