@@ -19,7 +19,11 @@ const UserSchema = new mongoose.Schema({
   facebook: {
     id: String,
     token: String,
-    email: String,
+    name: String,
+  },
+  google: {
+    id: String,
+    token: String,
     name: String,
   },
   randomPassword: String,

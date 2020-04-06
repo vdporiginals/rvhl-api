@@ -1,6 +1,7 @@
 const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/user.model');
+const randomstring = require('randomstring');
 
 // @desc      Register user
 // @route     POST /api/auth/register
@@ -207,6 +208,64 @@ const sendTokenResponse = (user, statusCode, res) => {
   });
 };
 
-exports.loginFb = asyncHandler(async (req, res, next) => {
+exports.loginStrategy = asyncHandler(async (req, res, next) => {
   sendTokenResponse(req.user, 200, res);
 });
+
+exports.fbStrategy = function (accessToken, refreshToken, profile, done) {
+  User.findOne({ 'facebook.id': profile.id }, function (err, user) {
+    if (err) return done(err);
+    if (user) return done(null, user);
+    else {
+      // if there is no user found with that facebook id, create them
+      let newUser = new User();
+      const randomPassword = randomstring.generate({
+        length: 12,
+        charset: 'alphabetic',
+      });
+      newUser.name = profile.displayName;
+      // set all of the facebook information in our user model
+      newUser.facebook.id = profile.id;
+      newUser.facebook.token = accessToken;
+      newUser.facebook.name = profile.displayName;
+      newUser.randomPassword = randomPassword;
+      newUser.password = randomPassword;
+      if (typeof profile.emails != 'undefined' && profile.emails.length > 0)
+        newUser.email = profile.emails[0].value;
+      // save our user to the database
+      newUser.save(function (err) {
+        if (err) throw err;
+        return done(null, newUser);
+      });
+    }
+  });
+};
+
+exports.googleStrategy = function (accessToken, refreshToken, profile, done) {
+  console.log(profile);
+  User.findOne({ 'google.id': profile.id }, function (err, user) {
+    if (err) return done(err);
+    if (user) return done(null, user);
+    else {
+      // if there is no user found with that facebook id, create them
+      let newUser = new User();
+      const randomPassword = randomstring.generate({
+        length: 12,
+        charset: 'alphabetic',
+      });
+      newUser.name = profile.displayName;
+      // set all of the facebook information in our user model
+      newUser.google.id = profile.id;
+      newUser.google.token = accessToken;
+      newUser.google.name = profile.displayName;
+      newUser.randomPassword = randomPassword;
+      newUser.password = randomPassword;
+      newUser.email = profile.emails[0].value;
+      // save our user to the database
+      newUser.save(function (err) {
+        if (err) throw err;
+        return done(null, newUser);
+      });
+    }
+  });
+};

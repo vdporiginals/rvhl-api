@@ -1,7 +1,8 @@
 const express = require('express');
 const passport = require('passport');
 const FacebookStrategy = require('passport-facebook').Strategy;
-const randomstring = require('randomstring');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 const {
   register,
   login,
@@ -11,7 +12,9 @@ const {
   resetPassword,
   updateDetails,
   updatePassword,
-  loginFb,
+  loginStrategy,
+  fbStrategy,
+  googleStrategy,
 } = require('../../controllers/auth.controller');
 const User = require('../../models/user.model');
 
@@ -38,33 +41,19 @@ passport.use(
       profileFields: ['id', 'email', 'displayName'],
     },
     function (accessToken, refreshToken, profile, done) {
-      User.findOne({ 'facebook.id': profile.id }, function (err, user) {
-        if (err) return done(err);
-        if (user) return done(null, user);
-        else {
-          // if there is no user found with that facebook id, create them
-          let newUser = new User();
-          const randomPassword = randomstring.generate({
-            length: 12,
-            charset: 'alphabetic',
-          });
-          newUser.name = profile.displayName;
-          // set all of the facebook information in our user model
-          newUser.facebook.id = profile.id;
-          newUser.facebook.token = accessToken;
-          newUser.facebook.name = profile.displayName;
-          newUser.randomPassword = randomPassword;
-          newUser.password = randomPassword;
-          if (typeof profile.emails != 'undefined' && profile.emails.length > 0)
-            newUser.facebook.email = profile.emails[0].value;
-          newUser.email = profile.emails[0].value;
-          // save our user to the database
-          newUser.save(function (err) {
-            if (err) throw err;
-            return done(null, newUser);
-          });
-        }
-      });
+      fbStrategy(accessToken, refreshToken, profile, done);
+    }
+  )
+);
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.GOOGLE_APP_ID,
+      clientSecret: process.env.GOOGLE_APP_SECRET,
+      callbackURL: '/api/auth/google/callback',
+    },
+    function (accessToken, refreshToken, profile, done) {
+      googleStrategy(accessToken, refreshToken, profile, done);
     }
   )
 );
@@ -73,7 +62,19 @@ router.post('/register', register);
 router.post('/login', login);
 
 router.get('/facebook', passport.authenticate('facebook'));
-router.get('/facebook/callback', passport.authenticate('facebook'), loginFb);
+router.get(
+  '/facebook/callback',
+  passport.authenticate('facebook'),
+  loginStrategy
+);
+
+router.get(
+  '/google',
+  passport.authenticate('google', {
+    scope: ['profile', 'email'],
+  })
+);
+router.get('/google/callback', passport.authenticate('google'), loginStrategy);
 
 router.get('/logout', logout);
 router.get('/me', protect, getMe);
