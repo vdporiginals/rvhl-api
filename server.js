@@ -12,6 +12,7 @@ const xss = require('xss-clean');
 const rateLimit = require('express-rate-limit');
 const hpp = require('hpp');
 const cors = require('cors');
+const FacebookStrategy = require('passport-facebook').Strategy;
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/database');
 //load env
@@ -27,6 +28,7 @@ const blogs = require('./routes/client/blog.client');
 const advertises = require('./routes/client/advertise.client');
 const auth = require('./routes/client/auth.client');
 const users = require('./routes/client/user.client');
+// const { fbStrat, passportStrategy } = require('./middleware/fbLogin');
 
 const app = express();
 //Body parser
@@ -39,6 +41,10 @@ app.use(cookieParser());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
 
 //file uploading
 // app.use(fileUpload());

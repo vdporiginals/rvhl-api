@@ -2,26 +2,6 @@ const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/user.model');
 
-// @desc      Register user fb
-// @route     POST /api/auth/facebook
-// @access    Public
-exports.loginFb = asyncHandler(async (req, res, next) => {
-  if (!req.user) {
-    return res.send(401, 'User Not Authenticated');
-  }
-
-  console.log(req.user);
-
-  // prepare token for API
-  req.auth = {
-    id: req.user.id,
-  };
-
-  console.log(req.auth);
-  sendTokenResponse(user, 200, res);
-  // next();
-});
-
 // @desc      Register user
 // @route     POST /api/auth/register
 // @access    Public
@@ -226,3 +206,7 @@ const sendTokenResponse = (user, statusCode, res) => {
     token,
   });
 };
+
+exports.loginFb = asyncHandler(async (req, res, next) => {
+  sendTokenResponse(req.user, 200, res);
+});

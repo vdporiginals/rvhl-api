@@ -16,13 +16,13 @@ const UserSchema = new mongoose.Schema({
       'Please add a valid email',
     ],
   },
-  facebookProvider: {
-    type: {
-      id: String,
-      token: String,
-    },
-    select: false,
+  facebook: {
+    id: String,
+    token: String,
+    email: String,
+    name: String,
   },
+  randomPassword: String,
   role: {
     type: String,
     enum: ['user', 'moderator', 'admin'],
@@ -64,11 +64,6 @@ UserSchema.methods.signedJWT = function () {
   });
 };
 
-//compare enter password is in database
-UserSchema.methods.comparePassword = async function (enteredPw) {
-  return await bcrypt.compare(enteredPw, this.password);
-};
-
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
@@ -97,40 +92,13 @@ UserSchema.methods.getResetPasswordToken = function () {
   return resetToken;
 };
 
-//FacebookLogin create user
-UserSchema.statics.upsertFbUser = function (
-  accessToken,
-  refreshToken,
-  profile,
-  cb
-) {
-  var that = this;
-  console.log(profile);
-  return this.findOne({ 'facebookProvider.id': profile.id }, function (
-    err,
-    user
-  ) {
-    // no user was found, lets create a new one
-    if (!user) {
-      var newUser = new that({
-        name: profile.name[0].value,
-        email: profile.emails[0].value,
-        facebookProvider: {
-          id: profile.id,
-          token: accessToken,
-        },
-      });
+UserSchema.methods.getUserById = function (id, callback) {
+  User.findById(id, callback);
+};
 
-      newUser.save(function (error, savedUser) {
-        if (error) {
-          console.log(error);
-        }
-        return cb(error, savedUser);
-      });
-    } else {
-      return cb(err, user);
-    }
-  });
+UserSchema.methods.getUserByUsername = function (username, callback) {
+  var query = { username: username };
+  User.findOne(query, callback);
 };
 
 module.exports = mongoose.model('User', UserSchema);
