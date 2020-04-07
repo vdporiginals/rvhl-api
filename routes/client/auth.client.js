@@ -38,7 +38,7 @@ passport.use(
       clientID: process.env.FACEBOOK_APP_ID,
       clientSecret: process.env.FACEBOOK_APP_SECRET,
       callbackURL: '/api/auth/facebook/callback',
-      profileFields: ['id', 'email', 'displayName'],
+      profileFields: ['id', 'displayName', 'emails', 'picture.type(large)'],
     },
     function (accessToken, refreshToken, profile, done) {
       fbStrategy(accessToken, refreshToken, profile, done);
@@ -61,7 +61,10 @@ passport.use(
 router.post('/register', register);
 router.post('/login', login);
 
-router.get('/facebook', passport.authenticate('facebook'));
+router.get(
+  '/facebook',
+  passport.authenticate('facebook', { scope: ['email'] })
+);
 router.get(
   '/facebook/callback',
   passport.authenticate('facebook'),

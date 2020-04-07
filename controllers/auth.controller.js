@@ -205,6 +205,7 @@ const sendTokenResponse = (user, statusCode, res) => {
   res.status(statusCode).cookie('token', token, options).json({
     success: true,
     token,
+    user: user.name,
   });
 };
 
@@ -212,60 +213,127 @@ exports.loginStrategy = asyncHandler(async (req, res, next) => {
   sendTokenResponse(req.user, 200, res);
 });
 
-exports.fbStrategy = function (accessToken, refreshToken, profile, done) {
-  User.findOne({ 'facebook.id': profile.id }, function (err, user) {
-    if (err) return done(err);
-    if (user) return done(null, user);
-    else {
-      // if there is no user found with that facebook id, create them
-      let newUser = new User();
-      const randomPassword = randomstring.generate({
-        length: 12,
-        charset: 'alphabetic',
-      });
-      newUser.name = profile.displayName;
-      // set all of the facebook information in our user model
-      newUser.facebook.id = profile.id;
-      newUser.facebook.token = accessToken;
-      newUser.facebook.name = profile.displayName;
-      newUser.randomPassword = randomPassword;
-      newUser.password = randomPassword;
-      if (typeof profile.emails != 'undefined' && profile.emails.length > 0)
-        newUser.email = profile.emails[0].value;
-      // save our user to the database
-      newUser.save(function (err) {
-        if (err) throw err;
-        return done(null, newUser);
-      });
+exports.fbStrategy = async function (accessToken, refreshToken, profile, done) {
+  const isDuplicate = await User.findOne(
+    { email: profile.emails[0].value },
+    function (err, user) {
+      return user;
     }
-  });
+  );
+
+  if (
+    isDuplicate &&
+    (Object.values(isDuplicate.facebook)[1] == undefined ||
+      Object.values(isDuplicate.facebook)[2] == undefined)
+  ) {
+    const fbJson = await {
+      id: profile.id,
+      token: accessToken,
+      name: profile.displayName,
+    };
+
+    const uptFbUser = await User.findByIdAndUpdate(isDuplicate.id, {
+      $set: {
+        facebook: fbJson,
+      },
+    });
+
+    return done(null, uptFbUser);
+  } else {
+    User.findOne({ 'facebook.id': profile.id }, function (err, user) {
+      if (err) return done(err);
+      if (user) return done(null, user);
+      else {
+        const randomPassword = randomstring.generate({
+          length: 12,
+          charset: 'alphabetic',
+        });
+
+        let newUser = new User({
+          name: profile.displayName,
+          password: randomPassword,
+          randomPassword,
+          facebook: {
+            id: profile.id,
+            token: accessToken,
+            name: profile.displayName,
+          },
+          avatar: profile.photos[0].value,
+        });
+
+        if (typeof profile.emails != 'undefined' && profile.emails.length > 0)
+          newUser.email = profile.emails[0].value;
+
+        // save our user to the database
+        newUser.save(function (err) {
+          if (err) return done(null, new ErrorResponse(err.errmsg, 400));
+          return done(null, newUser);
+        });
+      }
+    });
+  }
 };
 
-exports.googleStrategy = function (accessToken, refreshToken, profile, done) {
-  console.log(profile);
-  User.findOne({ 'google.id': profile.id }, function (err, user) {
-    if (err) return done(err);
-    if (user) return done(null, user);
-    else {
-      // if there is no user found with that facebook id, create them
-      let newUser = new User();
-      const randomPassword = randomstring.generate({
-        length: 12,
-        charset: 'alphabetic',
-      });
-      newUser.name = profile.displayName;
-      // set all of the facebook information in our user model
-      newUser.google.id = profile.id;
-      newUser.google.token = accessToken;
-      newUser.google.name = profile.displayName;
-      newUser.randomPassword = randomPassword;
-      newUser.password = randomPassword;
-      newUser.email = profile.emails[0].value;
-      // save our user to the database
-      newUser.save(function (err) {
-        if (err) throw err;
-        return done(null, newUser);
-      });
+exports.googleStrategy = async function (
+  accessToken,
+  refreshToken,
+  profile,
+  done
+) {
+  const isDuplicate = await User.findOne(
+    { email: profile.emails[0].value },
+    function (err, user) {
+      return user;
     }
-  });
+  );
+
+  if (
+    isDuplicate &&
+    (Object.values(isDuplicate.google)[1] == undefined ||
+      Object.values(isDuplicate.google)[2] == undefined)
+  ) {
+    const googleJson = await {
+      id: profile.id,
+      token: accessToken,
+      name: profile.displayName,
+    };
+
+    const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
+      $set: {
+        google: googleJson,
+      },
+    });
+
+    return done(null, uptUser);
+  } else {
+    User.findOne({ 'google.id': profile.id }, function (err, user) {
+      if (err) return done(err);
+      if (user) return done(null, user);
+      else {
+        // if there is no user found with that facebook id, create them
+        const randomPassword = randomstring.generate({
+          length: 12,
+          charset: 'alphabetic',
+        });
+
+        let newUser = new User({
+          name: profile.displayName,
+          password: randomPassword,
+          randomPassword,
+          email: profile.emails[0].value,
+          google: {
+            id: profile.id,
+            token: accessToken,
+            name: profile.displayName,
+          },
+          avatar: profile._json.picture,
+        });
+
+        newUser.save(function (err) {
+          if (err) return done(new ErrorResponse(err.errmsg, 400), null);
+          return done(null, newUser);
+        });
+      }
+    });
+  }
 };
