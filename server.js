@@ -28,7 +28,7 @@ const blogs = require('./routes/client/blog.client');
 const advertises = require('./routes/client/advertise.client');
 const auth = require('./routes/client/auth.client');
 const users = require('./routes/client/user.client');
-// const { fbStrat, passportStrategy } = require('./middleware/fbLogin');
+const tours = require('./routes/client/tour.client');
 
 const app = express();
 //Body parser
@@ -77,6 +77,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //mount router
 app.use('/api/blogs', blogs);
+app.use('/api/tours', tours);
 app.use('/api/advertises', advertises);
 app.use('/api/auth', auth);
 app.use('/api/users', users);

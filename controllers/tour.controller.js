@@ -7,7 +7,7 @@ const User = require('../models/user.model');
 //@desciption   Get all tour
 //@route        GET  /api/tour
 //@access       Public
-exports.getTour = asyncHandler(async (req, res, next) => {
+exports.getTours = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
@@ -17,19 +17,19 @@ exports.getTour = asyncHandler(async (req, res, next) => {
 exports.getTour = asyncHandler(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
 
-  if (!blog) {
+  if (!tour) {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`tour not found with id of ${req.params.id}`, 404)
     );
   }
 
   res.status(200).json({
     success: true,
-    data: tour
+    data: tour,
   });
 });
 
-//@desciption   create Blog
+//@desciption   create tour
 //@route        POST  /api/tour
 //@access       Private
 exports.createTour = asyncHandler(async (req, res, next) => {
@@ -39,7 +39,7 @@ exports.createTour = asyncHandler(async (req, res, next) => {
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `The user with ID ${req.user.id} has no permission to create new blog`,
+        `The user with ID ${req.user.id} has no permission to create new tour`,
         400
       )
     );
@@ -49,7 +49,7 @@ exports.createTour = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: tour
+    data: tour,
   });
 });
 
@@ -57,38 +57,27 @@ exports.createTour = asyncHandler(async (req, res, next) => {
 //@route        PUT  /api/tour/:id
 //@access       Private
 exports.updateTour = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.userId);
-
-  if (user.user.toString() !== req.user.id && req.user.role !== 'admin') {
-    return next(
-      new ErrorResponse(
-        `User ${req.user.id} is not authorized to update this blog ${user._id}`,
-        401
-      )
-    );
-  }
+  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
 
   if (!tour) {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`tour not found with id of ${req.params.id}`, 404)
     );
   }
-
-  const tour = await Tour.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true
-  });
 
   res.status(200).json({ success: true, data: tour });
 });
 
-//@desciption   Delete Blog
+//@desciption   Delete tour
 //@route        DELETE  /api/tour/:id
 //@access       Private
 exports.deleteTour = asyncHandler(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
 
-  if (tour.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (req.user.role !== 'admin' || req.user.role !== 'moderator') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete course ${course._id}`,
@@ -99,11 +88,30 @@ exports.deleteTour = asyncHandler(async (req, res, next) => {
 
   if (!tour) {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`tour not found with id of ${req.params.id}`, 404)
     );
   }
 
   tour.remove();
 
   res.status(200).json({ success: true, data: {} });
+});
+
+exports.getTourCategory = asyncHandler(async (req, res, next) => {
+  const results = await Tour.find().select('category');
+
+  const uniqueRes = results.filter((val, index) => {
+    const _val = JSON.stringify(val.category);
+    return (
+      index ===
+      results.findIndex((obj) => {
+        return JSON.stringify(obj.category) === _val;
+      })
+    );
+  });
+
+  res.status(200).json({
+    success: true,
+    data: uniqueRes,
+  });
 });

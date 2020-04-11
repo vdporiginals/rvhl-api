@@ -62,17 +62,21 @@ UserSchema.pre('save', async function (next) {
 });
 
 //Sign JWT
-UserSchema.methods.signedJWT = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
-};
+// UserSchema.methods.signedJWT = function () {
+//   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
+//     expiresIn: process.env.JWT_EXPIRE,
+//   });
+// };
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_EXPIRE,
-  });
+  return jwt.sign(
+    { id: this._id, name: this.name, role: this.role },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_USER_EXPIRE,
+    }
+  );
 };
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {

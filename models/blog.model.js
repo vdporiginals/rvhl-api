@@ -1,7 +1,15 @@
 const mongoose = require('mongoose');
 const slug = require('../config/slug');
-
+const shortid = require('shortid');
+shortid.characters(
+  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+);
 const BlogSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: shortid.generate,
+  },
+  postId: { type: Number, default: 0 },
   title: {
     type: String,
     trim: true,
@@ -43,7 +51,7 @@ const BlogSchema = new mongoose.Schema({
 
 BlogSchema.pre('save', function (next) {
   this.seo = slug(this.title, '-');
-  next();
+  this.postId = next();
 });
 
 module.exports = new mongoose.model('Blog', BlogSchema);

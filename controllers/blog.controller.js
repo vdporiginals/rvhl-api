@@ -85,7 +85,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 //@route        PUT  /api/blogs/:id
 //@access       Private
 exports.updateBlog = asyncHandler(async (req, res, next) => {
-  const user = await User.findById(req.params.userId);
+  const user = await Blog.findById(req.params.id);
 
   if (user.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
@@ -96,16 +96,16 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
     );
   }
 
+  const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
+    new: true,
+    runValidators: true,
+  });
+
   if (!blog) {
     return next(
       new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
     );
   }
-
-  const blog = await Blog.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
 
   res.status(200).json({ success: true, data: blog });
 });
