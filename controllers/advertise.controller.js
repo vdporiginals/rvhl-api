@@ -24,7 +24,7 @@ exports.getAdvertise = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: advertise
+    data: advertise,
   });
 });
 
@@ -39,13 +39,13 @@ exports.createAdvertise = asyncHandler(async (req, res, next) => {
 
   if (!advertise) {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`advertise not found with id of ${req.params.id}`, 404)
     );
   }
 
   res.status(201).json({
     success: true,
-    data: advertise
+    data: advertise,
   });
 });
 
@@ -55,12 +55,12 @@ exports.createAdvertise = asyncHandler(async (req, res, next) => {
 exports.updateAdvertise = asyncHandler(async (req, res, next) => {
   const advertise = await Advertise.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   if (!advertise) {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`advertise not found with id of ${req.params.id}`, 404)
     );
   }
 
@@ -75,7 +75,7 @@ exports.deleteAdvertise = asyncHandler(async (req, res, next) => {
 
   if (!advertise) {
     return next(
-      new ErrorResponse(`Blog not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`advertise not found with id of ${req.params.id}`, 404)
     );
   }
 

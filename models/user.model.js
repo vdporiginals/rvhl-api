@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema({
   },
   email: {
     type: String,
-    required: [true, 'please add an email'],
+    required: [true, 'please add a email'],
     unique: [true, 'Only one account per Email!'],
     match: [
       /^[a-z][a-z0-9_\.]{5,32}@[a-z0-9]{2,}(\.[a-z0-9]{2,4}){1,2}$/,
@@ -45,7 +45,7 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: 'no-photo.jpg',
+    default: '/no-photo.jpg',
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -60,13 +60,6 @@ UserSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
   this.password = await bcrypt.hash(this.password, salt);
 });
-
-//Sign JWT
-// UserSchema.methods.signedJWT = function () {
-//   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
-//     expiresIn: process.env.JWT_EXPIRE,
-//   });
-// };
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {

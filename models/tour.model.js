@@ -15,7 +15,7 @@ const TourSchema = new mongoose.Schema({
   description: String,
   phone: String,
   time: Date,
-  price: Number,
+  price: { type: Number, required: [true, 'Please add price'] },
   services: {
     type: [String],
   },
