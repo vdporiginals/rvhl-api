@@ -2,6 +2,9 @@ const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/user.model');
 const randomstring = require('randomstring');
+const { OAuth2Client } = require('google-auth-library');
+const client = new OAuth2Client(process.env.GOOGLE_APP_ID);
+const request = require('request');
 
 // @desc      Register user
 // @route     POST /api/auth/register
@@ -209,131 +212,143 @@ const sendTokenResponse = (user, statusCode, res) => {
   });
 };
 
-exports.loginStrategy = asyncHandler(async (req, res, next) => {
-  sendTokenResponse(req.user, 200, res);
+exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
+  const social = req.body;
+  const ticket = await client.verifyIdToken({
+    idToken: req.body.token,
+    audience: process.env.GOOGLE_APP_ID,
+  });
+  const payload = ticket.getPayload();
+  const googleUid = payload['sub'];
+
+  if (googleUid !== social.socialData.google.id) {
+    return next(
+      new ErrorResponse('You must login with Google or Facebook', 400)
+    );
+  }
+
+  const isDuplicate = await User.findOne(
+    { email: social.socialData.email },
+    function (err, user) {
+      return user;
+    }
+  );
+  if (req.body.socialData.google !== undefined) {
+    if (isDuplicate && isDuplicate.facebookId !== undefined) {
+      const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
+        $set: {
+          googleId: social.socialData.google.id,
+        },
+      });
+      sendTokenResponse(uptUser, 200, res);
+    } else {
+      User.findOne(
+        {
+          googleId: social.socialData.google.id,
+        },
+        function (err, user) {
+          if (err) return done(err);
+          if (user) sendTokenResponse(user, 200, res);
+          else {
+            // if there is no user found with that facebook id, create them
+            const randomPassword = randomstring.generate({
+              length: 12,
+              charset: 'alphabetic',
+            });
+
+            let newUser = new User({
+              name: social.socialData.google.name,
+              password: randomPassword,
+              randomPassword,
+              email: social.socialData.google.email,
+              googleId: social.socialData.google.id,
+              avatar: social.socialData.google.avatar,
+            });
+
+            newUser.save(function (err) {
+              if (err) return next(new ErrorResponse(err.errmsg, 400), null);
+              sendTokenResponse(newUser, 200, res);
+            });
+          }
+        }
+      );
+    }
+  } else {
+    return next(new ErrorResponse('You must login with Google', 400));
+  }
 });
 
-exports.fbStrategy = async function (accessToken, refreshToken, profile, done) {
-  const isDuplicate = await User.findOne(
-    { email: profile.emails[0].value },
-    function (err, user) {
-      return user;
+exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
+  const social = req.body;
+  let isValid = false;
+  request.get(
+    `https://graph.facebook.com/oauth/access_token?client_id=${process.env.FACEBOOK_APP_ID}
+    &client_secret=${process.env.FACEBOOK_APP_SECRET}&grant_type=client_credentials`,
+    function (err, res, body) {
+      //nếu có lỗi
+      if (err) throw err;
+      const access = JSON.parse(body);
+      request.get(
+        `https://graph.facebook.com/debug_token?input_token=${social.token}
+        &access_token=${access.access_token}`,
+        async function (err, res, body) {
+          //nếu có lỗi
+          if (err) throw err;
+          let data = JSON.parse(body);
+          isValid = await data.data.is_valid;
+          if (isValid !== true) {
+            return next(
+              new ErrorResponse('Not authorized to access this route', 401)
+            );
+          }
+        }
+      );
     }
   );
 
-  if (
-    isDuplicate &&
-    (Object.values(isDuplicate.facebook)[1] == undefined ||
-      Object.values(isDuplicate.facebook)[2] == undefined)
-  ) {
-    const fbJson = await {
-      id: profile.id,
-      token: accessToken,
-      name: profile.displayName,
-    };
-
-    const uptFbUser = await User.findByIdAndUpdate(isDuplicate.id, {
-      $set: {
-        facebook: fbJson,
-      },
-    });
-
-    return done(null, uptFbUser);
-  } else {
-    User.findOne({ 'facebook.id': profile.id }, function (err, user) {
-      if (err) return done(err);
-      if (user) return done(null, user);
-      else {
-        const randomPassword = randomstring.generate({
-          length: 12,
-          charset: 'alphabetic',
-        });
-
-        let newUser = new User({
-          name: profile.displayName,
-          password: randomPassword,
-          randomPassword,
-          facebook: {
-            id: profile.id,
-            token: accessToken,
-            name: profile.displayName,
-          },
-          avatar: profile.photos[0].value,
-        });
-
-        if (typeof profile.emails != 'undefined' && profile.emails.length > 0)
-          newUser.email = profile.emails[0].value;
-
-        // save our user to the database
-        newUser.save(function (err) {
-          if (err) return done(null, new ErrorResponse(err.errmsg, 400));
-          return done(null, newUser);
-        });
+  if (req.body.socialData !== undefined) {
+    const isDuplicate = await User.findOne(
+      { email: social.socialData.email },
+      function (err, user) {
+        return user;
       }
-    });
-  }
-};
+    );
 
-exports.googleStrategy = async function (
-  accessToken,
-  refreshToken,
-  profile,
-  done
-) {
-  const isDuplicate = await User.findOne(
-    { email: profile.emails[0].value },
-    function (err, user) {
-      return user;
+    if (isDuplicate && isDuplicate.googleId !== undefined) {
+      const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
+        $set: {
+          facebookId: social.socialData.id,
+        },
+      });
+      sendTokenResponse(uptUser, 200, res);
+    } else {
+      User.findOne({ facebookId: social.socialData.id }, function (err, user) {
+        if (err) return next(err);
+        if (user) sendTokenResponse(user, 200, res);
+        else {
+          // if there is no user found with that facebook id, create them
+          const randomPassword = randomstring.generate({
+            length: 12,
+            charset: 'alphabetic',
+          });
+
+          let newUser = new User({
+            name: social.socialData.name,
+            password: randomPassword,
+            randomPassword,
+            email: social.socialData.email,
+            facebookId: social.socialData.id,
+            avatar: social.socialData.picture.data.url,
+          });
+
+          newUser.save(function (err) {
+            if (err) return next(new ErrorResponse(err.errmsg, 400), null);
+            sendTokenResponse(newUser, 200, res);
+          });
+        }
+      });
     }
-  );
-
-  if (
-    isDuplicate &&
-    (Object.values(isDuplicate.google)[1] == undefined ||
-      Object.values(isDuplicate.google)[2] == undefined)
-  ) {
-    const googleJson = await {
-      id: profile.id,
-      token: accessToken,
-      name: profile.displayName,
-    };
-
-    const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
-      $set: {
-        google: googleJson,
-      },
-    });
-
-    return done(null, uptUser);
   } else {
-    User.findOne({ 'google.id': profile.id }, function (err, user) {
-      if (err) return done(err);
-      if (user) return done(null, user);
-      else {
-        // if there is no user found with that facebook id, create them
-        const randomPassword = randomstring.generate({
-          length: 12,
-          charset: 'alphabetic',
-        });
-
-        let newUser = new User({
-          name: profile.displayName,
-          password: randomPassword,
-          randomPassword,
-          email: profile.emails[0].value,
-          google: {
-            id: profile.id,
-            token: accessToken,
-            name: profile.displayName,
-          },
-          avatar: profile._json.picture,
-        });
-
-        newUser.save(function (err) {
-          if (err) return done(new ErrorResponse(err.errmsg, 400), null);
-          return done(null, newUser);
-        });
-      }
-    });
+    return next(new ErrorResponse('You must login with facebook', 400));
   }
-};
+});

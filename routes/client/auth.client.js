@@ -12,9 +12,8 @@ const {
   resetPassword,
   updateDetails,
   updatePassword,
-  loginStrategy,
-  fbStrategy,
-  googleStrategy,
+  loginWithGoogle,
+  loginWithFacebook,
 } = require('../../controllers/auth.controller');
 const User = require('../../models/user.model');
 
@@ -61,23 +60,8 @@ passport.use(
 router.post('/register', register);
 router.post('/login', login);
 
-router.get(
-  '/facebook',
-  passport.authenticate('facebook', { scope: ['email'] })
-);
-router.get(
-  '/facebook/callback',
-  passport.authenticate('facebook'),
-  loginStrategy
-);
-
-router.get(
-  '/google',
-  passport.authenticate('google', {
-    scope: ['profile', 'email'],
-  })
-);
-router.get('/google/callback', passport.authenticate('google'), loginStrategy);
+router.post('/google', loginWithGoogle);
+router.post('/facebook', loginWithFacebook);
 
 router.get('/logout', logout);
 router.get('/me', protect, getMe);

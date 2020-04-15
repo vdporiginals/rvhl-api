@@ -42,10 +42,6 @@ if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 }
 
-// Passport init
-app.use(passport.initialize());
-app.use(passport.session());
-
 //file uploading
 // app.use(fileUpload());
 
@@ -71,6 +67,10 @@ app.use(hpp());
 
 // Enable cors
 app.use(cors());
+
+// Passport init
+app.use(passport.initialize());
+app.use(passport.session());
 
 //set  static folder
 app.use(express.static(path.join(__dirname, 'public')));

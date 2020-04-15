@@ -8,15 +8,15 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 
 //load models
-const Blog = require('./models/blog.model');
-const Advertise = require('./models/advertise.model');
+// const Blog = require('./models/blog.model');
+// const Advertise = require('./models/advertise.model');
 const User = require('./models/user.model');
 
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
   useFindAndModify: false,
-  useUnifiedTopology: true
+  useUnifiedTopology: true,
 });
 
 //read JSON file
@@ -33,8 +33,8 @@ const users = JSON.parse(
 //import into DB
 const importData = async () => {
   try {
-    await Blog.create(blogs);
-    await Advertise.create(advertises);
+    // await Blog.create(blogs);
+    // await Advertise.create(advertises);
     await User.create(users);
     console.log('Data imported'.green.inverse);
     process.exit();
@@ -46,8 +46,8 @@ const importData = async () => {
 //delete data
 const deleteData = async () => {
   try {
-    await Blog.deleteMany();
-    await Advertise.deleteMany();
+    // await Blog.deleteMany();
+    // await Advertise.deleteMany();
     await User.deleteMany();
     console.log('Data delete...'.red.inverse);
     process.exit();

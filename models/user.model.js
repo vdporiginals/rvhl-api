@@ -16,16 +16,8 @@ const UserSchema = new mongoose.Schema({
       'Please add a valid email',
     ],
   },
-  facebook: {
-    id: String,
-    token: String,
-    name: String,
-  },
-  google: {
-    id: String,
-    token: String,
-    name: String,
-  },
+  facebookId: String,
+  googleId: String,
   randomPassword: String,
   role: {
     type: String,
