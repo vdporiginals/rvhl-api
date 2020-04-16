@@ -135,7 +135,8 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
     'host'
   )}/api/v1/auth/resetpassword/${resetToken}`;
 
-  const message = `You are receiving this email because you (or someone else) has requested the reset of a password. Please make a PUT request to: \n\n ${resetUrl}`;
+  const message = `You are receiving this email because you (or someone else) has requested the reset of a password. 
+  Please make a PUT request to: \n\n ${resetUrl}`;
 
   try {
     await sendEmail({
@@ -242,36 +243,34 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
       });
       sendTokenResponse(uptUser, 200, res);
     } else {
-      User.findOne(
-        {
-          googleId: social.socialData.google.id,
-        },
-        function (err, user) {
-          if (err) return done(err);
-          if (user) sendTokenResponse(user, 200, res);
-          else {
-            // if there is no user found with that facebook id, create them
-            const randomPassword = randomstring.generate({
-              length: 12,
-              charset: 'alphabetic',
-            });
+      User.findOne({ googleId: social.socialData.google.id }, function (
+        err,
+        user
+      ) {
+        if (err) return next(new ErrorResponse(err, err.status));
+        if (user) sendTokenResponse(user, 200, res);
+        else {
+          // if there is no user found with that facebook id, create them
+          const randomPassword = randomstring.generate({
+            length: 12,
+            charset: 'alphabetic',
+          });
 
-            let newUser = new User({
-              name: social.socialData.google.name,
-              password: randomPassword,
-              randomPassword,
-              email: social.socialData.google.email,
-              googleId: social.socialData.google.id,
-              avatar: social.socialData.google.avatar,
-            });
+          let newUser = new User({
+            name: social.socialData.google.name,
+            password: randomPassword,
+            randomPassword,
+            email: social.socialData.google.email,
+            googleId: social.socialData.google.id,
+            avatar: social.socialData.google.avatar,
+          });
 
-            newUser.save(function (err) {
-              if (err) return next(new ErrorResponse(err.errmsg, 400), null);
-              sendTokenResponse(newUser, 200, res);
-            });
-          }
+          newUser.save(function (err) {
+            if (err) return next(new ErrorResponse(err.errmsg, 400), null);
+            sendTokenResponse(newUser, 200, res);
+          });
         }
-      );
+      });
     }
   } else {
     return next(new ErrorResponse('You must login with Google', 400));
@@ -323,7 +322,7 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
       sendTokenResponse(uptUser, 200, res);
     } else {
       User.findOne({ facebookId: social.socialData.id }, function (err, user) {
-        if (err) return next(err);
+        if (err) return next(new ErrorResponse(err, err.status));
         if (user) sendTokenResponse(user, 200, res);
         else {
           // if there is no user found with that facebook id, create them
