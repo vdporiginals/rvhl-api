@@ -287,6 +287,7 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
       //nếu có lỗi
       if (err) throw err;
       const access = JSON.parse(body);
+
       request.get(
         `https://graph.facebook.com/debug_token?input_token=${social.token}
         &access_token=${access.access_token}`,
