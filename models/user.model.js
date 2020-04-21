@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
   randomPassword: String,
   role: {
     type: String,
-    enum: ['user', 'moderator', 'admin'],
+    enum: ['user', 'moderator', 'admin', 'apiUser'],
     default: 'user',
   },
   password: {
@@ -55,13 +55,9 @@ UserSchema.pre('save', async function (next) {
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign(
-    { id: this._id, name: this.name, role: this.role },
-    process.env.JWT_SECRET,
-    {
-      expiresIn: process.env.JWT_USER_EXPIRE,
-    }
-  );
+  return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
+    expiresIn: process.env.JWT_USER_EXPIRE,
+  });
 };
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {

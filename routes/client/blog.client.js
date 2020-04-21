@@ -21,6 +21,8 @@ const { protect, authorize } = require('../../middleware/auth');
 router
   .route('/')
   .get(
+    protect,
+    authorize('admin'),
     advancedResults(Blog, {
       path: 'user',
       select: 'name avatar description',
@@ -33,7 +35,7 @@ router.route('/category').get(getBlogCategory);
 
 router
   .route('/:id')
-  .get(getBlog)
+  .get(protect, authorize('admin'), getBlog)
   .put(protect, authorize('moderator', 'admin'), updateBlog)
   .delete(protect, authorize('moderator', 'admin'), deleteBlog);
 

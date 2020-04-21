@@ -227,15 +227,14 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
       new ErrorResponse('You must login with Google or Facebook', 400)
     );
   }
-
   const isDuplicate = await User.findOne(
-    { email: social.socialData.email },
+    { email: social.socialData.google.email },
     function (err, user) {
       return user;
     }
   );
   if (req.body.socialData.google !== undefined) {
-    if (isDuplicate && isDuplicate.facebookId !== undefined) {
+    if (isDuplicate && isDuplicate.googleId !== undefined) {
       const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
         $set: {
           googleId: social.socialData.google.id,
@@ -314,7 +313,7 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
       }
     );
 
-    if (isDuplicate && isDuplicate.googleId !== undefined) {
+    if (isDuplicate && isDuplicate.facebookId !== undefined) {
       const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
         $set: {
           facebookId: social.socialData.id,

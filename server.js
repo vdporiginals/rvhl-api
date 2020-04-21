@@ -43,6 +43,9 @@ if (process.env.NODE_ENV === 'development') {
 //file uploading
 // app.use(fileUpload());
 
+// Enable cors
+app.use(cors());
+
 //Santize data
 app.use(mongoSanitize());
 
@@ -62,9 +65,6 @@ app.use(litmiter);
 
 //prevent http param pollution
 app.use(hpp());
-
-// Enable cors
-app.use(cors());
 
 //set  static folder
 app.use(express.static(path.join(__dirname, 'public')));

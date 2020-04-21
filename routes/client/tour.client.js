@@ -21,6 +21,8 @@ const { protect, authorize } = require('../../middleware/auth');
 router
   .route('/')
   .get(
+    protect,
+    authorize('admin'),
     advancedResults(Tour, {
       path: 'user',
       select: 'name avatar description',
@@ -33,7 +35,7 @@ router.route('/category').get(getTourCategory);
 
 router
   .route('/:id')
-  .get(getTour)
+  .get(protect, authorize('admin'), getTour)
   .put(protect, authorize('moderator', 'admin'), updateTour)
   .delete(protect, authorize('moderator', 'admin'), deleteTour);
 

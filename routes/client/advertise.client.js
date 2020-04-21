@@ -4,7 +4,7 @@ const {
   getAdvertise,
   createAdvertise,
   updateAdvertise,
-  deleteAdvertise
+  deleteAdvertise,
 } = require('../../controllers/advertise.controller');
 
 const Advertise = require('../../models/advertise.model');
@@ -19,12 +19,17 @@ const { protect, authorize } = require('../../middleware/auth');
 
 router
   .route('/')
-  .get(advancedResults(Advertise, null), getAdvertises)
+  .get(
+    protect,
+    authorize('admin'),
+    advancedResults(Advertise, null),
+    getAdvertises
+  )
   .post(protect, authorize('admin'), createAdvertise);
 
 router
   .route('/:id')
-  .get(getAdvertise)
+  .get(protect, authorize('admin'), getAdvertise)
   .put(protect, authorize('admin'), updateAdvertise)
   .delete(protect, authorize('admin'), deleteAdvertise);
 
