@@ -45,7 +45,7 @@ const BlogSchema = new mongoose.Schema({
   },
   images: {
     type: [String],
-    default: 'no-photo.jpg',
+    default: `localhost:${process.env.PORT}/no-photo.jpg`,
   },
 });
 

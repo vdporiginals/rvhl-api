@@ -233,6 +233,7 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
       return user;
     }
   );
+
   if (req.body.socialData.google !== undefined) {
     if (isDuplicate && isDuplicate.googleId !== undefined) {
       const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
@@ -258,7 +259,6 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
           let newUser = new User({
             name: social.socialData.google.name,
             password: randomPassword,
-            randomPassword,
             email: social.socialData.google.email,
             googleId: social.socialData.google.id,
             avatar: social.socialData.google.avatar,
@@ -334,7 +334,6 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
           let newUser = new User({
             name: social.socialData.name,
             password: randomPassword,
-            randomPassword,
             email: social.socialData.email,
             facebookId: social.socialData.id,
             avatar: social.socialData.picture.data.url,

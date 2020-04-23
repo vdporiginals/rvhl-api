@@ -18,7 +18,6 @@ const UserSchema = new mongoose.Schema({
   },
   facebookId: String,
   googleId: String,
-  randomPassword: String,
   role: {
     type: String,
     enum: ['user', 'moderator', 'admin', 'apiUser'],

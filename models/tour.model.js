@@ -21,7 +21,7 @@ const TourSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['Transfer', 'Hotel', 'Bay', 'AllInOne'],
+    enum: ['Transfer', 'Hotel', 'Cruise', 'AllInOne'],
   },
   seo: String,
   createdAt: { type: Date, default: Date.now },
