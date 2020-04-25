@@ -1,6 +1,18 @@
 const mongoose = require('mongoose');
 const slug = require('../config/slug');
 
+const TourCategorySchema = new mongoose.Schema({
+  name: {
+    type: String,
+    unique: true,
+    required: [true, 'please add a category'],
+  },
+  description: String,
+  createdAt: { type: Date, default: Date.now },
+});
+
+module.exports = new mongoose.model('TourCategory', TourCategorySchema);
+
 const TourSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -28,6 +40,10 @@ const TourSchema = new mongoose.Schema({
   status: {
     type: Boolean,
     default: false,
+  },
+  tourCategory: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'TourCategory',
   },
   user: {
     type: mongoose.Schema.ObjectId,

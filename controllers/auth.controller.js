@@ -6,6 +6,17 @@ const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_APP_ID);
 const request = require('request');
 
+exports.authApp = asyncHandler(async (req, res, next) => {
+  const { email, password } = req.body;
+  const appId = req.params.appId;
+  const user = await User.findOne({ email }).select('+password');
+  if (appId !== process.env.ANGULAR_APPID && !user) {
+    return next(new ErrorResponse('Not Authorized', 401));
+  }
+
+  sendTokenResponse(user, 200, res);
+});
+
 // @desc      Register user
 // @route     POST /api/auth/register
 // @access    Public
@@ -227,6 +238,7 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
       new ErrorResponse('You must login with Google or Facebook', 400)
     );
   }
+
   const isDuplicate = await User.findOne(
     { email: social.socialData.google.email },
     function (err, user) {
@@ -234,45 +246,41 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
     }
   );
 
-  if (req.body.socialData.google !== undefined) {
-    if (isDuplicate && isDuplicate.googleId !== undefined) {
-      const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
-        $set: {
-          googleId: social.socialData.google.id,
-        },
-      });
-      sendTokenResponse(uptUser, 200, res);
-    } else {
-      User.findOne({ googleId: social.socialData.google.id }, function (
-        err,
-        user
-      ) {
-        if (err) return next(new ErrorResponse(err, err.status));
-        if (user) sendTokenResponse(user, 200, res);
-        else {
-          // if there is no user found with that facebook id, create them
-          const randomPassword = randomstring.generate({
-            length: 12,
-            charset: 'alphabetic',
-          });
-
-          let newUser = new User({
-            name: social.socialData.google.name,
-            password: randomPassword,
-            email: social.socialData.google.email,
-            googleId: social.socialData.google.id,
-            avatar: social.socialData.google.avatar,
-          });
-
-          newUser.save(function (err) {
-            if (err) return next(new ErrorResponse(err.errmsg, 400), null);
-            sendTokenResponse(newUser, 200, res);
-          });
-        }
-      });
-    }
+  if (isDuplicate && isDuplicate.googleId !== undefined) {
+    const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
+      $set: {
+        googleId: social.socialData.google.id,
+      },
+    });
+    sendTokenResponse(uptUser, 200, res);
   } else {
-    return next(new ErrorResponse('You must login with Google', 400));
+    User.findOne({ googleId: social.socialData.google.id }, function (
+      err,
+      user
+    ) {
+      if (err) return next(new ErrorResponse(err, err.status));
+      if (user) sendTokenResponse(user, 200, res);
+      else {
+        // if there is no user found with that facebook id, create them
+        const randomPassword = randomstring.generate({
+          length: 12,
+          charset: 'alphabetic',
+        });
+
+        let newUser = new User({
+          name: social.socialData.google.name,
+          password: randomPassword,
+          email: social.socialData.google.email,
+          googleId: social.socialData.google.id,
+          avatar: social.socialData.google.avatar,
+        });
+
+        newUser.save(function (err) {
+          if (err) return next(new ErrorResponse(err.errmsg, 400), null);
+          sendTokenResponse(newUser, 200, res);
+        });
+      }
+    });
   }
 });
 
@@ -305,48 +313,48 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
     }
   );
 
-  if (req.body.socialData !== undefined) {
-    const isDuplicate = await User.findOne(
-      { email: social.socialData.email },
-      function (err, user) {
-        return user;
-      }
-    );
-
-    if (isDuplicate && isDuplicate.facebookId !== undefined) {
-      const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
-        $set: {
-          facebookId: social.socialData.id,
-        },
-      });
-      sendTokenResponse(uptUser, 200, res);
-    } else {
-      User.findOne({ facebookId: social.socialData.id }, function (err, user) {
-        if (err) return next(new ErrorResponse(err, err.status));
-        if (user) sendTokenResponse(user, 200, res);
-        else {
-          // if there is no user found with that facebook id, create them
-          const randomPassword = randomstring.generate({
-            length: 12,
-            charset: 'alphabetic',
-          });
-
-          let newUser = new User({
-            name: social.socialData.name,
-            password: randomPassword,
-            email: social.socialData.email,
-            facebookId: social.socialData.id,
-            avatar: social.socialData.picture.data.url,
-          });
-
-          newUser.save(function (err) {
-            if (err) return next(new ErrorResponse(err.errmsg, 400), null);
-            sendTokenResponse(newUser, 200, res);
-          });
-        }
-      });
-    }
-  } else {
+  if (social.socialData !== undefined) {
     return next(new ErrorResponse('You must login with facebook', 400));
+  }
+
+  const isDuplicate = await User.findOne(
+    { email: social.socialData.email },
+    function (err, user) {
+      return user;
+    }
+  );
+
+  if (isDuplicate && isDuplicate.facebookId !== undefined) {
+    const uptUser = await User.findByIdAndUpdate(isDuplicate.id, {
+      $set: {
+        facebookId: social.socialData.id,
+      },
+    });
+    sendTokenResponse(uptUser, 200, res);
+  } else {
+    User.findOne({ facebookId: social.socialData.id }, function (err, user) {
+      if (err) return next(new ErrorResponse(err, err.status));
+      if (user) sendTokenResponse(user, 200, res);
+      else {
+        // if there is no user found with that facebook id, create them
+        const randomPassword = randomstring.generate({
+          length: 12,
+          charset: 'alphabetic',
+        });
+
+        let newUser = new User({
+          name: social.socialData.name,
+          password: randomPassword,
+          email: social.socialData.email,
+          facebookId: social.socialData.id,
+          avatar: social.socialData.picture.data.url,
+        });
+
+        newUser.save(function (err) {
+          if (err) return next(new ErrorResponse(err.errmsg, 400), null);
+          sendTokenResponse(newUser, 200, res);
+        });
+      }
+    });
   }
 });
