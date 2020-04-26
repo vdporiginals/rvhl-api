@@ -31,7 +31,12 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     enum: ['Schedule', 'Food', 'Other'],
   },
-  // comment: {},
+  comments: [
+    {
+      type: mongoose.Schema.ObjectId,
+      ref: 'Comment',
+    },
+  ],
   // tags: {
   //     type: mongoose.Schema.ObjectId,
   //     ref: 'Tags'
@@ -53,5 +58,7 @@ BlogSchema.pre('save', function (next) {
   this.seo = slug(this.title, '-');
   this.postId = next();
 });
+
+BlogSchema.pre('findOne', Populate('user')).pre('find', Populate('user'));
 
 module.exports = new mongoose.model('Blog', BlogSchema);

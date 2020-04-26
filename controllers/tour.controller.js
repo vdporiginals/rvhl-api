@@ -3,7 +3,7 @@ const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const geocoder = require('../middleware/utils/geocoder');
 const Tour = require('../models/tour.model');
-const User = require('../models/user.model');
+
 //@desciption   Get all tour
 //@route        GET  /api/tour
 //@access       Public
@@ -15,7 +15,10 @@ exports.getTours = asyncHandler(async (req, res, next) => {
 //@route        GET  /api/tour/:id
 //@access       Public
 exports.getTour = asyncHandler(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
+  const tour = await Tour.findById(req.params.id).populate({
+    path: 'tourCategory',
+    select: 'name description',
+  });
 
   if (!tour) {
     return next(
@@ -97,6 +100,7 @@ exports.deleteTour = asyncHandler(async (req, res, next) => {
   res.status(200).json({ success: true, data: {} });
 });
 
+// GET api/tour/category
 exports.getTourCategory = asyncHandler(async (req, res, next) => {
   const results = await Tour.find().select('category');
 

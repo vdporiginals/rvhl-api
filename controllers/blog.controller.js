@@ -37,8 +37,10 @@ exports.getBlogCategory = asyncHandler(async (req, res, next) => {
 //@route        GET  /api/blogs/:id
 //@access       Public
 exports.getBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.id);
-  const user = await User.findById(blog.user);
+  const blog = await Blog.findById(req.params.id).populate({
+    path: 'user',
+    select: 'name avatar description email',
+  });
 
   if (!blog) {
     return next(
@@ -49,11 +51,6 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   res.status(200).json({
     success: true,
     data: blog,
-    user: {
-      name: user.name,
-      avatar: user.avatar,
-      description: user.description,
-    },
   });
 });
 
@@ -78,6 +75,50 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   res.status(201).json({
     success: true,
     data: blog,
+  });
+});
+
+//@desciption   create comment
+//@route        POST  /api/blogs/:id
+//@access       Private
+exports.createComment = asyncHandler(async (req, res, next) => {
+  //add user to req.body
+  req.body.user = req.user.id;
+
+  if (!req.user) {
+    return next(
+      new ErrorResponse(`The user has no permission to create new comment`, 400)
+    );
+  }
+
+  const comment = await Blog.create(req.body);
+
+  res.status(201).json({
+    success: true,
+    data: comment,
+  });
+});
+
+//@desciption   create reply
+//@route        POST  /api/blogs/:id/comments/:commentId
+//@access       Private
+exports.createReply = asyncHandler(async (req, res, next) => {
+  //add user to req.body
+  req.body.user = req.user.id;
+
+  if (!req.user) {
+    return next(
+      new ErrorResponse(`The user has no permission to create new blog`, 400)
+    );
+  }
+
+  const reply = await Comment.findByIdAndUpdate(req.params.commentId, {
+    reply: req.body,
+  });
+
+  res.status(201).json({
+    success: true,
+    data: reply,
   });
 });
 
