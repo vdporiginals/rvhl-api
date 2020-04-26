@@ -3,7 +3,7 @@ const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const geocoder = require('../middleware/utils/geocoder');
 const Blog = require('../models/blog.model');
-const User = require('../models/user.model');
+const Comment = require('../models/comment.model');
 //@desciption   Get all Blogs
 //@route        GET  /api/blogs
 //@access       Public
@@ -79,47 +79,97 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   create comment
-//@route        POST  /api/blogs/:id
+//@route        POST  /api/blogs/:id/comments
 //@access       Private
 exports.createComment = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-  req.body.user = req.user.id;
-
-  if (!req.user) {
-    return next(
-      new ErrorResponse(`The user has no permission to create new comment`, 400)
-    );
+  const currentUser = req.user;
+  if (currentUser === null) {
+    return res.redirect('/login');
   }
-
-  const comment = await Blog.create(req.body);
-
-  res.status(201).json({
-    success: true,
-    data: comment,
-  });
+  Blog.findById(req.params.id)
+    .then((post) => {
+      const author = req.user;
+      const authorId = author._id;
+      const postId = req.params.id;
+      const content = req.body.content;
+      const authorName = author.username;
+      console.log(req.params.id);
+      const comment = new Comment({
+        content,
+        postId,
+        author: authorId,
+        authorName,
+        authorAvatar: author.avatar,
+      });
+      post.comments.unshift(comment);
+      post.save();
+      return res.status(201).json({
+        success: true,
+        data: comment,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 //@desciption   create reply
 //@route        POST  /api/blogs/:id/comments/:commentId
 //@access       Private
 exports.createReply = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-  req.body.user = req.user.id;
-
-  if (!req.user) {
-    return next(
-      new ErrorResponse(`The user has no permission to create new blog`, 400)
-    );
+  const currentUser = req.user;
+  if (currentUser === null) {
+    return res.redirect('/login');
   }
 
-  const reply = await Comment.findByIdAndUpdate(req.params.commentId, {
-    reply: req.body,
-  });
+  const username = currentUser.name;
+  const postId = req.params.id;
+  const commentId = req.params.commentId;
 
-  res.status(201).json({
-    success: true,
-    data: reply,
-  });
+  Blog.findById(postId)
+    .then((post) => {
+      // console.log(">>> Found post:", post);
+      const findComment = (id, reply) => {
+        if (reply.length > 0) {
+          for (var index = 0; index < reply.length; index++) {
+            const comment = reply[index];
+            if (comment._id == id) {
+              return comment;
+            }
+            const foundComment = findComment(id, comment.reply);
+            if (foundComment) {
+              return foundComment;
+            }
+          }
+        }
+      };
+      // Step 1 find comment id -------------------'
+      const comment = findComment(commentId, post.comments);
+
+      // console.log(comment);
+      // make a new comment
+      const commentNew = new Comment({
+        content: req.body.content,
+        author: currentUser._id,
+        postId,
+        authorName: username,
+      });
+
+      // Step 2 unshift new comment ---------------------------
+      comment.reply.unshift(commentNew);
+
+      post.markModified('comments');
+      return post.save();
+    })
+    .then((post) => {
+      return res.status(201).json({
+        success: true,
+        data: post.reply,
+      });
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 });
 
 //@desciption   Update Blog

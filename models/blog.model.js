@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const slug = require('../config/slug');
 const shortid = require('shortid');
+const Comment = require('./comment.model');
+
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
@@ -9,7 +11,6 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     default: shortid.generate,
   },
-  postId: { type: Number, default: 0 },
   title: {
     type: String,
     trim: true,
@@ -31,12 +32,7 @@ const BlogSchema = new mongoose.Schema({
     type: String,
     enum: ['Schedule', 'Food', 'Other'],
   },
-  comments: [
-    {
-      type: mongoose.Schema.ObjectId,
-      ref: 'Comment',
-    },
-  ],
+  comments: [Comment.schema],
   // tags: {
   //     type: mongoose.Schema.ObjectId,
   //     ref: 'Tags'
@@ -58,7 +54,5 @@ BlogSchema.pre('save', function (next) {
   this.seo = slug(this.title, '-');
   this.postId = next();
 });
-
-BlogSchema.pre('findOne', Populate('user')).pre('find', Populate('user'));
 
 module.exports = new mongoose.model('Blog', BlogSchema);

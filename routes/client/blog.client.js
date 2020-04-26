@@ -6,6 +6,8 @@ const {
   updateBlog,
   deleteBlog,
   getBlogCategory,
+  createComment,
+  createReply,
 } = require('../../controllers/blog.controller');
 
 const Blog = require('../../models/blog.model');
@@ -38,5 +40,6 @@ router
   .get(protect, authorize('admin'), getBlog)
   .put(protect, authorize('moderator', 'admin'), updateBlog)
   .delete(protect, authorize('moderator', 'admin'), deleteBlog);
-
+router.route('/:id/comments/:commentId').post(protect, createReply);
+router.route('/:id/comments').post(protect, createComment);
 module.exports = router;
