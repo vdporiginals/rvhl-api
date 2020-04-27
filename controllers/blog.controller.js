@@ -93,7 +93,6 @@ exports.createComment = asyncHandler(async (req, res, next) => {
       const postId = req.params.id;
       const content = req.body.content;
       const authorName = author.username;
-      console.log(req.params.id);
       const comment = new Comment({
         content,
         postId,

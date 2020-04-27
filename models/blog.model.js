@@ -33,10 +33,7 @@ const BlogSchema = new mongoose.Schema({
     enum: ['Schedule', 'Food', 'Other'],
   },
   comments: [Comment.schema],
-  // tags: {
-  //     type: mongoose.Schema.ObjectId,
-  //     ref: 'Tags'
-  // },
+  tags: [String],
   address: String,
   seo: String,
   createdAt: { type: Date, default: Date.now },

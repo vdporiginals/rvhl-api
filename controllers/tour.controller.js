@@ -5,20 +5,21 @@ const geocoder = require('../middleware/utils/geocoder');
 const Tour = require('../models/tour.model');
 
 //@desciption   Get all tour
-//@route        GET  /api/tour
+//@route        GET  /api/tours
 //@access       Public
 exports.getTours = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
 //@desciption   Get single Tour
-//@route        GET  /api/tour/:id
+//@route        GET  /api/tours/:id
 //@access       Public
 exports.getTour = asyncHandler(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id).populate({
-    path: 'tourCategory',
-    select: 'name description',
-  });
+  const tour = await Tour.findById(req.params.id);
+  // .populate({
+  //   path: 'tourCategory',
+  //   select: 'name description',
+  // });
 
   if (!tour) {
     return next(
