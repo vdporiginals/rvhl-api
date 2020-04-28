@@ -3,7 +3,7 @@ const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const geocoder = require('../middleware/utils/geocoder');
 const Tour = require('../models/tour.model');
-
+const Category = require('../models/tourCategory.model');
 //@desciption   Get all tour
 //@route        GET  /api/tours
 //@access       Public
@@ -38,6 +38,13 @@ exports.getTour = asyncHandler(async (req, res, next) => {
 exports.createTour = asyncHandler(async (req, res, next) => {
   //add user to req.body
   req.body.user = req.user.id;
+  const category = await Category.findById(req.body.category);
+  if (!category) {
+    return next(
+      new ErrorResponse(`No category with the id of ${req.params.categoryId}`),
+      404
+    );
+  }
 
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
@@ -47,7 +54,6 @@ exports.createTour = asyncHandler(async (req, res, next) => {
       )
     );
   }
-
   const tour = await Tour.create(req.body);
 
   res.status(201).json({

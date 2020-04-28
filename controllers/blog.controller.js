@@ -3,6 +3,7 @@ const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const geocoder = require('../middleware/utils/geocoder');
 const Blog = require('../models/blog.model');
+const Category = require('../models/blogCategory.model');
 const Comment = require('../models/comment.model');
 //@desciption   Get all Blogs
 //@route        GET  /api/blogs
@@ -37,10 +38,15 @@ exports.getBlogCategory = asyncHandler(async (req, res, next) => {
 //@route        GET  /api/blogs/:id
 //@access       Public
 exports.getBlog = asyncHandler(async (req, res, next) => {
-  const blog = await Blog.findById(req.params.id).populate({
-    path: 'user',
-    select: 'name avatar description email',
-  });
+  const blog = await Blog.findById(req.params.id)
+    .populate({
+      path: 'user',
+      select: 'name avatar description email',
+    })
+    .populate({
+      path: 'category',
+      select: 'name',
+    });
 
   if (!blog) {
     return next(
@@ -54,12 +60,20 @@ exports.getBlog = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   create Blog
+//@desciption   create Blog add category ID to body
 //@route        POST  /api/blogs
 //@access       Private
 exports.createBlog = asyncHandler(async (req, res, next) => {
   //add user to req.body
+  // req.body.category = req.params.categoryId;
   req.body.user = req.user.id;
+  const category = await Category.findById(req.body.category);
+  if (!category) {
+    return next(
+      new ErrorResponse(`No category with the id of ${req.params.categoryId}`),
+      404
+    );
+  }
 
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(

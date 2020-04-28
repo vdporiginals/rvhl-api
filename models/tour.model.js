@@ -17,22 +17,20 @@ const TourSchema = new mongoose.Schema({
   ],
   description: String,
   phone: String,
-  time: Date,
+  time: String,
   price: { type: Number, required: [true, 'Please add price'] },
-  category: {
-    type: String,
-    enum: ['Transfer', 'Hotel', 'Cruise', 'AllInOne'],
-  },
   seo: String,
   createdAt: { type: Date, default: Date.now },
   status: {
     type: Boolean,
     default: false,
   },
-  tourCategory: {
+  category: {
     type: mongoose.Schema.ObjectId,
     ref: 'TourCategory',
+    required: true,
   },
+  address: String,
   user: {
     type: mongoose.Schema.ObjectId,
     ref: 'User',

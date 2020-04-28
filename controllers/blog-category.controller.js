@@ -1,13 +1,64 @@
 const path = require('path');
 const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
-const Category = require('../models/tourCategory.model');
-
+const Category = require('../models/blogCategory.model');
+const Blog = require('../models/blog.model');
 //@desciption   Get all category
 //@route        GET  /api/blogs/categories
+// @route     GET /api/blogs/categories/:id
 //@access       Public
 exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
+});
+
+exports.getBlogbyCategory = asyncHandler(async (req, res, next) => {
+  let blog = Blog.find({ category: req.params.categoryId }).populate({
+    path: 'category',
+    select: 'name',
+  });
+
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    blog = blog.select(fields);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    blog = blog.sort(sortBy);
+  } else {
+    blog = blog.sort('-createdAt');
+  }
+
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await Blog.countDocuments(blog);
+  const pagination = {};
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
+  blog = blog.skip(startIndex).limit(limit);
+  const result = await blog;
+  // const total = await Blog.countDocuments(...req.query);
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    pagination,
+    count: total,
+    data: result,
+  });
 });
 
 //@desciption   create Blog category

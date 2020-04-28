@@ -5,7 +5,6 @@ const {
   createBlog,
   updateBlog,
   deleteBlog,
-  getBlogCategory,
   createComment,
   createReply,
 } = require('../../controllers/blog.controller');
@@ -15,10 +14,11 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
+  getBlogbyCategory,
 } = require('../../controllers/blog-category.controller');
 const Blog = require('../../models/blog.model');
 const advancedResults = require('../../middleware/advancedResults');
-
+const Category = require('../../models/blogCategory.model');
 const router = express.Router();
 
 const { protect, authorize } = require('../../middleware/auth');
@@ -31,23 +31,20 @@ router
   .get(
     protect,
     authorize('admin'),
-    advancedResults(Blog, {
-      path: 'user',
-      select: 'name avatar description',
-    }),
+    advancedResults(
+      Blog,
+      {
+        path: 'user',
+        select: 'name avatar description',
+      },
+      {
+        path: 'category',
+        select: 'name',
+      }
+    ),
     getBlogs
   )
   .post(protect, authorize('moderator', 'admin'), createBlog);
-
-router.route('/category').get(getBlogCategory);
-
-router
-  .route('/:id')
-  .get(protect, authorize('admin'), getBlog)
-  .put(protect, authorize('moderator', 'admin'), updateBlog)
-  .delete(protect, authorize('moderator', 'admin'), deleteBlog);
-router.route('/:id/comments/:commentId').post(protect, createReply);
-router.route('/:id/comments').post(protect, createComment);
 
 router
   .route('/category')
@@ -55,13 +52,28 @@ router
   .get(
     protect,
     authorize('admin'),
-    advancedResults(Category, 'tour'),
+    advancedResults(Category, 'blog'),
     getCategories
   );
 
 router
-  .route('/category/:id')
+  .route('/category/:categoryId')
+  .get(
+    protect,
+    authorize('admin'),
+    advancedResults(Category, 'blog'),
+    getBlogbyCategory
+  )
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
+
+router
+  .route('/:id')
+  .get(protect, authorize('admin'), getBlog)
+  .put(protect, authorize('moderator', 'admin'), updateBlog)
+  .delete(protect, authorize('moderator', 'admin'), deleteBlog);
+
+router.route('/:id/comments/:commentId').post(protect, createReply);
+router.route('/:id/comments').post(protect, createComment);
 
 module.exports = router;

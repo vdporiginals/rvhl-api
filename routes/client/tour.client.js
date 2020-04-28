@@ -29,32 +29,32 @@ router
     protect,
     authorize('admin'),
     advancedResults(Tour, {
-      path: 'user',
-      select: 'name avatar description',
+      path: 'category',
+      select: 'name',
     }),
     getTours
   )
   .post(protect, authorize('moderator', 'admin'), createTour);
 
 router
-  .route('/:id')
-  .get(protect, authorize('admin'), getTour)
-  .put(protect, authorize('moderator', 'admin'), updateTour)
-  .delete(protect, authorize('moderator', 'admin'), deleteTour);
-
-router
   .route('/category')
-  .post(protect, authorize('moderator', 'admin'), createCategory)
   .get(
     protect,
     authorize('admin'),
     advancedResults(Category, 'tour'),
     getCategories
-  );
+  )
+  .post(protect, authorize('moderator', 'admin'), createCategory);
 
 router
   .route('/category/:id')
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
+
+router
+  .route('/:id')
+  .get(protect, authorize('admin'), getTour)
+  .put(protect, authorize('moderator', 'admin'), updateTour)
+  .delete(protect, authorize('moderator', 'admin'), deleteTour);
 
 module.exports = router;

@@ -29,8 +29,9 @@ const BlogSchema = new mongoose.Schema({
     ref: 'User',
   },
   category: {
-    type: String,
-    enum: ['Schedule', 'Food', 'Other'],
+    type: mongoose.Schema.ObjectId,
+    ref: 'BlogCategory',
+    required: true,
   },
   comments: [Comment.schema],
   tags: [String],
