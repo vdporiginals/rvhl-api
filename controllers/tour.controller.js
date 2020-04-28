@@ -15,11 +15,10 @@ exports.getTours = asyncHandler(async (req, res, next) => {
 //@route        GET  /api/tours/:id
 //@access       Public
 exports.getTour = asyncHandler(async (req, res, next) => {
-  const tour = await Tour.findById(req.params.id);
-  // .populate({
-  //   path: 'tourCategory',
-  //   select: 'name description',
-  // });
+  const tour = await Tour.findById(req.params.id).populate({
+    path: 'tourCategory',
+    select: 'name description',
+  });
 
   if (!tour) {
     return next(
@@ -99,24 +98,4 @@ exports.deleteTour = asyncHandler(async (req, res, next) => {
   tour.remove();
 
   res.status(200).json({ success: true, data: {} });
-});
-
-// GET api/tour/category
-exports.getTourCategory = asyncHandler(async (req, res, next) => {
-  const results = await Tour.find().select('category');
-
-  const uniqueRes = results.filter((val, index) => {
-    const _val = JSON.stringify(val.category);
-    return (
-      index ===
-      results.findIndex((obj) => {
-        return JSON.stringify(obj.category) === _val;
-      })
-    );
-  });
-
-  res.status(200).json({
-    success: true,
-    data: uniqueRes,
-  });
 });

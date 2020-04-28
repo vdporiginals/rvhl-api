@@ -7,18 +7,18 @@ const TourSchema = new mongoose.Schema({
     trim: true,
     required: [true, 'Please add Title'],
   },
-  schedule: {
-    timeStart: Date,
-    timeEnd: Date,
-    location: String,
-  },
+  schedule: [
+    {
+      timeStart: Date,
+      timeEnd: Date,
+      location: String,
+      service: String,
+    },
+  ],
   description: String,
   phone: String,
   time: Date,
   price: { type: Number, required: [true, 'Please add price'] },
-  services: {
-    type: [String],
-  },
   category: {
     type: String,
     enum: ['Transfer', 'Hotel', 'Cruise', 'AllInOne'],

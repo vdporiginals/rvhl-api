@@ -5,10 +5,15 @@ const {
   createTour,
   updateTour,
   deleteTour,
-  getTourCategory,
 } = require('../../controllers/tour.controller');
-
+const {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+} = require('../../controllers/tour-category.controller');
 const Tour = require('../../models/tour.model');
+const Category = require('../../models/tourCategory.model');
 const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
@@ -31,12 +36,25 @@ router
   )
   .post(protect, authorize('moderator', 'admin'), createTour);
 
-router.route('/category').get(getTourCategory);
-
 router
   .route('/:id')
   .get(protect, authorize('admin'), getTour)
   .put(protect, authorize('moderator', 'admin'), updateTour)
   .delete(protect, authorize('moderator', 'admin'), deleteTour);
+
+router
+  .route('/category')
+  .post(protect, authorize('moderator', 'admin'), createCategory)
+  .get(
+    protect,
+    authorize('admin'),
+    advancedResults(Category, 'tour'),
+    getCategories
+  );
+
+router
+  .route('/category/:id')
+  .put(protect, authorize('moderator', 'admin'), updateCategory)
+  .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 
 module.exports = router;
