@@ -28,7 +28,7 @@ router
   .route('/')
   .get(
     protect,
-    authorize('admin'),
+    authorize('apiUser'),
     advancedResults(Tour, {
       path: 'category',
       select: 'name',
@@ -41,7 +41,7 @@ router
   .route('/category')
   .get(
     protect,
-    authorize('admin'),
+    authorize('apiUser'),
     advancedResults(Category, 'tour'),
     getCategories
   )
@@ -51,7 +51,7 @@ router
   .route('/category/:categoryId')
   .get(
     protect,
-    authorize('admin'),
+    authorize('apiUser'),
     advancedResults(Category, 'blog'),
     getTourbyCategory
   )
@@ -60,7 +60,7 @@ router
 
 router
   .route('/:id')
-  .get(protect, authorize('admin'), getTour)
+  .get(protect, authorize('apiUser'), getTour)
   .put(protect, authorize('moderator', 'admin'), updateTour)
   .delete(protect, authorize('moderator', 'admin'), deleteTour);
 
