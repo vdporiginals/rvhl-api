@@ -11,6 +11,7 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
+  getTourbyCategory,
 } = require('../../controllers/tour-category.controller');
 const Tour = require('../../models/tour.model');
 const Category = require('../../models/tourCategory.model');
@@ -47,7 +48,13 @@ router
   .post(protect, authorize('moderator', 'admin'), createCategory);
 
 router
-  .route('/category/:id')
+  .route('/category/:categoryId')
+  .get(
+    protect,
+    authorize('admin'),
+    advancedResults(Category, 'blog'),
+    getTourbyCategory
+  )
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 

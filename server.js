@@ -22,6 +22,7 @@ dotenv.config({
 connectDB();
 
 //route
+const authApp = require('./routes/admin/auth-app.admin');
 const blogs = require('./routes/client/blog.client');
 const advertises = require('./routes/client/advertise.client');
 const auth = require('./routes/client/auth.client');
@@ -70,6 +71,7 @@ app.use(hpp());
 app.use(express.static(path.join(__dirname, 'public')));
 
 //mount router
+app.use('/api', authApp);
 app.use('/api/blogs', blogs);
 app.use('/api/tours', tours);
 app.use('/api/advertises', advertises);

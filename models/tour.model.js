@@ -9,6 +9,7 @@ const TourSchema = new mongoose.Schema({
   },
   schedule: [
     {
+      _id : false,
       timeStart: Date,
       timeEnd: Date,
       location: String,
@@ -43,6 +44,9 @@ const TourSchema = new mongoose.Schema({
 
 TourSchema.pre('save', function (next) {
   this.seo = slug(this.title, '-');
+  this.schedule.sort(function (a, b) {
+    return new Date(a.timeStart) - new Date(b.timeStart);
+  });
   next();
 });
 

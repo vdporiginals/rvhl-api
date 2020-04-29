@@ -2,12 +2,61 @@ const path = require('path');
 const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const Category = require('../models/tourCategory.model');
-
+const Tour = require('../models/tour.model');
 //@desciption   Get all tour
 //@route        GET  /api/tours/categories
 //@access       Public
 exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
+});
+
+exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
+  let tour = Tour.find({ category: req.params.categoryId }).populate({
+    path: 'category',
+    select: 'name',
+  });
+
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    tour = tour.select(fields);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    tour = tour.sort(sortBy);
+  } else {
+    tour = tour.sort('-createdAt');
+  }
+
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+  const startIndex = (page - 1) * limit;
+  const endIndex = page * limit;
+  const total = await Tour.countDocuments(tour);
+  const pagination = {};
+  if (endIndex < total) {
+    pagination.next = {
+      page: page + 1,
+      limit,
+    };
+  }
+
+  if (startIndex > 0) {
+    pagination.prev = {
+      page: page - 1,
+      limit,
+    };
+  }
+
+  tour = tour.skip(startIndex).limit(limit);
+  const result = await tour;
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    pagination,
+    count: total,
+    data: result,
+  });
 });
 
 //@desciption   create Tour category

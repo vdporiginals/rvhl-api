@@ -12,10 +12,15 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
 });
 
 exports.getBlogbyCategory = asyncHandler(async (req, res, next) => {
-  let blog = Blog.find({ category: req.params.categoryId }).populate({
-    path: 'category',
-    select: 'name',
-  });
+  let blog = Blog.find({ category: req.params.categoryId })
+    .populate({
+      path: 'category',
+      select: 'name',
+    })
+    .populate({
+      path: 'user',
+      select: 'name',
+    });
 
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ');
