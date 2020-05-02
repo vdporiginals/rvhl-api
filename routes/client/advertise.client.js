@@ -21,7 +21,7 @@ router
   .route('/')
   .get(
     protect,
-    authorize('apiUser'),
+    authorize('apiUser', 'admin'),
     advancedResults(Advertise, null),
     getAdvertises
   )
@@ -29,7 +29,7 @@ router
 
 router
   .route('/:id')
-  .get(protect, authorize('apiUser'), getAdvertise)
+  .get(protect, authorize('apiUser', 'admin'), getAdvertise)
   .put(protect, authorize('admin'), updateAdvertise)
   .delete(protect, authorize('admin'), deleteAdvertise);
 

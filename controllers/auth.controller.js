@@ -7,7 +7,6 @@ const client = new OAuth2Client(process.env.GOOGLE_APP_ID);
 const request = require('request');
 
 exports.authApp = asyncHandler(async (req, res, next) => {
-  console.log(req.query);
   const { email, password } = req.query;
   const appId = req.query.appId;
   const user = await User.findOne({ email }).select('+password');

@@ -10,8 +10,8 @@ dotenv.config({ path: './config/config.env' });
 //load models
 // const Blog = require('./models/blog.model');
 // const Advertise = require('./models/advertise.model');
-const User = require('./models/user.model');
-
+// const User = require('./models/user.model');
+const Tour = require('./models/tour.model');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -35,7 +35,7 @@ const importData = async () => {
   try {
     // await Blog.create(blogs);
     // await Advertise.create(advertises);
-    await User.create(users);
+    // await User.create(users);
     console.log('Data imported'.green.inverse);
     process.exit();
   } catch (err) {
@@ -48,7 +48,7 @@ const deleteData = async () => {
   try {
     // await Blog.deleteMany();
     // await Advertise.deleteMany();
-    await User.deleteMany();
+    await Tour.deleteMany();
     console.log('Data delete...'.red.inverse);
     process.exit();
   } catch (err) {

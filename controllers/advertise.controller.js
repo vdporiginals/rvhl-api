@@ -7,6 +7,7 @@ const Advertise = require('../models/advertise.model');
 //@route        GET  /api/advertises
 //@access       Public
 exports.getAdvertises = asyncHandler(async (req, res, next) => {
+  console.log(req);
   res.status(200).json(res.advancedResults);
 });
 

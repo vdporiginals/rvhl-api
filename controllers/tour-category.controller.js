@@ -28,7 +28,7 @@ exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
     tour = tour.sort('-createdAt');
   }
 
-  const page = parseInt(req.query.page, 10) || 1;
+  const page = parseInt(req.query.page, 10) || 0;
   const limit = parseInt(req.query.limit, 10) || 25;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;

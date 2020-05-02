@@ -30,7 +30,7 @@ router
   .route('/')
   .get(
     protect,
-    authorize('apiUser'),
+    authorize('apiUser', 'admin'),
     advancedResults(
       Blog,
       {
@@ -51,7 +51,7 @@ router
   .post(protect, authorize('moderator', 'admin'), createCategory)
   .get(
     protect,
-    authorize('apiUser'),
+    authorize('apiUser', 'admin'),
     advancedResults(Category, 'blog'),
     getCategories
   );
@@ -60,7 +60,7 @@ router
   .route('/category/:categoryId')
   .get(
     protect,
-    authorize('apiUser'),
+    authorize('apiUser', 'admin'),
     advancedResults(Category, 'blog'),
     getBlogbyCategory
   )
@@ -69,7 +69,7 @@ router
 
 router
   .route('/:id')
-  .get(protect, authorize('apiUser'), getBlog)
+  .get(protect, authorize('apiUser', 'admin'), getBlog)
   .put(protect, authorize('moderator', 'admin'), updateBlog)
   .delete(protect, authorize('moderator', 'admin'), deleteBlog);
 

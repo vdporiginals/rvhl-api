@@ -9,7 +9,7 @@ const TourSchema = new mongoose.Schema({
   },
   schedule: [
     {
-      _id : false,
+      _id: false,
       timeStart: Date,
       timeEnd: Date,
       location: String,
@@ -18,6 +18,7 @@ const TourSchema = new mongoose.Schema({
   ],
   description: String,
   phone: String,
+  customerNum: Number,
   time: String,
   price: { type: Number, required: [true, 'Please add price'] },
   seo: String,

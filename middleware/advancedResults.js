@@ -18,9 +18,18 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     /\b(gt|gte|lt|lte|in)\b/g,
     (match) => `$${match}`
   );
-
   //finding resource
-  query = model.find(JSON.parse(queryStr));
+  if (req.query.title) {
+    query = model.find(
+      { title: { $regex: new RegExp(req.query.title, 'i') } },
+      JSON.parse(queryStr),
+      { _id: 0 },
+      function (err, data) {}
+    );
+  } else {
+    query = model.find(JSON.parse(queryStr));
+  }
+
   //SELECT Field
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ');
@@ -41,9 +50,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const total = await model.countDocuments();
-
   query = query.skip(startIndex).limit(limit);
-
   if (populate) {
     query = query.populate(populate);
   }

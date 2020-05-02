@@ -54,6 +54,7 @@ exports.createTour = asyncHandler(async (req, res, next) => {
       )
     );
   }
+
   const tour = await Tour.create(req.body);
 
   res.status(201).json({
@@ -86,11 +87,11 @@ exports.updateTour = asyncHandler(async (req, res, next) => {
 exports.deleteTour = asyncHandler(async (req, res, next) => {
   const tour = await Tour.findById(req.params.id);
 
-  if (req.user.role !== 'admin' || req.user.role !== 'moderator') {
+  if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to delete course ${course._id}`,
-        401
+        `The user with ID ${req.user.id} has no permission to create new tour`,
+        400
       )
     );
   }
