@@ -18,6 +18,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     /\b(gt|gte|lt|lte|in)\b/g,
     (match) => `$${match}`
   );
+
   //finding resource
   if (req.query.title) {
     query = model.find(
@@ -50,6 +51,10 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const total = await model.countDocuments();
+  if (page < 0) {
+    page = 1;
+  }
+
   query = query.skip(startIndex).limit(limit);
   if (populate) {
     query = query.populate(populate);

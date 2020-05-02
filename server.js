@@ -56,6 +56,9 @@ app.use(helmet());
 //Prevent xss attack
 app.use(xss());
 
+//prevent http param pollution
+app.use(hpp());
+
 //rate limiting
 const litmiter = rateLimit({
   windowMs: 10 * 60 * 1000, //10 minute
@@ -63,9 +66,6 @@ const litmiter = rateLimit({
 });
 
 app.use(litmiter);
-
-//prevent http param pollution
-app.use(hpp());
 
 //set  static folder
 app.use(express.static(path.join(__dirname, 'public')));
