@@ -2,7 +2,9 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   let query;
 
   //copy req.query
-  const reqQuery = { ...req.query };
+  const reqQuery = {
+    ...req.query
+  };
 
   //field to exclude
   const removeFields = ['select', 'sort', 'page', 'limit']; //pageNum and pageSize
@@ -18,16 +20,32 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     /\b(gt|gte|lt|lte|in)\b/g,
     (match) => `$${match}`
   );
-
+  console.log(req.query)
   //finding resource
   if (req.query.title) {
-    query = model.find(
-      { title: { $regex: new RegExp(req.query.title, 'i') } },
-      JSON.parse(queryStr),
-      { _id: 0 },
+    query = model.find({
+        title: {
+          $regex: new RegExp(req.query.title, 'i')
+        }
+      },
+      JSON.parse(queryStr), {
+        _id: 0
+      },
+      function (err, data) {}
+    );
+  } else if (req.query.name) {
+    query = model.find({
+        name: {
+          $regex: new RegExp(req.query.name, 'i')
+        }
+      },
+      JSON.parse(queryStr), {
+        _id: 0
+      },
       function (err, data) {}
     );
   } else {
+
     query = model.find(JSON.parse(queryStr));
   }
 
@@ -81,7 +99,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
   res.advancedResults = {
     success: true,
-    totalRecord: results.length,
+    numRecord: results.length,
     count: total,
     pagination,
     data: results,

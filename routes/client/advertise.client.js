@@ -5,14 +5,24 @@ const {
   createAdvertise,
   updateAdvertise,
   deleteAdvertise,
-} = require('../../controllers/advertise.controller');
-
-const Advertise = require('../../models/advertise.model');
+} = require('../../controllers/advertise/advertise.controller');
+const {
+  getCategories,
+  createCategory,
+  updateCategory,
+  deleteCategory,
+  getAdvertisebyCategory,
+} = require('../../controllers/advertise/advertise-category.controller');
+const Category = require('../../models/advertise/advertiseCategory.model');
+const Advertise = require('../../models/advertise/advertise.model');
 const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
 
-const { protect, authorize } = require('../../middleware/auth');
+const {
+  protect,
+  authorize
+} = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
@@ -26,6 +36,27 @@ router
     getAdvertises
   )
   .post(protect, authorize('admin'), createAdvertise);
+
+router
+  .route('/category')
+  .post(protect, authorize('moderator', 'admin'), createCategory)
+  .get(
+    protect,
+    authorize('apiUser', 'admin'),
+    advancedResults(Category, 'position'),
+    getCategories
+  );
+
+router
+  .route('/category/:categoryId')
+  .get(
+    protect,
+    authorize('apiUser', 'admin'),
+    advancedResults(Category, 'position'),
+    getAdvertisebyCategory
+  )
+  .put(protect, authorize('moderator', 'admin'), updateCategory)
+  .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 
 router
   .route('/:id')

@@ -7,12 +7,17 @@ const BlogCategorySchema = new mongoose.Schema({
     required: [true, 'please add a category'],
   },
   description: String,
-  createdAt: { type: Date, default: Date.now },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 });
 
 BlogCategorySchema.pre('remove', async function (next) {
   console.log(`Blog being removed from BlogCategory ${this._id}`);
-  await this.model('Blog').deleteMany({ bootcamp: this._id });
+  await this.model('Blog').deleteMany({
+    category: this._id
+  });
   next();
 });
 

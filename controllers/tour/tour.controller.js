@@ -1,9 +1,9 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/utils/errorResponse');
-const asyncHandler = require('../middleware/asyncHandler');
-const geocoder = require('../middleware/utils/geocoder');
-const Tour = require('../models/tour.model');
-const Category = require('../models/tourCategory.model');
+const ErrorResponse = require('../../middleware/utils/errorResponse');
+const asyncHandler = require('../../middleware/asyncHandler');
+const geocoder = require('../../middleware/utils/geocoder');
+const Tour = require('../../models/tour/tour.model');
+const Category = require('../../models/tour/tourCategory.model');
 //@desciption   Get all tour
 //@route        GET  /api/tours
 //@access       Public
@@ -78,7 +78,10 @@ exports.updateTour = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: tour });
+  res.status(200).json({
+    success: true,
+    data: tour
+  });
 });
 
 //@desciption   Delete tour
@@ -104,5 +107,8 @@ exports.deleteTour = asyncHandler(async (req, res, next) => {
 
   tour.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

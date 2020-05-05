@@ -1,8 +1,8 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/utils/errorResponse');
-const asyncHandler = require('../middleware/asyncHandler');
-const Category = require('../models/tourCategory.model');
-const Tour = require('../models/tour.model');
+const ErrorResponse = require('../../middleware/utils/errorResponse');
+const asyncHandler = require('../../middleware/asyncHandler');
+const Category = require('../../models/tour/tourCategory.model');
+const Tour = require('../../models/tour/tour.model');
 //@desciption   Get all tour
 //@route        GET  /api/tours/categories
 //@access       Public
@@ -11,7 +11,9 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
 });
 
 exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
-  let tour = Tour.find({ category: req.params.categoryId }).populate({
+  let tour = Tour.find({
+    category: req.params.categoryId
+  }).populate({
     path: 'category',
     select: 'name',
   });
@@ -98,7 +100,10 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: category });
+  res.status(200).json({
+    success: true,
+    data: category
+  });
 });
 
 //@desciption   Delete tour category
@@ -124,5 +129,8 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
   category.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

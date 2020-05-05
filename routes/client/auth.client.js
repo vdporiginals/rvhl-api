@@ -12,7 +12,6 @@ const {
   loginWithGoogle,
   loginWithFacebook,
 } = require('../../controllers/auth.controller');
-const User = require('../../models/user.model');
 
 const router = express.Router();
 

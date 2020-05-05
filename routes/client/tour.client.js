@@ -5,21 +5,24 @@ const {
   createTour,
   updateTour,
   deleteTour,
-} = require('../../controllers/tour.controller');
+} = require('../../controllers/tour/tour.controller');
 const {
   getCategories,
   createCategory,
   updateCategory,
   deleteCategory,
   getTourbyCategory,
-} = require('../../controllers/tour-category.controller');
-const Tour = require('../../models/tour.model');
-const Category = require('../../models/tourCategory.model');
+} = require('../../controllers/tour/tour-category.controller');
+const Tour = require('../../models/tour/tour.model');
+const Category = require('../../models/tour/tourCategory.model');
 const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
 
-const { protect, authorize } = require('../../middleware/auth');
+const {
+  protect,
+  authorize
+} = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
@@ -52,7 +55,6 @@ router
   .get(
     protect,
     authorize('apiUser', 'admin'),
-    advancedResults(Category, 'blog'),
     getTourbyCategory
   )
   .put(protect, authorize('moderator', 'admin'), updateCategory)

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const slug = require('../config/slug');
+const slug = require('../../config/slug');
 const AdvertiseSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -23,20 +23,18 @@ const AdvertiseSchema = new mongoose.Schema({
     default: false,
   },
   category: {
-    type: String,
-    enum: [
-      'bannerReview',
-      'bannerTour',
-      'bannerTransfer',
-      'bannerHotel',
-      'bannerCruise',
-      'video',
-      'about',
-      'slider',
-      'other',
-    ],
+    type: mongoose.Schema.ObjectId,
+    ref: 'AdvertiseCategory',
+    required: true,
   },
-  createdAt: { type: Date, default: Date.now },
+  isPopular: {
+    type: Boolean,
+    default: false
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 });
 
 AdvertiseSchema.pre('save', function (next) {

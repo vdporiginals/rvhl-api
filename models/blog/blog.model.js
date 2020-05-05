@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const slug = require('../config/slug');
+const slug = require('../../config/slug');
 const shortid = require('shortid');
 const Comment = require('./comment.model');
 
@@ -33,18 +33,25 @@ const BlogSchema = new mongoose.Schema({
     ref: 'BlogCategory',
     required: true,
   },
+  isPopular: {
+    type: Boolean,
+    default: false
+  },
   comments: [Comment.schema],
   tags: [String],
   address: String,
   seo: String,
-  createdAt: { type: Date, default: Date.now },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
   status: {
     type: Boolean,
     default: false,
   },
   images: {
     type: [String],
-    default: `localhost:${process.env.PORT}/no-photo.jpg`,
+    default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
   },
 });
 

@@ -7,12 +7,17 @@ const TourCategorySchema = new mongoose.Schema({
     required: [true, 'please add a category'],
   },
   description: String,
-  createdAt: { type: Date, default: Date.now },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
 });
 
 TourCategorySchema.pre('remove', async function (next) {
   console.log(`Tour being removed from tourcategory ${this._id}`);
-  await this.model('Tour').deleteMany({ bootcamp: this._id });
+  await this.model('Tour').deleteMany({
+    category: this._id
+  });
   next();
 });
 

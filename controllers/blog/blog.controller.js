@@ -1,10 +1,10 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/utils/errorResponse');
-const asyncHandler = require('../middleware/asyncHandler');
-const geocoder = require('../middleware/utils/geocoder');
-const Blog = require('../models/blog.model');
-const Category = require('../models/blogCategory.model');
-const Comment = require('../models/comment.model');
+const ErrorResponse = require('../../middleware/utils/errorResponse');
+const asyncHandler = require('../../middleware/asyncHandler');
+const geocoder = require('../../middleware/utils/geocoder');
+const Blog = require('../../models/blog/blog.model');
+const Category = require('../../models/blog/blogCategory.model');
+const Comment = require('../../models/blog/comment.model');
 //@desciption   Get all Blogs
 //@route        GET  /api/blogs
 //@access       Public
@@ -116,7 +116,6 @@ exports.createReply = asyncHandler(async (req, res, next) => {
   const username = currentUser.name;
   const postId = req.params.id;
   const commentId = req.params.commentId;
-
   Blog.findById(postId)
     .then((post) => {
       // console.log(">>> Found post:", post);
@@ -163,11 +162,39 @@ exports.createReply = asyncHandler(async (req, res, next) => {
     });
 });
 
+//@desciption   create reply
+//@route        PUT  /api/blogs/:id/comments/:commentId
+//@access       Private
+exports.deleteComment = asyncHandler(async (req, res, next) => {
+  Blog.findByIdAndUpdate(
+    req.params.id, {
+      $pull: {
+        comments: {
+          _id: req.params.commentId
+        }
+      }
+    }, {
+      safe: true,
+      upsert: true
+    },
+    function (err, node) {
+      if (err) {
+        return handleError(res, err);
+      }
+      return res.status(200).json({
+        success: true,
+        data: []
+      });
+    }
+  );
+});
 //@desciption   Update Blog
 //@route        PUT  /api/blogs/:id
 //@access       Private
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const user = await Blog.findById(req.params.id);
+
+
 
   if (user.user.toString() !== req.user.id && req.user.role !== 'admin') {
     return next(
@@ -189,7 +216,9 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: blog });
+  res.status(200).json({
+    success: true
+  });
 });
 
 //@desciption   Delete Blog
@@ -215,5 +244,8 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
 
   blog.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

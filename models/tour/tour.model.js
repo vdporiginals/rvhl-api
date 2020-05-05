@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const slug = require('../config/slug');
+const slug = require('../../config/slug');
 
 const TourSchema = new mongoose.Schema({
   title: {
@@ -7,22 +7,30 @@ const TourSchema = new mongoose.Schema({
     trim: true,
     required: [true, 'Please add Title'],
   },
-  schedule: [
-    {
-      _id: false,
-      timeStart: Date,
-      timeEnd: Date,
-      location: String,
-      service: String,
-    },
-  ],
+  schedule: [{
+    _id: false,
+    timeStart: Date,
+    timeEnd: Date,
+    location: String,
+    service: String,
+  }],
+  isPopular: {
+    type: Boolean,
+    default: false
+  },
   description: String,
   phone: String,
   customerNum: Number,
   time: String,
-  price: { type: Number, required: [true, 'Please add price'] },
+  price: {
+    type: Number,
+    required: [true, 'Please add price']
+  },
   seo: String,
-  createdAt: { type: Date, default: Date.now },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
   status: {
     type: Boolean,
     default: false,

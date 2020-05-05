@@ -1,8 +1,8 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/utils/errorResponse');
-const asyncHandler = require('../middleware/asyncHandler');
-const Category = require('../models/blogCategory.model');
-const Blog = require('../models/blog.model');
+const ErrorResponse = require('../../middleware/utils/errorResponse');
+const asyncHandler = require('../../middleware/asyncHandler');
+const Category = require('../../models/blog/blogCategory.model');
+const Blog = require('../../models/blog/blog.model');
 //@desciption   Get all category
 //@route        GET  /api/blogs/categories
 // @route     GET /api/blogs/categories/:id
@@ -12,7 +12,9 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
 });
 
 exports.getBlogbyCategory = asyncHandler(async (req, res, next) => {
-  let blog = Blog.find({ category: req.params.categoryId })
+  let blog = Blog.find({
+      category: req.params.categoryId
+    })
     .populate({
       path: 'category',
       select: 'name',
@@ -105,7 +107,10 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: category });
+  res.status(200).json({
+    success: true,
+    data: category
+  });
 });
 
 //@desciption   Delete Blog category
@@ -131,5 +136,8 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
   category.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

@@ -1,7 +1,7 @@
 const path = require('path');
-const ErrorResponse = require('../middleware/utils/errorResponse');
-const asyncHandler = require('../middleware/asyncHandler');
-const Advertise = require('../models/advertise.model');
+const ErrorResponse = require('../../middleware/utils/errorResponse');
+const asyncHandler = require('../../middleware/asyncHandler');
+const Advertise = require('../../models/advertise/advertise.model');
 
 //@desciption   Get all advertise
 //@route        GET  /api/advertises
@@ -65,7 +65,10 @@ exports.updateAdvertise = asyncHandler(async (req, res, next) => {
     );
   }
 
-  res.status(200).json({ success: true, data: advertise });
+  res.status(200).json({
+    success: true,
+    data: advertise
+  });
 });
 
 //@desciption   Delete advertise
@@ -82,5 +85,8 @@ exports.deleteAdvertise = asyncHandler(async (req, res, next) => {
 
   advertise.remove();
 
-  res.status(200).json({ success: true, data: {} });
+  res.status(200).json({
+    success: true,
+    data: {}
+  });
 });

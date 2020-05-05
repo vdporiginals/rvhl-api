@@ -28,7 +28,9 @@ const advertises = require('./routes/client/advertise.client');
 const auth = require('./routes/client/auth.client');
 const users = require('./routes/client/user.client');
 const tours = require('./routes/client/tour.client');
-
+const hotels = require('./routes/client/hotel.client');
+const transfers = require('./routes/client/transfer.client');
+const homepage = require('./routes/client/homepage.client')
 const app = express();
 //Body parser
 app.use(express.json());
@@ -72,8 +74,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 //mount router
 app.use('/api', authApp);
+app.use('/api/homepage', homepage);
 app.use('/api/blogs', blogs);
 app.use('/api/tours', tours);
+app.use('/api/hotels', hotels);
+app.use('/api/transfers', transfers);
 app.use('/api/advertises', advertises);
 app.use('/api/auth', auth);
 app.use('/api/users', users);
@@ -84,13 +89,26 @@ const server = app.listen(
   PORT,
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}!`.yellow
-      .bold
+    .bold
   )
 );
-
+loadModels = function () {
+  // loop through all files in models directory ignoring hidden files and this file
+  fs.readdirSync(config.modelsDirMongo)
+    .filter(function (file) {
+      return file.indexOf('.') !== 0 && file !== 'index.js';
+    })
+    // import model files and save model names
+    .forEach(function (file) {
+      winston.info('Loading mongoose model file ' + file);
+      require(path.join(config.modelsDirMongo, file));
+    });
+};
 //handle rejecttions
 process.on('unhandledRejection', (err, promise) => {
   console.log(`Error: ${err.message}`.red);
   //close server and exit process
   server.close(() => process.exit(1));
 });
+
+// module.exports = server
