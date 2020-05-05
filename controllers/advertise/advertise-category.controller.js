@@ -19,10 +19,6 @@ exports.getAdvertisebyCategory = asyncHandler(async (req, res, next) => {
             path: 'category',
             select: 'name',
         })
-        .populate({
-            path: 'position',
-            select: 'name',
-        });
 
     if (req.query.select) {
         const fields = req.query.select.split(',').join(' ');
@@ -36,27 +32,6 @@ exports.getAdvertisebyCategory = asyncHandler(async (req, res, next) => {
         advertise = advertise.sort('-createdAt');
     }
 
-    const page = parseInt(req.query.page, 10) || 0;
-    const limit = parseInt(req.query.limit, 10) || 25;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const total = await Advertise.countDocuments(advertise);
-    const pagination = {};
-    if (endIndex < total) {
-        pagination.next = {
-            page: page + 1,
-            limit,
-        };
-    }
-
-    if (startIndex > 0) {
-        pagination.prev = {
-            page: page - 1,
-            limit,
-        };
-    }
-
-    advertise = advertise.skip(startIndex).limit(limit);
     const result = await advertise;
     // const total = await advertise.countDocuments(...req.query);
     return res.status(200).json({

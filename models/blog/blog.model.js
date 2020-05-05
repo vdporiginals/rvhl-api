@@ -37,6 +37,7 @@ const BlogSchema = new mongoose.Schema({
     type: Boolean,
     default: false
   },
+  keywords: String,
   comments: [Comment.schema],
   tags: [String],
   address: String,

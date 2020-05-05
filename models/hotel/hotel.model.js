@@ -21,6 +21,7 @@ const HotelSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.jpg',
   },
+  keywords: String,
   seo: String,
   status: {
     type: Boolean,

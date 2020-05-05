@@ -11,6 +11,7 @@ const TransferSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a description'],
   },
+  keywords: String,
   link: {
     type: String,
   },

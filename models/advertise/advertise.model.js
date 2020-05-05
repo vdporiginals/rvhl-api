@@ -10,9 +10,11 @@ const AdvertiseSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a description'],
   },
+  keywords: String,
   link: {
     type: String,
   },
+  page: ['tour', 'review', 'hotel', 'transfer', 'bannerTour', 'bannerReview', 'bannerHotel', 'bannerTransfer'],
   image: {
     type: String,
     default: 'no-photo.jpg',

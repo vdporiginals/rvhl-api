@@ -7,6 +7,7 @@ const TourSchema = new mongoose.Schema({
     trim: true,
     required: [true, 'Please add Title'],
   },
+  keywords: String,
   schedule: [{
     _id: false,
     timeStart: Date,

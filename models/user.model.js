@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-
+const http = require("http");
+const host = http.originalUrl;
 const UserSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -36,7 +37,7 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: 'localhost:5001/no-photo.jpg',
+    default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -54,7 +55,10 @@ UserSchema.pre('save', async function (next) {
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({ id: this._id, role: this.role }, process.env.JWT_SECRET, {
+  return jwt.sign({
+    id: this._id,
+    role: this.role
+  }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_USER_EXPIRE,
   });
 };
@@ -85,7 +89,9 @@ UserSchema.methods.getUserById = function (id, callback) {
 };
 
 UserSchema.methods.getUserByUsername = function (username, callback) {
-  var query = { username: username };
+  var query = {
+    username: username
+  };
   User.findOne(query, callback);
 };
 

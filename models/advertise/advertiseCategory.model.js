@@ -6,7 +6,7 @@ const AdvertiseCategorySchema = new mongoose.Schema({
         required: [true, 'please add a category'],
     },
     description: String,
-    position: ['slider', 'video', 'bannerAdvertise'],
+    position: ['slider', 'video', 'bannerAdvertise', 'bannerPage'],
     createdAt: {
         type: Date,
         default: Date.now
