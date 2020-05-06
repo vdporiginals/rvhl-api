@@ -7,6 +7,10 @@ const BlogCategorySchema = new mongoose.Schema({
     required: [true, 'please add a category'],
   },
   description: String,
+  keywords: {
+    type: String,
+    default: 'Danh mục review hạ long',
+  },
   createdAt: {
     type: Date,
     default: Date.now

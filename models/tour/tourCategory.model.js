@@ -6,6 +6,10 @@ const TourCategorySchema = new mongoose.Schema({
     unique: true,
     required: [true, 'please add a category'],
   },
+  keywords: {
+    type: String,
+    default: 'Danh mục tour hạ long',
+  },
   description: String,
   createdAt: {
     type: Date,

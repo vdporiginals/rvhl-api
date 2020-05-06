@@ -6,6 +6,10 @@ const AdvertiseCategorySchema = new mongoose.Schema({
         required: [true, 'please add a category'],
     },
     description: String,
+    keywords: {
+        type: String,
+        default: 'Danh mục quảng cáo hạ long',
+    },
     position: ['slider', 'video', 'bannerAdvertise', 'bannerPage'],
     createdAt: {
         type: Date,

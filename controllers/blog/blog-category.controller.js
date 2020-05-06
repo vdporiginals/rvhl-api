@@ -114,12 +114,12 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 });
 
 //@desciption   Delete Blog category
-//@route        DELETE  /api/blogs/categories/:id
+//@route        DELETE  /api/blogs/category/:id
 //@access       Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
-  const category = await Category.findById(req.params.id);
+  const category = await Category.findById(req.params.categoryId);
 
-  if (req.user.role !== 'admin' || req.user.role !== 'moderator') {
+  if (req.user.role !== 'admin' && req.user.role !== 'moderator') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete course ${category._id}`,

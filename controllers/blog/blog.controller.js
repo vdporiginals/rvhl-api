@@ -66,7 +66,7 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: blog,
+    data: blog._id,
   });
 });
 
@@ -96,7 +96,7 @@ exports.createComment = asyncHandler(async (req, res, next) => {
       post.save();
       return res.status(201).json({
         success: true,
-        data: comment,
+        data: comment._id,
       });
     })
     .catch((err) => {
@@ -154,7 +154,7 @@ exports.createReply = asyncHandler(async (req, res, next) => {
     .then((post) => {
       return res.status(201).json({
         success: true,
-        data: post.reply,
+        data: post.reply._id,
       });
     })
     .catch((err) => {
@@ -217,7 +217,8 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
   }
 
   res.status(200).json({
-    success: true
+    success: true,
+    data: blog._id
   });
 });
 
