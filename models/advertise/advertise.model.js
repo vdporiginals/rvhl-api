@@ -14,7 +14,10 @@ const AdvertiseSchema = new mongoose.Schema({
   link: {
     type: String,
   },
-  page: ['tour', 'review', 'hotel', 'transfer', 'bannerTour', 'bannerReview', 'bannerHotel', 'bannerTransfer'],
+  page: {
+    type: String,
+    enum: ['tour', 'review', 'hotel', 'transfer', 'bannerTour', 'bannerReview', 'bannerHotel', 'bannerTransfer']
+  },
   image: {
     type: String,
     default: 'no-photo.jpg',

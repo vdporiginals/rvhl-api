@@ -17,12 +17,12 @@ const BlogCategorySchema = new mongoose.Schema({
   },
 });
 
-// BlogCategorySchema.pre('remove', async function (next) {
-//   console.log(`Blog being removed from BlogCategory ${this._id}`);
-//   await this.model('Blog').deleteMany({
-//     category: this._id
-//   });
-//   next();
-// });
+BlogCategorySchema.pre('remove', async function (next) {
+  console.log(`Blog being removed from BlogCategory ${this._id}`);
+  await this.model('Blog').deleteMany({
+    category: this._id
+  });
+  next();
+});
 
 module.exports = new mongoose.model('BlogCategory', BlogCategorySchema);
