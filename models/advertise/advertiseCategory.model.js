@@ -11,8 +11,7 @@ const AdvertiseCategorySchema = new mongoose.Schema({
         default: 'Danh mục quảng cáo hạ long',
     },
     position: {
-        type: String,
-        enum: ['Slider', 'Video', 'BannerAdvertise', 'BannerPage']
+        type: String['slider', 'video', 'bannerAdvertise', 'bannerPage']
     },
     createdAt: {
         type: Date,

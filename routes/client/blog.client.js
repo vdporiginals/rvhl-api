@@ -53,7 +53,7 @@ router
   .route('/category')
   .post(protect, authorize('moderator', 'admin'), createCategory)
   .get(
-    advancedResults(Category, 'blog'),
+    advancedResults(Category, null),
     getCategories
   );
 

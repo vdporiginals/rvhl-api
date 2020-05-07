@@ -41,7 +41,7 @@ router
 router
   .route('/category')
   .get(
-    advancedResults(Category, 'tour'),
+    advancedResults(Category, null),
     getCategories
   )
   .post(protect, authorize('moderator', 'admin'), createCategory);

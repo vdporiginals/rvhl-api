@@ -40,14 +40,13 @@ router
   .route('/category')
   .post(protect, authorize('moderator', 'admin'), createCategory)
   .get(
-    advancedResults(Category, 'position'),
+    advancedResults(Category, null),
     getCategories
   );
 
 router
   .route('/category/:categoryId')
   .get(
-    advancedResults(Category, 'position'),
     getAdvertisebyCategory
   )
   .put(protect, authorize('moderator', 'admin'), updateCategory)
