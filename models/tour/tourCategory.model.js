@@ -17,12 +17,12 @@ const TourCategorySchema = new mongoose.Schema({
   },
 });
 
-TourCategorySchema.pre('remove', async function (next) {
-  console.log(`Tour being removed from tourcategory ${this._id}`);
-  await this.model('Tour').deleteMany({
-    category: this._id
-  });
-  next();
-});
+// TourCategorySchema.pre('remove', async function (next) {
+//   console.log(`Tour being removed from tourcategory ${this._id}`);
+//   await this.model('Tour').deleteMany({
+//     category: this._id
+//   });
+//   next();
+// });
 
 module.exports = new mongoose.model('TourCategory', TourCategorySchema);

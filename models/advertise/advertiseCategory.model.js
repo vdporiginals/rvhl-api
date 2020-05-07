@@ -17,12 +17,12 @@ const AdvertiseCategorySchema = new mongoose.Schema({
     },
 });
 
-AdvertiseCategorySchema.pre('remove', async function (next) {
-    console.log(`Advertise being removed from AdvertiseCategory ${this._id}`);
-    await this.model('Advertise').deleteMany({
-        category: this._id
-    });
-    next();
-});
+// AdvertiseCategorySchema.pre('remove', async function (next) {
+//     console.log(`Advertise being removed from AdvertiseCategory ${this._id}`);
+//     await this.model('Advertise').deleteMany({
+//         category: this._id
+//     });
+//     next();
+// });
 
 module.exports = new mongoose.model('AdvertiseCategory', AdvertiseCategorySchema);
