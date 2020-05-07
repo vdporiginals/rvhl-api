@@ -12,7 +12,7 @@ const AdvertiseCategorySchema = new mongoose.Schema({
     },
     position: {
         type: String,
-        enum: ['slider', 'video', 'bannerAdvertise', 'bannerPage']
+        enum: ['Slider', 'Video', 'BannerAdvertise', 'BannerPage']
     },
     createdAt: {
         type: Date,
