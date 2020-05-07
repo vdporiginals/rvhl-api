@@ -30,8 +30,7 @@ const {
 router
   .route('/')
   .get(
-    protect,
-    authorize('apiUser', 'admin'),
+
     advancedResults(Advertise, null),
     getAdvertises
   )
@@ -41,8 +40,6 @@ router
   .route('/category')
   .post(protect, authorize('moderator', 'admin'), createCategory)
   .get(
-    protect,
-    authorize('apiUser', 'admin'),
     advancedResults(Category, 'position'),
     getCategories
   );
@@ -50,8 +47,6 @@ router
 router
   .route('/category/:categoryId')
   .get(
-    protect,
-    authorize('apiUser', 'admin'),
     advancedResults(Category, 'position'),
     getAdvertisebyCategory
   )
@@ -60,7 +55,7 @@ router
 
 router
   .route('/:id')
-  .get(protect, authorize('apiUser', 'admin'), getAdvertise)
+  .get(getAdvertise)
   .put(protect, authorize('admin'), updateAdvertise)
   .delete(protect, authorize('admin'), deleteAdvertise);
 

@@ -27,7 +27,7 @@ router
 
 router
   .route('/:id')
-  .get(protect, authorize('apiUser', 'admin'), getTransfer)
+  .get(getTransfer)
   .put(protect, authorize('admin', 'moderator'), updateTransfer)
   .delete(protect, authorize('admin', 'moderator'), deleteTransfer);
 

@@ -23,8 +23,6 @@ const {
 router
   .route('/')
   .get(
-    protect,
-    authorize('apiUser', 'admin'),
     advancedResults(Hotel, null),
     getHotels
   )
@@ -32,7 +30,7 @@ router
 
 router
   .route('/:id')
-  .get(protect, authorize('apiUser', 'admin'), getHotel)
+  .get(getHotel)
   .put(protect, authorize('admin', 'moderator'), updateHotel)
   .delete(protect, authorize('admin', 'moderator'), deleteHotel);
 

@@ -24,40 +24,29 @@ const {
 router
     .route('/slider')
     .get(
-        protect,
-        authorize('apiUser', 'admin'),
+
         getSliderAdvertise
     )
 
 router
     .route('/popular-review')
     .get(
-        protect,
-        authorize('apiUser', 'admin'),
+
         getPopularReviews
     )
 
 router
     .route('/popular-tour')
     .get(
-        protect,
-        authorize('apiUser', 'admin'),
         getPopupularTour
     )
 
 router
     .route('/video-banner')
     .get(
-        protect,
-        authorize('apiUser', 'admin'),
-        getVideoBanner
-    )
+        getVideoBanner)
 
 router
     .route('/advertise-banner')
-    .get(
-        protect,
-        authorize('apiUser', 'admin'),
-        getAdvertiseBanner
-    )
+    .get(getAdvertiseBanner)
 module.exports = router;
