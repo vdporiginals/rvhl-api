@@ -4,7 +4,6 @@ const asyncHandler = require('../../middleware/asyncHandler');
 const geocoder = require('../../middleware/utils/geocoder');
 const Blog = require('../../models/blog/blog.model');
 const Category = require('../../models/blog/blogCategory.model');
-const Comment = require('../../models/blog/comment.model');
 //@desciption   Get all Blogs
 //@route        GET  /api/blogs
 //@access       Public
@@ -70,133 +69,14 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   create comment
-//@route        POST  /api/blogs/:id/comments
-//@access       Private
-exports.createComment = asyncHandler(async (req, res, next) => {
-  const currentUser = req.user;
-  if (currentUser === null) {
-    return res.redirect('/login');
-  }
-  Blog.findById(req.params.id)
-    .then((post) => {
-      const author = req.user;
-      const authorId = author._id;
-      const postId = req.params.id;
-      const content = req.body.content;
-      const authorName = author.username;
-      const comment = new Comment({
-        content,
-        postId,
-        author: authorId,
-        authorName,
-        authorAvatar: author.avatar,
-      });
-      post.comments.unshift(comment);
-      post.save();
-      return res.status(201).json({
-        success: true,
-        data: comment._id,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
 
-//@desciption   create reply
-//@route        POST  /api/blogs/:id/comments/:commentId
-//@access       Private
-exports.createReply = asyncHandler(async (req, res, next) => {
-  const currentUser = req.user;
-  if (currentUser === null) {
-    return res.redirect('/login');
-  }
-
-  const username = currentUser.name;
-  const postId = req.params.id;
-  const commentId = req.params.commentId;
-  Blog.findById(postId)
-    .then((post) => {
-      // console.log(">>> Found post:", post);
-      const findComment = (id, reply) => {
-        if (reply.length > 0) {
-          for (var index = 0; index < reply.length; index++) {
-            const comment = reply[index];
-            if (comment._id == id) {
-              return comment;
-            }
-            const foundComment = findComment(id, comment.reply);
-            if (foundComment) {
-              return foundComment;
-            }
-          }
-        }
-      };
-      // Step 1 find comment id -------------------'
-      const comment = findComment(commentId, post.comments);
-
-      // console.log(comment);
-      // make a new comment
-      const commentNew = new Comment({
-        content: req.body.content,
-        author: currentUser._id,
-        postId,
-        authorName: username,
-      });
-
-      // Step 2 unshift new comment ---------------------------
-      comment.reply.unshift(commentNew);
-
-      post.markModified('comments');
-      return post.save();
-    })
-    .then((post) => {
-      return res.status(201).json({
-        success: true,
-        data: post.reply._id,
-      });
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-});
-
-//@desciption   create reply
-//@route        PUT  /api/blogs/:id/comments/:commentId
-//@access       Private
-exports.deleteComment = asyncHandler(async (req, res, next) => {
-  Blog.findByIdAndUpdate(
-    req.params.id, {
-      $pull: {
-        comments: {
-          _id: req.params.commentId
-        }
-      }
-    }, {
-      safe: true,
-      upsert: true
-    },
-    function (err, node) {
-      if (err) {
-        return handleError(res, err);
-      }
-      return res.status(200).json({
-        success: true,
-        data: []
-      });
-    }
-  );
-});
 //@desciption   Update Blog
 //@route        PUT  /api/blogs/:id
 //@access       Private
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const user = await Blog.findById(req.params.id);
 
-
-
-  if (user.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (user.user.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to update this blog ${user._id}`,
@@ -228,7 +108,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
 
-  if (blog.user.toString() !== req.user.id && req.user.role !== 'admin') {
+  if (blog.user.toString() !== req.user._id && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete course ${course._id}`,

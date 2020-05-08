@@ -30,7 +30,8 @@ const users = require('./routes/client/user.client');
 const tours = require('./routes/client/tour.client');
 const hotels = require('./routes/client/hotel.client');
 const transfers = require('./routes/client/transfer.client');
-const homepage = require('./routes/client/homepage.client')
+const homepage = require('./routes/client/homepage.client');
+const comment = require('./routes/client/comment.client');
 const app = express();
 //Body parser
 app.use(express.json());
@@ -81,6 +82,7 @@ app.use('/api/hotels', hotels);
 app.use('/api/transfers', transfers);
 app.use('/api/advertises', advertises);
 app.use('/api/auth', auth);
+app.use('/api/comment', comment);
 app.use('/api/users', users);
 app.use(errorHandler);
 const PORT = process.env.PORT || 5000;

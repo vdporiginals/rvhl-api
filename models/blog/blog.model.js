@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const slug = require('../../config/slug');
 const shortid = require('shortid');
-const Comment = require('./comment.model');
 
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
@@ -38,7 +37,6 @@ const BlogSchema = new mongoose.Schema({
     default: false
   },
   keywords: String,
-  comments: [Comment.schema],
   tags: [String],
   address: String,
   seo: String,
@@ -54,11 +52,36 @@ const BlogSchema = new mongoose.Schema({
     type: [String],
     default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
   },
+}, {
+  toJSON: {
+    virtuals: true
+  },
+  toObject: {
+    virtuals: true
+  }
 });
 
 BlogSchema.pre('save', function (next) {
   this.seo = slug(this.title, '-');
-  this.postId = next();
+  next();
 });
+
+
+// BlogSchema.pre('remove', async function (next) {
+//   console.log(`comment being removed from blog ${this._id}`);
+//   await this.model('Comment').deleteMany({
+//     postId: this._id
+//   });
+//   next();
+// });
+
+// Revere populate  
+BlogSchema.virtual('comments', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'postId',
+  justOne: false
+});
+
 
 module.exports = new mongoose.model('Blog', BlogSchema);

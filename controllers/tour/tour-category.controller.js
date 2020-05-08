@@ -11,6 +11,7 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
 });
 
 exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
+  console.log(req.params.categoryId)
   let tour = Tour.find({
     category: req.params.categoryId
   }).populate({
@@ -35,7 +36,16 @@ exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
   const total = await Tour.countDocuments(tour);
+
+  const result = await tour;
+
+  tour = tour.skip(startIndex).limit(limit);
+
   const pagination = {};
+  if (page < 0) {
+    page = 1;
+  }
+
   if (endIndex < total) {
     pagination.next = {
       page: page + 1,
@@ -51,7 +61,6 @@ exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
   }
 
   tour = tour.skip(startIndex).limit(limit);
-  const result = await tour;
   return res.status(200).json({
     success: true,
     totalRecord: result.length,
