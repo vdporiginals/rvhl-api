@@ -19,12 +19,8 @@ const {
     authorize
 } = require('../../middleware/auth');
 
-router.route('/reply/:replyId')
-    .put(protect, updateReply)
-    .delete(protect, deleteReply)
-
 router
-    .route('/:postId')
+    .route('/comments/:postId')
     .get(
         advancedResults(
             Comment, [{
@@ -33,21 +29,10 @@ router
                 path: 'postId',
                 select: 'title',
             }, {
-                path: 'answer',
-                match: {
-                    status: true
-                }
+                path: 'answer'
             }]
         ),
         getComments
     )
-    .post(protect, createBlogComment);
-
-router
-    .route('/:postId/:commentId')
-    .put(protect, updateComment)
-    .get(protect, advancedResults(Reply, 'commentId'), getComments)
-    .post(protect, createBlogReply)
-    .delete(protect, deleteComment);
 
 module.exports = router;

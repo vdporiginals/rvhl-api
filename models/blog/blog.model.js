@@ -67,20 +67,12 @@ BlogSchema.pre('save', function (next) {
 });
 
 
-// BlogSchema.pre('remove', async function (next) {
-//   console.log(`comment being removed from blog ${this._id}`);
-//   await this.model('Comment').deleteMany({
-//     postId: this._id
-//   });
-//   next();
-// });
-
-// Revere populate  
-BlogSchema.virtual('comments', {
-  ref: 'Comment',
-  localField: '_id',
-  foreignField: 'postId',
-  justOne: false
+BlogSchema.pre('remove', async function (next) {
+  console.log(`comment being removed from blog ${this._id}`);
+  await this.model('Comment').deleteMany({
+    postId: this._id
+  });
+  next();
 });
 
 

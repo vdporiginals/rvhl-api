@@ -35,12 +35,13 @@ const CommentSchema = new mongoose.Schema({
   }
 });
 
-CommentSchema.virtual('reply', {
+CommentSchema.virtual('answer', {
   ref: 'Reply',
   localField: '_id',
   foreignField: 'commentId',
-  justOne: false
-})
+  justOne: false,
+
+});
 
 // Use a regular function here to avoid issues with this!
 CommentSchema.pre('save', function (next) {
