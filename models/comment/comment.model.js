@@ -42,7 +42,7 @@ CommentSchema.virtual('answer', {
   justOne: false,
 });
 
-CommentSchema.virtual('answer', {
+CommentSchema.virtual('answerCount', {
   ref: 'Reply',
   localField: '_id',
   foreignField: 'commentId',

@@ -2,12 +2,12 @@ const path = require('path');
 const ErrorResponse = require('../../middleware/utils/errorResponse');
 const asyncHandler = require('../../middleware/asyncHandler');
 const Transfer = require('../../models/transfer/transfer.model');
+const Category = require('../../models/transfer/transferCategory.model');
 
 //@desciption   Get all Transfer
 //@route        GET  /api/Transfers
 //@access       Public
 exports.getTransfers = asyncHandler(async (req, res, next) => {
-  console.log(req);
   res.status(200).json(res.advancedResults);
 });
 
@@ -15,7 +15,7 @@ exports.getTransfers = asyncHandler(async (req, res, next) => {
 //@route        GET  /api/Transfers/:id
 //@access       Public
 exports.getTransfer = asyncHandler(async (req, res, next) => {
-  const transfer = await Transfer.findById(req.params.id);
+  const transfer = await Transfer.findById(req.params.transferId);
 
   if (!transfer) {
     return next(
@@ -33,20 +33,19 @@ exports.getTransfer = asyncHandler(async (req, res, next) => {
 //@route        POST  /api/Transfers
 //@access       Private
 exports.createTransfer = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-  req.body.user = req.user.id;
+  const category = await Category.findById(req.body.category);
 
-  const transfer = await Transfer.create(req.body);
-
-  if (!transfer) {
+  if (!category) {
     return next(
-      new ErrorResponse(`Transfer not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(`Category not found with id of ${req.params.id}`, 404)
     );
   }
 
+  const transfer = await Transfer.create(req.body);
+
   res.status(201).json({
     success: true,
-    data: transfer,
+    data: transfer._id,
   });
 });
 
@@ -67,7 +66,7 @@ exports.updateTransfer = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: transfer
+    data: transfer._id,
   });
 });
 
@@ -87,6 +86,6 @@ exports.deleteTransfer = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {}
+    data: {},
   });
 });

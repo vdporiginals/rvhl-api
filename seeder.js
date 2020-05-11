@@ -8,8 +8,10 @@ const dotenv = require('dotenv');
 dotenv.config({ path: './config/config.env' });
 
 //load models
-// const Blog = require('./models/blog.model');
-// const Advertise = require('./models/advertise.model');
+const BlogCategory = require('./models/blog/blogCategory.model');
+const AdvertiseCategory = require('./models/advertise/advertiseCategory.model');
+const TourCategory = require('./models/tour/tourCategory.model');
+const TransferCategory = require('./models/transfer/transferCategory.model');
 const User = require('./models/user.model');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -19,11 +21,17 @@ mongoose.connect(process.env.MONGO_URI, {
 });
 
 //read JSON file
-const blogs = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/blog.json`, 'utf-8')
+const blogCategories = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/blogCat.json`, 'utf-8')
 );
-const advertises = JSON.parse(
-  fs.readFileSync(`${__dirname}/_data/advertise.json`, 'utf-8')
+const advertiseCategories = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/advertiseCat.json`, 'utf-8')
+);
+const tourCategories = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/tourCat.json`, 'utf-8')
+);
+const transferCategories = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/transferCat.json`, 'utf-8')
 );
 const users = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/user.json`, 'utf-8')
@@ -32,8 +40,10 @@ const users = JSON.parse(
 //import into DB
 const importData = async () => {
   try {
-    // await Blog.create(blogs);
-    // await Advertise.create(advertises);
+    await BlogCategory.create(blogCategories);
+    await AdvertiseCategory.create(advertiseCategories);
+    await TourCategory.create(tourCategories);
+    await TransferCategory.create(transferCategories);
     await User.create(users);
     console.log('Data imported'.green.inverse);
     process.exit();
@@ -45,9 +55,11 @@ const importData = async () => {
 //delete data
 const deleteData = async () => {
   try {
-    // await Blog.deleteMany();
-    // await Advertise.deleteMany();
-    await Tour.deleteMany();
+    await BlogCategory.deleteMany();
+    await AdvertiseCategory.deleteMany();
+    await TourCategory.deleteMany();
+    await TransferCategory.deleteMany();
+    await User.deleteMany();
     console.log('Data delete...'.red.inverse);
     process.exit();
   } catch (err) {

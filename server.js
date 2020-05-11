@@ -28,11 +28,11 @@ const advertises = require('./routes/client/advertise.client');
 const auth = require('./routes/client/auth.client');
 const users = require('./routes/client/user.client');
 const tours = require('./routes/client/tour.client');
-const hotels = require('./routes/client/hotel.client');
 const transfers = require('./routes/client/transfer.client');
 const homepage = require('./routes/client/homepage.client');
 const comment = require('./routes/client/comment.client');
 const commentControl = require('./routes/admin/comment.admin');
+const estates = require('./routes/client/estate.client');
 const app = express();
 //Body parser
 app.use(express.json());
@@ -79,11 +79,11 @@ app.use('/api', authApp);
 app.use('/api/homepage', homepage);
 app.use('/api/blogs', blogs);
 app.use('/api/tours', tours);
-app.use('/api/hotels', hotels);
 app.use('/api/transfers', transfers);
 app.use('/api/advertises', advertises);
 app.use('/api/auth', auth);
 app.use('/api/comments', comment);
+app.use('/api/estates', estates);
 app.use('/api/users', users);
 app.use('/api/admin', commentControl);
 app.use(errorHandler);
@@ -93,7 +93,7 @@ const server = app.listen(
   PORT,
   console.log(
     `Server running in ${process.env.NODE_ENV} mode on port ${PORT}!`.yellow
-    .bold
+      .bold
   )
 );
 loadModels = function () {
