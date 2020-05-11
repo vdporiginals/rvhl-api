@@ -25,7 +25,7 @@ const { protect, authorize } = require('../../middleware/auth');
 //   .update(protect, authorize('publisher', 'admin'), blogPhotoUpload);
 router
   .route('/category')
-  .get(advancedResults(Category, 'transfers'), getCategories)
+  .get(advancedResults(Category, null), getCategories)
   .post(protect, authorize('admin', 'moderator'), createCategory)
   .put(protect, authorize('admin', 'moderator'), updateCategory)
   .delete(protect, authorize('admin', 'moderator'), deleteCategory);
@@ -33,12 +33,12 @@ router
 // router.route('/category/:categoryId').get(getCategory);
 
 router
-  .route('/transfer')
+  .route('/')
   .get(advancedResults(Transfer, null), getTransfers)
   .post(protect, authorize('admin', 'moderator'), createTransfer)
   .put(protect, authorize('admin', 'moderator'), updateTransfer)
   .delete(protect, authorize('admin', 'moderator'), deleteTransfer);
 
-router.route('/transfer/:transferId').get(getTransfer);
+router.route('/:transferId').get(getTransfer);
 
 module.exports = router;

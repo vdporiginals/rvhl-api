@@ -51,15 +51,15 @@ router
 
 router
   .route('/category/villa')
-  .get(advancedResults(Estate, 'villas', 'Villa'), getCategories);
+  .get(advancedResults(Estate, null, 'Villa'), getCategories);
 
 router
   .route('/category/homestay')
-  .get(advancedResults(Estate, 'homestays', 'Homestay'), getCategories);
+  .get(advancedResults(Estate, null, 'Homestay'), getCategories);
 
 router
   .route('/category/hotel')
-  .get(advancedResults(Estate, 'hotels', 'Hotel'), getCategories);
+  .get(advancedResults(Estate, null, 'Hotel'), getCategories);
 
 router
   .route('/hotel')

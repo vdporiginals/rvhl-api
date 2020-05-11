@@ -33,8 +33,6 @@ exports.getHomestay = asyncHandler(async (req, res, next) => {
 //@route        POST  /estate/homestays
 //@access       Private
 exports.createHomestay = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-  req.body.user = req.user.id;
   const category = await Category.findById(req.body.category);
 
   if (!category) {

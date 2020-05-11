@@ -88,8 +88,6 @@ const advancedResults = (model, populate, position) => async (
   if (populate) {
     query = query.populate(populate);
   }
-  console.log(model);
-  console.log(populate);
   //excuting query
   const results = await query;
 

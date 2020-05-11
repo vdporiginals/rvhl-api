@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const TourCategorySchema = new mongoose.Schema({
   name: {
     type: String,
-    unique: true,
+    unique: false,
     required: [true, 'please add a category'],
   },
   keywords: {
@@ -13,14 +13,14 @@ const TourCategorySchema = new mongoose.Schema({
   description: String,
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 
 TourCategorySchema.pre('remove', async function (next) {
   console.log(`Tour being removed from tourcategory ${this._id}`);
   await this.model('Tour').deleteMany({
-    category: this._id
+    category: this._id,
   });
   next();
 });

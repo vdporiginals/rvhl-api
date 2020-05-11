@@ -7,7 +7,6 @@ const Advertise = require('../../models/advertise/advertise.model');
 //@route        GET  /api/advertises
 //@access       Public
 exports.getAdvertises = asyncHandler(async (req, res, next) => {
-  console.log(req);
   res.status(200).json(res.advancedResults);
 });
 
@@ -67,7 +66,7 @@ exports.updateAdvertise = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: advertise._id
+    data: advertise._id,
   });
 });
 
@@ -87,6 +86,6 @@ exports.deleteAdvertise = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {}
+    data: {},
   });
 });

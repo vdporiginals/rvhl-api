@@ -27,10 +27,14 @@ const BlogSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
+    position: {
+      type: String,
+      enum: ['Schedule', 'Food'],
+      required: [true, 'Please add  a position'],
+    },
     category: {
       type: mongoose.Schema.ObjectId,
       ref: 'BlogCategory',
-      required: true,
     },
     isPopular: {
       type: Boolean,

@@ -14,8 +14,6 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
 //@route        POst  /api/estates/categories/:id
 //@access       Public
 exports.createCategory = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(

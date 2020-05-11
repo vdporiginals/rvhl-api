@@ -33,8 +33,6 @@ exports.getHotel = asyncHandler(async (req, res, next) => {
 //@route        POST  /estate/Hotels
 //@access       Private
 exports.createHotel = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-  req.body.user = req.user.id;
   const category = await Category.findById(req.body.category);
 
   if (!category) {

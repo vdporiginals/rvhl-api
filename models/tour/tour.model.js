@@ -38,10 +38,14 @@ const TourSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  position: {
+    type: String,
+    enum: ['TourCruise', 'TourAll', 'TourHaLong'],
+    required: [true, 'Please add a position'],
+  },
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'TourCategory',
-    required: true,
   },
   address: String,
   user: {

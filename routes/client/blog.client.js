@@ -4,7 +4,7 @@ const {
   getBlog,
   createBlog,
   updateBlog,
-  deleteBlog
+  deleteBlog,
 } = require('../../controllers/blog/blog.controller');
 
 const {
@@ -19,10 +19,7 @@ const advancedResults = require('../../middleware/advancedResults');
 const Category = require('../../models/blog/blogCategory.model');
 const router = express.Router();
 
-const {
-  protect,
-  authorize
-} = require('../../middleware/auth');
+const { protect, authorize } = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
@@ -30,15 +27,16 @@ const {
 router
   .route('/')
   .get(
-    advancedResults(
-      Blog, [{
+    advancedResults(Blog, [
+      {
         path: 'user',
         select: 'name avatar description',
-      }, {
+      },
+      {
         path: 'category',
         select: 'name',
-      }]
-    ),
+      },
+    ]),
     getBlogs
   )
   .post(protect, authorize('moderator', 'admin'), createBlog);
@@ -46,16 +44,13 @@ router
 router
   .route('/category')
   .post(protect, authorize('moderator', 'admin'), createCategory)
-  .get(
-    advancedResults(Category, null),
-    getCategories
-  );
+  .get(advancedResults(Category, null), getCategories);
 
 router
   .route('/category/:categoryId')
-  .get(
-    getBlogbyCategory
-  )
+  // .get(
+  //   getBlogbyCategory
+  // )
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 

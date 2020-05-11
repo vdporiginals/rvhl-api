@@ -1,0 +1,20 @@
+[{
+        "name": "Slider homepage",
+        "description": "slider quảng cáo đầu trang",
+        "position": "slider"
+    },
+    {
+        "name": "Video banner page",
+        "description": "banner video quảng cáo",
+        "position": "video"
+    }, {
+        "name": "banner quảng cáo homepage",
+        "description": "banner quảng cáo homepage",
+        "position": "HomepageAdvertise"
+    },
+    {
+        "name": "Banner quảng cáo page khác",
+        "description": "banner quảng cáo page khác",
+        "position": "AdvertisePage"
+    }
+]
