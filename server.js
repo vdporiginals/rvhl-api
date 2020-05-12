@@ -23,6 +23,7 @@ connectDB();
 
 //route
 const authApp = require('./routes/admin/auth-app.admin');
+const webConfig = require('./routes/admin/web-config.admin');
 const blogs = require('./routes/client/blog.client');
 const advertises = require('./routes/client/advertise.client');
 const auth = require('./routes/client/auth.client');
@@ -85,6 +86,7 @@ app.use('/api/auth', auth);
 app.use('/api/comments', comment);
 app.use('/api/estates', estates);
 app.use('/api/users', users);
+app.use('/api/web-config', webConfig);
 app.use('/api/admin', commentControl);
 app.use(errorHandler);
 const PORT = process.env.PORT || 5000;
