@@ -19,36 +19,24 @@ const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
 
-const {
-  protect,
-  authorize
-} = require('../../middleware/auth');
+const { protect, authorize } = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
 
 router
   .route('/')
-  .get(
-
-    advancedResults(Advertise, null),
-    getAdvertises
-  )
+  .get(advancedResults(Advertise, null), getAdvertises)
   .post(protect, authorize('admin'), createAdvertise);
 
 router
   .route('/category')
   .post(protect, authorize('moderator', 'admin'), createCategory)
-  .get(
-    advancedResults(Category, null),
-    getCategories
-  );
+  .get(advancedResults(Category, null), getCategories);
 
 router
   .route('/category/:categoryId')
-  .get(
-    getAdvertisebyCategory
-  )
+  .get(getAdvertisebyCategory)
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 

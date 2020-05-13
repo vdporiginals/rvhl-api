@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const slug = require('../../config/slug');
 const HotelSchema = new mongoose.Schema({
-  title: {
+  name: {
     type: String,
     trim: true,
     required: [true, 'Please add a title'],
@@ -10,16 +10,25 @@ const HotelSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a description'],
   },
-  link: {
-    type: String,
+  price: {
+    type: Number,
   },
+  roomNum: Number,
   isPopular: {
     type: Boolean,
-    default: false
+    default: false,
   },
-  image: {
+  images: {
+    type: [String],
+  },
+  category: {
+    type: mongoose.Schema.ObjectId,
+    ref: 'EstateCategory',
+    required: true,
+  },
+  phone: {
     type: String,
-    default: 'no-photo.jpg',
+    required: [true, 'Please add a phone'],
   },
   keywords: String,
   seo: String,
@@ -29,12 +38,12 @@ const HotelSchema = new mongoose.Schema({
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 
 HotelSchema.pre('save', function (next) {
-  this.seo = slug(this.title, '-');
+  this.seo = slug(this.name, '-');
   next();
 });
 

@@ -1,10 +1,10 @@
 const express = require('express');
 const {
-    getSliderAdvertise,
-    getPopularReviews,
-    getPopupularTour,
-    getVideoBanner,
-    getAdvertiseBanner,
+  getSliderAdvertise,
+  getPopularReviews,
+  getPopularTour,
+  getVideoBanner,
+  getAdvertiseBanner,
 } = require('../../controllers/homepage.controller');
 const Blog = require('../../models/blog/blog.model');
 const Tour = require('../../models/tour/tour.model');
@@ -13,40 +13,18 @@ const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
 
-const {
-    protect,
-    authorize
-} = require('../../middleware/auth');
+const { protect, authorize } = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
 
-router
-    .route('/slider')
-    .get(
+router.route('/slider').get(getSliderAdvertise);
 
-        getSliderAdvertise
-    )
+router.route('/popular-review').get(getPopularReviews);
 
-router
-    .route('/popular-review')
-    .get(
+router.route('/popular-tour').get(getPopularTour);
 
-        getPopularReviews
-    )
+router.route('/video-banner').get(getVideoBanner);
 
-router
-    .route('/popular-tour')
-    .get(
-        getPopupularTour
-    )
-
-router
-    .route('/video-banner')
-    .get(
-        getVideoBanner)
-
-router
-    .route('/advertise-banner')
-    .get(getAdvertiseBanner)
+router.route('/advertise-banner').get(getAdvertiseBanner);
 module.exports = router;

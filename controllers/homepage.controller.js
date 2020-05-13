@@ -8,184 +8,178 @@ const Blog = require('../models/blog/blog.model');
 //@route        GET  //api/homepage/slider
 //@access       Public
 exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
-    AdvertiseCategory.find({
-        position: 'slider'
-    }).then(async (val) => {
-        let slider = Advertise.find({
-            category: val._id
-        });
-
-        if (req.query.select) {
-            const fields = req.query.select.split(',').join(' ');
-            slider = slider.select(fields);
-        }
-
-        if (req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ');
-            slider = slider.sort(sortBy);
-        } else {
-            slider = slider.sort('-createdAt'); //get lastest
-        }
-
-        const result = await slider;
-        return res.status(200).json({
-            success: true,
-            data: result,
-        });
+  AdvertiseCategory.find({
+    position: 'slider',
+  }).then(async (val) => {
+    console.log(val);
+    let slider = Advertise.find({
+      category: val[0]._id,
+      page: 'Homepage',
     });
+    if (req.query.select) {
+      const fields = req.query.select.split(',').join(' ');
+      slider = slider.select(fields);
+    }
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      slider = slider.sort(sortBy);
+    } else {
+      slider = slider.sort('-createdAt'); //get lastest
+    }
+
+    const result = await slider;
+
+    console.log(result);
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  });
 });
 
 //@route        GET  /api/homepage/popular-tour
 //@access       Public
-exports.getPopupularTour = asyncHandler(async (req, res, next) => {
-    let popular = Tour.find({
-        isPopular: true
-    });
-    if (req.query.select) {
-        const fields = req.query.select.split(',').join(' ');
-        popular = popular.select(fields);
-    }
+exports.getPopularTour = asyncHandler(async (req, res, next) => {
+  let query;
+  req.query.isPopular = true;
 
-    if (req.query.sort) {
-        const sortBy = req.query.sort.split(',').join(' ');
-        popular = popular.sort(sortBy);
-    } else {
-        popular = popular.sort('-createdAt');
-    }
+  //copy req.query
+  const reqQuery = {
+    ...req.query,
+  };
 
-    const page = parseInt(req.query.page, 10) || 0;
-    const limit = parseInt(req.query.limit, 10) || 25;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const total = await popular.countDocuments(popular);
-    const pagination = {};
-    if (endIndex < total) {
-        pagination.next = {
-            page: page + 1,
-            limit,
-        };
-    }
+  //field to exclude
+  const removeFields = ['select', 'sort', 'page', 'limit']; //pageNum and pageSize
 
-    if (startIndex > 0) {
-        pagination.prev = {
-            page: page - 1,
-            limit,
-        };
-    }
+  //loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
 
-    const result = await popular;
-    return res.status(200).json({
-        success: true,
-        totalRecord: result.length,
-        pagination,
-        count: total,
-        data: result,
-    });
+  //create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  //create operators ($gt,$gte,...)
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  //finding resource
+  query = Tour.find(JSON.parse(queryStr));
+
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  query = query.limit(limit);
+  const result = await query;
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    data: result,
+  });
 });
 
 //@route        GET  //api/homepage/review
 //@access       Public
 exports.getPopularReviews = asyncHandler(async (req, res, next) => {
-    let popular = Blog.find({
-        isPopular: true
-    });
-    if (req.query.select) {
-        const fields = req.query.select.split(',').join(' ');
-        popular = popular.select(fields);
-    }
+  let query;
+  req.query.isPopular = true;
 
-    if (req.query.sort) {
-        const sortBy = req.query.sort.split(',').join(' ');
-        popular = popular.sort(sortBy);
-    } else {
-        popular = popular.sort('-createdAt');
-    }
+  //copy req.query
+  const reqQuery = {
+    ...req.query,
+  };
 
-    const page = parseInt(req.query.page, 10) || 0;
-    const limit = parseInt(req.query.limit, 10) || 25;
-    const startIndex = (page - 1) * limit;
-    const endIndex = page * limit;
-    const total = await popular.countDocuments(popular);
-    const pagination = {};
-    if (endIndex < total) {
-        pagination.next = {
-            page: page + 1,
-            limit,
-        };
-    }
+  //field to exclude
+  const removeFields = ['select', 'sort', 'page', 'limit']; //pageNum and pageSize
 
-    if (startIndex > 0) {
-        pagination.prev = {
-            page: page - 1,
-            limit,
-        };
-    }
+  //loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
 
-    const result = await popular;
-    return res.status(200).json({
-        success: true,
-        totalRecord: result.length,
-        pagination,
-        count: total,
-        data: result,
-    });
+  //create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  //create operators ($gt,$gte,...)
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  //finding resource
+  query = Blog.find(JSON.parse(queryStr));
+
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  query = query.limit(limit);
+  const result = await query;
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    data: result,
+  });
 });
 
 //@route        GET  /api/homepage/video-banner
 //@access       Public
-exports.getVideoBanner = (async (req, res, next) => {
-    AdvertiseCategory.find({
-        position: 'video'
-    }).then(async (val) => {
-        let banner = Advertise.find({
-            category: val._id
-        });
-
-        if (req.query.select) {
-            const fields = req.query.select.split(',').join(' ');
-            banner = banner.select(fields);
-        }
-
-        if (req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ');
-            banner = banner.sort(sortBy);
-        } else {
-            banner = banner.sort('-createdAt'); //get lastest
-        }
-
-        const result = await banner;
-        return res.status(200).json({
-            success: true,
-            data: result,
-        });
+exports.getVideoBanner = async (req, res, next) => {
+  AdvertiseCategory.find({
+    position: 'video',
+  }).then(async (val) => {
+    let banner = Advertise.find({
+      category: val[0]._id,
+      page: 'Homepage',
     });
-});
+    const limit = parseInt(req.query.limit, 10) || 25;
+
+    if (req.query.select) {
+      const fields = req.query.select.split(',').join(' ');
+      banner = banner.select(fields);
+    }
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      banner = banner.sort(sortBy);
+    } else {
+      banner = banner.sort('-createdAt'); //get lastest
+    }
+    banner.limit(limit);
+    const result = await banner;
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  });
+};
 
 //@route        GET  /api/homepage/advertise-banner
 //@access       Public
 exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
-    AdvertiseCategory.find({
-        position: 'bannerAdvertise'
-    }).then(async (val) => {
-        let banner = Advertise.find({
-            category: val._id
-        });
-
-        if (req.query.select) {
-            const fields = req.query.select.split(',').join(' ');
-            banner = banner.select(fields);
-        }
-
-        if (req.query.sort) {
-            const sortBy = req.query.sort.split(',').join(' ');
-            banner = banner.sort(sortBy);
-        } else {
-            banner = banner.sort('-createdAt'); //get lastest
-        }
-        const result = await banner;
-        return res.status(200).json({
-            success: true,
-            data: result,
-        });
+  AdvertiseCategory.find({
+    position: 'HomepageAdvertise',
+  }).then(async (val) => {
+    let banner = Advertise.find({
+      category: val[0]._id,
+      page: 'Homepage',
     });
+    const limit = parseInt(req.query.limit, 10) || 25;
+
+    if (req.query.select) {
+      const fields = req.query.select.split(',').join(' ');
+      banner = banner.select(fields);
+    }
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      banner = banner.sort(sortBy);
+    } else {
+      banner = banner.sort('-createdAt'); //get lastest
+    }
+    banner.limit(limit);
+    const result = await banner;
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
+  });
 });

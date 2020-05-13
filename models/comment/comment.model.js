@@ -40,7 +40,14 @@ CommentSchema.virtual('answer', {
   localField: '_id',
   foreignField: 'commentId',
   justOne: false,
+});
 
+CommentSchema.virtual('answerCount', {
+  ref: 'Reply',
+  localField: '_id',
+  foreignField: 'commentId',
+  justOne: false,
+  count: true
 });
 
 // Use a regular function here to avoid issues with this!

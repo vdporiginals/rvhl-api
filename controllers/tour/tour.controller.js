@@ -36,8 +36,6 @@ exports.getTour = asyncHandler(async (req, res, next) => {
 //@route        POST  /api/tour
 //@access       Private
 exports.createTour = asyncHandler(async (req, res, next) => {
-  //add user to req.body
-  req.body.user = req.user.id;
   const category = await Category.findById(req.body.category);
   if (!category) {
     return next(
@@ -80,7 +78,7 @@ exports.updateTour = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: tour._id
+    data: tour._id,
   });
 });
 
@@ -109,6 +107,6 @@ exports.deleteTour = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {}
+    data: {},
   });
 });

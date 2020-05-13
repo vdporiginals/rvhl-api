@@ -8,16 +8,18 @@ const TourSchema = new mongoose.Schema({
     required: [true, 'Please add Title'],
   },
   keywords: String,
-  schedule: [{
-    _id: false,
-    timeStart: Date,
-    timeEnd: Date,
-    location: String,
-    service: String,
-  }],
+  schedule: [
+    {
+      _id: false,
+      timeStart: Date,
+      timeEnd: Date,
+      location: String,
+      service: String,
+    },
+  ],
   isPopular: {
     type: Boolean,
-    default: false
+    default: false,
   },
   description: String,
   phone: String,
@@ -25,21 +27,25 @@ const TourSchema = new mongoose.Schema({
   time: String,
   price: {
     type: Number,
-    required: [true, 'Please add price']
+    required: [true, 'Please add price'],
   },
   seo: String,
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
   status: {
     type: Boolean,
     default: false,
   },
+  position: {
+    type: String,
+    enum: ['TourCruise', 'TourAll', 'TourHaLong'],
+    required: [true, 'Please add a position'],
+  },
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'TourCategory',
-    required: true,
   },
   address: String,
   user: {

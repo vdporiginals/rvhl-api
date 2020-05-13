@@ -1,24 +1,23 @@
 const path = require('path');
 const ErrorResponse = require('../../middleware/utils/errorResponse');
 const asyncHandler = require('../../middleware/asyncHandler');
-const Category = require('../../models/blog/blogCategory.model');
-const Blog = require('../../models/blog/blog.model');
+const Category = require('../../models/transfer/transferCategory.model');
 //@desciption   Get all category
-//@route        GET  /api/blogs/categories
-// @route     GET /api/blogs/categories/:id
+//@route        GET  /api/estates/categories
+// @route     GET /api/estates/categories/:id
 //@access       Public
 exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
-//@desciption   create Blog category
-//@route        POst  /api/blogs/categories/:id
+//@desciption   create estate category
+//@route        POst  /api/estates/categories/:id
 //@access       Public
 exports.createCategory = asyncHandler(async (req, res, next) => {
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `The user with ID ${req.user.id} has no permission to create new blog category`,
+        `The user with ID ${req.user.id} has no permission to create new estate category`,
         400
       )
     );
@@ -32,8 +31,8 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   Update Blog category
-//@route        PUT  /api/blogs/categories/:id
+//@desciption   Update estate category
+//@route        PUT  /api/estates/categories/:id
 //@access       Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
@@ -53,8 +52,8 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   Delete Blog category
-//@route        DELETE  /api/blogs/category/:id
+//@desciption   Delete estate category
+//@route        DELETE  /api/estates/category/:id
 //@access       Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findById(req.params.categoryId);

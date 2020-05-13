@@ -1,9 +1,17 @@
-const advancedResults = (model, populate) => async (req, res, next) => {
+const advancedResults = (model, populate, position) => async (
+  req,
+  res,
+  next
+) => {
   let query;
+  if (position) {
+    req.query.position = position;
+    console.log(position);
+  }
 
   //copy req.query
   const reqQuery = {
-    ...req.query
+    ...req.query,
   };
 
   //field to exclude
@@ -23,29 +31,32 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 
   //finding resource
   if (req.query.title) {
-    query = model.find({
+    query = model.find(
+      {
         title: {
-          $regex: new RegExp(req.query.title, 'i')
-        }
+          $regex: new RegExp(req.query.title, 'i'),
+        },
       },
-      JSON.parse(queryStr), {
-        _id: 0
+      JSON.parse(queryStr),
+      {
+        _id: 0,
       },
       function (err, data) {}
     );
   } else if (req.query.name) {
-    query = model.find({
+    query = model.find(
+      {
         name: {
-          $regex: new RegExp(req.query.name, 'i')
-        }
+          $regex: new RegExp(req.query.name, 'i'),
+        },
       },
-      JSON.parse(queryStr), {
-        _id: 0
+      JSON.parse(queryStr),
+      {
+        _id: 0,
       },
       function (err, data) {}
     );
   } else {
-
     query = model.find(JSON.parse(queryStr));
   }
 
@@ -77,8 +88,6 @@ const advancedResults = (model, populate) => async (req, res, next) => {
   if (populate) {
     query = query.populate(populate);
   }
-  console.log(model)
-  console.log(populate)
   //excuting query
   const results = await query;
 

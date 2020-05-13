@@ -16,7 +16,18 @@ const AdvertiseSchema = new mongoose.Schema({
   },
   page: {
     type: String,
-    enum: ['tour', 'review', 'hotel', 'transfer', 'bannerTour', 'bannerReview', 'bannerHotel', 'bannerTransfer']
+    enum: [
+      'Homepage',
+      'TourCruisePage',
+      'TourAllPage',
+      'TransferPage',
+      'TourHalongPage',
+      'SchedulePage',
+      'FoodPage',
+      'HotelPage',
+      'HomestayPage',
+      'VillaPage',
+    ],
   },
   image: {
     type: String,
@@ -34,11 +45,11 @@ const AdvertiseSchema = new mongoose.Schema({
   },
   isPopular: {
     type: Boolean,
-    default: false
+    default: false,
   },
   createdAt: {
     type: Date,
-    default: Date.now
+    default: Date.now,
   },
 });
 
