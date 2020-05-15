@@ -19,6 +19,7 @@ const VillaSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  views: String,
   images: {
     type: [String],
   },

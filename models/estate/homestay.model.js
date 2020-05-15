@@ -21,6 +21,7 @@ const HomestaySchema = new mongoose.Schema({
   images: {
     type: [String],
   },
+  views: String,
   phone: {
     type: String,
     required: [true, 'Please add a phone'],

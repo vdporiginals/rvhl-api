@@ -79,7 +79,7 @@ const advancedResults = (model, populate, position) => async (
   const limit = parseInt(req.query.limit, 10) || 25;
   const startIndex = (page - 1) * limit;
   const endIndex = page * limit;
-  const total = await model.countDocuments();
+  const total = await model.countDocuments(query);
   if (page < 0) {
     page = 1;
   }
@@ -89,7 +89,6 @@ const advancedResults = (model, populate, position) => async (
     query = query.populate(populate);
   }
   //excuting query
-  const results = await query;
 
   //pagination result
   const pagination = {};
@@ -106,7 +105,8 @@ const advancedResults = (model, populate, position) => async (
       limit,
     };
   }
-
+  const results = await query;
+  console.log(query);
   res.advancedResults = {
     success: true,
     numRecord: results.length,

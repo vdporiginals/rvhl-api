@@ -1,39 +1,42 @@
 const mongoose = require('mongoose');
 
-const CommentSchema = new mongoose.Schema({
-  content: {
-    type: String,
-    required: true
+const CommentSchema = new mongoose.Schema(
+  {
+    content: {
+      type: String,
+      required: true,
+    },
+    createdAt: {
+      type: Date,
+    },
+    updatedAt: {
+      type: Date,
+    },
+    status: Boolean,
+    author: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true,
+    },
+    status: {
+      type: Boolean,
+      default: false,
+    },
+    postId: {
+      type: String,
+      ref: 'Blog',
+      required: true,
+    },
   },
-  createdAt: {
-    type: Date
-  },
-  updatedAt: {
-    type: Date
-  },
-  status: Boolean,
-  author: {
-    type: mongoose.Schema.ObjectId,
-    ref: 'User',
-    required: true
-  },
-  status: {
-    type: Boolean,
-    default: false,
-  },
-  postId: {
-    type: String,
-    ref: 'Blog',
-    required: true
-  },
-}, {
-  toJSON: {
-    virtuals: true
-  },
-  toObject: {
-    virtuals: true
+  {
+    toJSON: {
+      virtuals: true,
+    },
+    toObject: {
+      virtuals: true,
+    },
   }
-});
+);
 
 CommentSchema.virtual('answer', {
   ref: 'Reply',
@@ -47,7 +50,7 @@ CommentSchema.virtual('answerCount', {
   localField: '_id',
   foreignField: 'commentId',
   justOne: false,
-  count: true
+  count: true,
 });
 
 // Use a regular function here to avoid issues with this!
@@ -63,7 +66,7 @@ CommentSchema.pre('save', function (next) {
 CommentSchema.pre('remove', async function (next) {
   console.log(`reply being removed from comment ${this._id}`);
   await this.model('Reply').deleteMany({
-    commentId: this._id
+    commentId: this._id,
   });
   next();
 });

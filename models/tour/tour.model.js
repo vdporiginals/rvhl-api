@@ -17,6 +17,7 @@ const TourSchema = new mongoose.Schema({
       service: String,
     },
   ],
+  content: String,
   isPopular: {
     type: Boolean,
     default: false,

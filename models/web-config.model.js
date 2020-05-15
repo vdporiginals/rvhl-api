@@ -1,6 +1,4 @@
 const mongoose = require('mongoose');
-
-const slug = require('../config/slug');
 const WebconfigSchema = new mongoose.Schema({
   _id: {
     type: String,

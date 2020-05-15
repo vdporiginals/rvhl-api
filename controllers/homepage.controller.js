@@ -5,6 +5,9 @@ const AdvertiseCategory = require('../models/advertise/advertiseCategory.model')
 const Advertise = require('../models/advertise/advertise.model');
 const Tour = require('../models/tour/tour.model');
 const Blog = require('../models/blog/blog.model');
+const Hotel = require('../models/estate/hotel.model');
+const Villa = require('../models/estate/villa.model');
+const Homestay = require('../models/estate/homestay.model');
 //@route        GET  //api/homepage/slider
 //@access       Public
 exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
@@ -79,6 +82,116 @@ exports.getPopularTour = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.getPopularHotel = asyncHandler(async (req, res, next) => {
+  let query;
+  req.query.isPopular = true;
+  req.query.status = true;
+  //copy req.query
+  const reqQuery = {
+    ...req.query,
+  };
+
+  //field to exclude
+  const removeFields = ['select', 'sort', 'page', 'limit']; //pageNum and pageSize
+
+  //loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
+
+  //create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  //create operators ($gt,$gte,...)
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  //finding resource
+  query = Hotel.find(JSON.parse(queryStr));
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  query = query.limit(limit);
+  const result = await query;
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    data: result,
+  });
+});
+
+exports.getPopularVilla = asyncHandler(async (req, res, next) => {
+  let query;
+  req.query.isPopular = true;
+  req.query.status = true;
+  //copy req.query
+  const reqQuery = {
+    ...req.query,
+  };
+
+  //field to exclude
+  const removeFields = ['select', 'sort', 'page', 'limit']; //pageNum and pageSize
+
+  //loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
+
+  //create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  //create operators ($gt,$gte,...)
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  //finding resource
+  query = Villa.find(JSON.parse(queryStr));
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  query = query.limit(limit);
+  const result = await query;
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    data: result,
+  });
+});
+
+exports.getPopularHomestay = asyncHandler(async (req, res, next) => {
+  let query;
+  req.query.isPopular = true;
+  req.query.status = true;
+  //copy req.query
+  const reqQuery = {
+    ...req.query,
+  };
+
+  //field to exclude
+  const removeFields = ['select', 'sort', 'page', 'limit']; //pageNum and pageSize
+
+  //loop over removeFields and delete them from reqQuery
+  removeFields.forEach((param) => delete reqQuery[param]);
+
+  //create query string
+  let queryStr = JSON.stringify(reqQuery);
+
+  //create operators ($gt,$gte,...)
+  queryStr = queryStr.replace(
+    /\b(gt|gte|lt|lte|in)\b/g,
+    (match) => `$${match}`
+  );
+
+  //finding resource
+  query = Homestay.find(JSON.parse(queryStr));
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  query = query.limit(limit);
+  const result = await query;
+  return res.status(200).json({
+    success: true,
+    totalRecord: result.length,
+    data: result,
+  });
+});
 //@route        GET  //api/homepage/review
 //@access       Public
 exports.getPopularReviews = asyncHandler(async (req, res, next) => {

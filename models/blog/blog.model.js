@@ -72,6 +72,22 @@ BlogSchema.pre('save', function (next) {
   next();
 });
 
+BlogSchema.virtual('replyCount', {
+  ref: 'Reply',
+  localField: '_id',
+  foreignField: 'postId',
+  justOne: false,
+  count: true,
+});
+
+BlogSchema.virtual('commentsCount', {
+  ref: 'Comment',
+  localField: '_id',
+  foreignField: 'postId',
+  justOne: false,
+  count: true,
+});
+
 BlogSchema.pre('remove', async function (next) {
   console.log(`comment being removed from blog ${this._id}`);
   await this.model('Comment').deleteMany({

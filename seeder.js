@@ -12,6 +12,7 @@ const BlogCategory = require('./models/blog/blogCategory.model');
 const AdvertiseCategory = require('./models/advertise/advertiseCategory.model');
 const TourCategory = require('./models/tour/tourCategory.model');
 const TransferCategory = require('./models/transfer/transferCategory.model');
+const Webconfig = require('./models/web-config.model');
 const User = require('./models/user.model');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
@@ -33,6 +34,9 @@ const tourCategories = JSON.parse(
 const transferCategories = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/transferCat.json`, 'utf-8')
 );
+const webConfig = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/webConfig.json`, 'utf-8')
+);
 const users = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/user.json`, 'utf-8')
 );
@@ -40,11 +44,12 @@ const users = JSON.parse(
 //import into DB
 const importData = async () => {
   try {
-    await BlogCategory.create(blogCategories);
-    await AdvertiseCategory.create(advertiseCategories);
-    await TourCategory.create(tourCategories);
-    await TransferCategory.create(transferCategories);
-    await User.create(users);
+    // await BlogCategory.create(blogCategories);
+    // await AdvertiseCategory.create(advertiseCategories);
+    // await TourCategory.create(tourCategories);
+    // await TransferCategory.create(transferCategories);
+    // await User.create(users);
+    await Webconfig.create(webConfig);
     console.log('Data imported'.green.inverse);
     process.exit();
   } catch (err) {

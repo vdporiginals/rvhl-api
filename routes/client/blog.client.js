@@ -33,8 +33,10 @@ router
         select: 'name avatar description',
       },
       {
-        path: 'category',
-        select: 'name',
+        path: 'commentsCount',
+      },
+      {
+        path: 'replyCount',
       },
     ]),
     getBlogs
