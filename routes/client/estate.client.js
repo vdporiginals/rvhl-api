@@ -45,7 +45,10 @@ const { protect, authorize } = require('../../middleware/auth');
 router
   .route('/category')
   .get(advancedResults(Estate, null), getCategories)
-  .post(protect, authorize('admin', 'moderator'), createCategory)
+  .post(protect, authorize('admin', 'moderator'), createCategory);
+
+router
+  .route('/category/:categoryId')
   .put(protect, authorize('admin', 'moderator'), updateCategory)
   .delete(protect, authorize('admin', 'moderator'), deleteCategory);
 
@@ -63,7 +66,7 @@ router
 
 router
   .route('/hotel')
-  .get(advancedResults(Hotel, null), getHotels)
+  .get(advancedResults(Hotel, null, null), getHotels)
   .post(protect, authorize('admin', 'moderator'), createHotel);
 
 router

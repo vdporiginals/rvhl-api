@@ -55,7 +55,7 @@ EstateCategorySchema.virtual('villas', {
 
 EstateCategorySchema.pre('remove', async function (next) {
   console.log(`Estate being removed from EstateCategory ${this._id}`);
-  await this.model('Estate').deleteMany({
+  await this.model('Hotel').deleteMany({
     category: this._id,
   });
   next();

@@ -106,7 +106,7 @@ const advancedResults = (model, populate, position) => async (
     };
   }
   const results = await query;
-  console.log(query);
+  console.log(results, queryStr);
   res.advancedResults = {
     success: true,
     numRecord: results.length,

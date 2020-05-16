@@ -25,7 +25,6 @@ const HotelSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'EstateCategory',
-    required: true,
   },
   phone: {
     type: String,
