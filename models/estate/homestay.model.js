@@ -18,6 +18,7 @@ const HomestaySchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  address: String,
   images: {
     type: [String],
   },
@@ -25,6 +26,12 @@ const HomestaySchema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, 'Please add a phone'],
+  },
+  facilities: {
+    square: Number,
+    pool: Boolean,
+    kitchen: Boolean,
+    other: String,
   },
   category: {
     type: mongoose.Schema.ObjectId,

@@ -13,7 +13,9 @@ const TransferSchema = new mongoose.Schema({
   locationStart: String,
   locationEnd: String,
   timeStart: Date,
-  timePerTrip: Date,
+  timePerTrip: String,
+  content: String,
+  chairNum: String,
   price: Number,
   keywords: String,
   category: {
@@ -21,6 +23,13 @@ const TransferSchema = new mongoose.Schema({
     ref: 'TransferCategory',
     required: true,
   },
+  schedule: [
+    {
+      _id: false,
+      time: Date,
+      location: String,
+    },
+  ],
   images: {
     type: [String],
     default: 'no-photo.jpg',
@@ -41,7 +50,7 @@ const TransferSchema = new mongoose.Schema({
 });
 
 TransferSchema.pre('save', function (next) {
-  this.seo = slug(this.title, '-');
+  this.seo = slug(this.name, '-');
   next();
 });
 

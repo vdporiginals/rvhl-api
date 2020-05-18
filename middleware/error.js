@@ -12,6 +12,11 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 404);
   }
 
+  if (err.message.indexOf('Cast to ObjectId failed') !== -1) {
+    const message = 'Cast to ObjectId entered';
+    error = new ErrorResponse(message, 400);
+  }
+
   //mongoose duplicate key
   if (err.code === 11000) {
     const message = 'Duplicate fields entered';
@@ -20,13 +25,13 @@ const errorHandler = (err, req, res, next) => {
 
   //mongoose validation error
   if (err.name === 'ValidationError') {
-    const message = Object.values(err.errors).map(val => val.message);
+    const message = Object.values(err.errors).map((val) => val.message);
     error = new ErrorResponse(message, 400);
   }
 
   res.status(error.statusCode || 500).json({
     success: false,
-    error: error.message || 'Server Error'
+    error: error.message || 'Server Error',
   });
 };
 

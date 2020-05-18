@@ -14,7 +14,6 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'slider',
   }).then(async (val) => {
-    console.log(val);
     let slider = Advertise.find({
       category: val[0]._id,
       page: 'Homepage',
@@ -33,7 +32,6 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
 
     const result = await slider;
 
-    console.log(result);
     return res.status(200).json({
       success: true,
       data: result,

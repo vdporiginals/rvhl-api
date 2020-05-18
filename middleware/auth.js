@@ -26,6 +26,7 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.user = await User.findById(decoded.id);
     req.user.role = await decoded.role;
     req.user._id = await decoded.id;
+    console.log(decoded);
     next();
   } catch (err) {
     console.log(err);

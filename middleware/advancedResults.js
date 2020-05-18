@@ -6,7 +6,6 @@ const advancedResults = (model, populate, position) => async (
   let query;
   if (position) {
     req.query.position = position;
-    console.log(position);
   }
 
   //copy req.query
@@ -30,34 +29,53 @@ const advancedResults = (model, populate, position) => async (
   );
 
   //finding resource
+  const newQuery = JSON.parse(queryStr);
   if (req.query.title) {
+    newQuery.title = {
+      $regex: new RegExp(req.query.title, 'i'),
+    };
     query = model.find(
-      {
-        title: {
-          $regex: new RegExp(req.query.title, 'i'),
-        },
-      },
-      JSON.parse(queryStr),
+      newQuery,
       {
         _id: 0,
       },
       function (err, data) {}
     );
   } else if (req.query.name) {
+    newQuery.name = {
+      $regex: new RegExp(req.query.name, 'i'),
+    };
     query = model.find(
+      newQuery,
       {
-        name: {
-          $regex: new RegExp(req.query.name, 'i'),
-        },
+        _id: 0,
       },
-      JSON.parse(queryStr),
+      function (err, data) {}
+    );
+  } else if (req.query.locationStart) {
+    newQuery.locationStart = {
+      $regex: new RegExp(req.query.locationStart, 'i'),
+    };
+    query = model.find(
+      newQuery,
+      {
+        _id: 0,
+      },
+      function (err, data) {}
+    );
+  } else if (req.query.address) {
+    newQuery.address = {
+      $regex: new RegExp(req.query.address, 'i'),
+    };
+    query = model.find(
+      newQuery,
       {
         _id: 0,
       },
       function (err, data) {}
     );
   } else {
-    query = model.find(JSON.parse(queryStr));
+    query = model.find(newQuery);
   }
 
   //SELECT Field
@@ -106,7 +124,6 @@ const advancedResults = (model, populate, position) => async (
     };
   }
   const results = await query;
-  console.log(results, queryStr);
   res.advancedResults = {
     success: true,
     numRecord: results.length,

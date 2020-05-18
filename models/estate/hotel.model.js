@@ -18,6 +18,7 @@ const HotelSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  address: String,
   views: String,
   images: {
     type: [String],
@@ -25,6 +26,14 @@ const HotelSchema = new mongoose.Schema({
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'EstateCategory',
+  },
+  facilities: {
+    bed: String,
+    square: Number,
+    pool: Boolean,
+    restaurant: Boolean,
+    meetingRoom: Boolean,
+    other: String,
   },
   phone: {
     type: String,

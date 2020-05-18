@@ -34,10 +34,9 @@ router
       },
       {
         path: 'answer',
-        match: {
-          status: true,
-        },
+        status: true,
       },
+      { path: 'answerCount' },
     ]),
     getComments
   )

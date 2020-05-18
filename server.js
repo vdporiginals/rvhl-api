@@ -67,7 +67,7 @@ app.use(hpp());
 //rate limiting
 const litmiter = rateLimit({
   windowMs: 10 * 60 * 1000, //10 minute
-  max: 200,
+  max: 400,
 });
 
 app.use(litmiter);
