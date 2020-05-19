@@ -13,6 +13,7 @@ const HotelSchema = new mongoose.Schema({
   price: {
     type: Number,
   },
+  content: String,
   roomNum: Number,
   isPopular: {
     type: Boolean,
@@ -31,9 +32,10 @@ const HotelSchema = new mongoose.Schema({
     bed: String,
     square: Number,
     pool: Boolean,
+    oceanViews: Boolean,
     restaurant: Boolean,
     meetingRoom: Boolean,
-    other: String,
+    other: [String],
   },
   phone: {
     type: String,

@@ -13,6 +13,7 @@ const HomestaySchema = new mongoose.Schema({
   price: {
     type: Number,
   },
+  content: String,
   roomNum: Number,
   isPopular: {
     type: Boolean,
@@ -30,8 +31,9 @@ const HomestaySchema = new mongoose.Schema({
   facilities: {
     square: Number,
     pool: Boolean,
+    oceanViews: Boolean,
     kitchen: Boolean,
-    other: String,
+    other: [String],
   },
   category: {
     type: mongoose.Schema.ObjectId,

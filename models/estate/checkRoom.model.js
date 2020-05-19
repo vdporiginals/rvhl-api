@@ -10,6 +10,15 @@ const CheckRoomSchema = new mongoose.Schema({
     required: true,
     ref: 'EstateCategory',
   },
+  phone: {
+    type: String,
+    required: [true, 'Please add a phone'],
+  },
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true,
+    ref: 'User',
+  },
   roomId: {
     type: mongoose.Schema.Types.ObjectId,
     required: true,

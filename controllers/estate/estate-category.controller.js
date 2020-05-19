@@ -2,6 +2,7 @@ const path = require('path');
 const ErrorResponse = require('../../middleware/utils/errorResponse');
 const asyncHandler = require('../../middleware/asyncHandler');
 const Category = require('../../models/estate/estateCategory.model');
+const CheckRoom = require('../../models/estate/checkRoom.model');
 //@desciption   Get all category
 //@route        GET  /api/estates/categories
 // @route     GET /api/estates/categories/:id
@@ -31,6 +32,46 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
   });
 });
 
+//POST  /api/estates/check-room
+exports.checkRoom = asyncHandler(async (req, res, next) => {
+  const category = await Category.findById(req.body.category);
+
+  if (!category) {
+    return next(
+      new ErrorResponse(
+        `category not found with id of ${req.body.category}`,
+        404
+      )
+    );
+  }
+
+  const user = await user.findById(req.body.user);
+  if (!user) {
+    return next(
+      new ErrorResponse(`Not authorized with id of ${req.body.user}`, 403)
+    );
+  }
+
+  const roomHotel = await Hotel.findById(req.body.roomId);
+  const roomHomestay = await Homestay.findById(req.body.roomId);
+  const roomVilla = await Villa.findById(req.body.roomId);
+
+  if (!roomHomestay || !roomHotel || !roomVilla) {
+    return next(
+      new ErrorResponse(`Not found room with id of ${req.body.roomId}`, 404)
+    );
+  }
+
+  const room = await CheckRoom.create(req.body);
+  res.status(201).json({
+    success: true,
+    data: room._id,
+  });
+});
+
+exports.getCheckRoom = asyncHandler(async (req, res, next) => {
+  res.status(200).json(res.advancedResults);
+});
 //@desciption   Update estate category
 //@route        PUT  /api/estates/categories/:id
 //@access       Private

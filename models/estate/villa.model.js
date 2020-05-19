@@ -19,6 +19,7 @@ const VillaSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  content: String,
   address: String,
   views: String,
   images: {
@@ -31,10 +32,11 @@ const VillaSchema = new mongoose.Schema({
   facilities: {
     square: Number,
     pool: Boolean,
+    oceanViews: Boolean,
     restaurant: Boolean,
     kitchen: Boolean,
     bbqArea: Boolean,
-    other: String,
+    other: [String],
   },
   category: {
     type: mongoose.Schema.ObjectId,

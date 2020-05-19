@@ -26,6 +26,8 @@ const {
 const {
   getCategories,
   createCategory,
+  checkRoom,
+  getCheckRoom,
   updateCategory,
   deleteCategory,
 } = require('../../controllers/estate/estate-category.controller');
@@ -33,6 +35,7 @@ const {
 const Homestay = require('../../models/estate/homestay.model');
 const Villa = require('../../models/estate/villa.model');
 const Hotel = require('../../models/estate/hotel.model');
+const CheckRoom = require('../../models/estate/checkRoom.model');
 const Estate = require('../../models/estate/estateCategory.model');
 const advancedResults = require('../../middleware/advancedResults');
 
@@ -47,6 +50,15 @@ router
   .get(advancedResults(Estate, null), getCategories)
   .post(protect, authorize('admin', 'moderator'), createCategory);
 
+router
+  .route('/check-room')
+  .get(
+    protect,
+    authorize('admin', 'moderator'),
+    advancedResults(CheckRoom, ['user', 'roomId', 'roomCategory']),
+    getCheckRoom
+  )
+  .post(protect, checkRoom);
 router
   .route('/category/:categoryId')
   .put(protect, authorize('admin', 'moderator'), updateCategory)
