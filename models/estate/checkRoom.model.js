@@ -10,6 +10,10 @@ const CheckRoomSchema = new mongoose.Schema({
     required: true,
     ref: 'EstateCategory',
   },
+  checkHandle: {
+    type: Boolean,
+    default: false,
+  },
   phone: {
     type: String,
     required: [true, 'Please add a phone'],
