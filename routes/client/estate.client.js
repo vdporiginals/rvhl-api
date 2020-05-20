@@ -22,7 +22,7 @@ const {
   updateHomestay,
   deleteHomestay,
 } = require('../../controllers/estate/homestay.controller');
-
+const rateLimit = require('express-rate-limit');
 const {
   getCategories,
   createCategory,
@@ -45,6 +45,11 @@ const { protect, authorize } = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .update(protect, authorize('publisher', 'admin'), blogPhotoUpload);
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 15 minutes
+  max: 4,
+});
+
 router
   .route('/category')
   .get(advancedResults(Estate, null), getCategories)
@@ -58,7 +63,7 @@ router
     advancedResults(CheckRoom, ['user', 'roomId', 'roomCategory']),
     getCheckRoom
   )
-  .post(protect, checkRoom);
+  .post(apiLimiter, protect, checkRoom);
 router
   .route('/category/:categoryId')
   .put(protect, authorize('admin', 'moderator'), updateCategory)
