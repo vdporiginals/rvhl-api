@@ -11,7 +11,7 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
-  getAdvertisebyCategory,
+  getCategory,
 } = require('../../controllers/advertise/advertise-category.controller');
 const Category = require('../../models/advertise/advertiseCategory.model');
 const Advertise = require('../../models/advertise/advertise.model');
@@ -36,7 +36,7 @@ router
 
 router
   .route('/category/:categoryId')
-  .get(getAdvertisebyCategory)
+  .get(getCategory)
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 

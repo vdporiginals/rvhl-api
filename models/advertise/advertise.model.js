@@ -8,7 +8,6 @@ const AdvertiseSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: [true, 'Please add a description'],
   },
   keywords: String,
   link: {
@@ -28,6 +27,7 @@ const AdvertiseSchema = new mongoose.Schema({
       'HomestayPage',
       'VillaPage',
     ],
+    required: [true, 'please add page position'],
   },
   image: {
     type: String,

@@ -11,34 +11,21 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
-exports.getAdvertisebyCategory = asyncHandler(async (req, res, next) => {
-  let advertise = Advertise.find({
-    category: req.params.categoryId,
-  }).populate({
-    path: 'category',
-    select: 'name',
-  });
+exports.getCategory = asyncHandler(async (req, res, next) => {
+  const advertise = await Category.findById(req.params.categoryId);
 
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    advertise = advertise.select(fields);
+  if (!advertise) {
+    return next(
+      new ErrorResponse(
+        `Advertise not found with id of ${req.params.categoryId}`,
+        404
+      )
+    );
   }
 
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    advertise = advertise.sort(sortBy);
-  } else {
-    advertise = advertise.sort('-createdAt');
-  }
-
-  const result = await advertise;
-  // const total = await advertise.countDocuments(...req.query);
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
-    totalRecord: result.length,
-    pagination,
-    count: total,
-    data: result,
+    data: advertise,
   });
 });
 
@@ -67,14 +54,21 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 //@route        PUT  /api/Advertises/categories/:id
 //@access       Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
-  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const category = await Category.findByIdAndUpdate(
+    req.params.categoryId,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!category) {
     return next(
-      new ErrorResponse(`category not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `category not found with id of ${req.params.categoryId}`,
+        404
+      )
     );
   }
 
@@ -88,7 +82,7 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 //@route        DELETE  /api/Advertises/categories/:id
 //@access       Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
-  const category = await Category.findById(req.params.id);
+  const category = await Category.findById(req.params.categoryId);
 
   if (req.user.role !== 'admin' && req.user.role !== 'moderator') {
     return next(
@@ -101,7 +95,10 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
   if (!category) {
     return next(
-      new ErrorResponse(`category not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `category not found with id of ${req.params.categoryId}`,
+        404
+      )
     );
   }
 

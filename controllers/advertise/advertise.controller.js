@@ -14,7 +14,10 @@ exports.getAdvertises = asyncHandler(async (req, res, next) => {
 //@route        GET  /api/advertises/:id
 //@access       Public
 exports.getAdvertise = asyncHandler(async (req, res, next) => {
-  const advertise = await Advertise.findById(req.params.id);
+  const advertise = await Advertise.findById(req.params.id).populate({
+    path: 'category',
+    select: 'name',
+  });
 
   if (!advertise) {
     return next(
