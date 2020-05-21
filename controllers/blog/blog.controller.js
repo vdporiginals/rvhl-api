@@ -69,7 +69,6 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
   });
 });
 
-
 //@desciption   Update Blog
 //@route        PUT  /api/blogs/:id
 //@access       Private
@@ -98,7 +97,7 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: blog._id
+    data: blog._id,
   });
 });
 
@@ -127,6 +126,6 @@ exports.deleteBlog = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {}
+    data: {},
   });
 });

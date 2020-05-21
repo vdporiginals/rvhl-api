@@ -12,7 +12,7 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
-  getBlogbyCategory,
+  getCategory,
 } = require('../../controllers/blog/blog-category.controller');
 const Blog = require('../../models/blog/blog.model');
 const advancedResults = require('../../middleware/advancedResults');
@@ -50,9 +50,7 @@ router
 
 router
   .route('/category/:categoryId')
-  // .get(
-  //   getBlogbyCategory
-  // )
+  .get(getCategory)
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 

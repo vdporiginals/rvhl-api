@@ -4,7 +4,7 @@ const BlogCategorySchema = new mongoose.Schema({
   name: {
     type: String,
     unique: false,
-    required: [true, 'please add a category'],
+    required: [true, 'please add a name'],
   },
   description: String,
   keywords: {

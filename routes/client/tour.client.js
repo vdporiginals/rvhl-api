@@ -11,7 +11,7 @@ const {
   createCategory,
   updateCategory,
   deleteCategory,
-  getTourbyCategory,
+  getCategory,
 } = require('../../controllers/tour/tour-category.controller');
 const Tour = require('../../models/tour/tour.model');
 const Category = require('../../models/tour/tourCategory.model');
@@ -19,10 +19,7 @@ const advancedResults = require('../../middleware/advancedResults');
 
 const router = express.Router();
 
-const {
-  protect,
-  authorize
-} = require('../../middleware/auth');
+const { protect, authorize } = require('../../middleware/auth');
 // router
 //   .route('/:id/photo')
 //   .put(protect, authorize('publisher', 'admin'), blogPhotoUpload);
@@ -40,17 +37,12 @@ router
 
 router
   .route('/category')
-  .get(
-    advancedResults(Category, null),
-    getCategories
-  )
+  .get(advancedResults(Category, null), getCategories)
   .post(protect, authorize('moderator', 'admin'), createCategory);
 
 router
   .route('/category/:categoryId')
-  .get(
-    getTourbyCategory
-  )
+  .get(getCategory)
   .put(protect, authorize('moderator', 'admin'), updateCategory)
   .delete(protect, authorize('moderator', 'admin'), deleteCategory);
 

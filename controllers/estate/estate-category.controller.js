@@ -96,14 +96,21 @@ exports.getCheckRoom = asyncHandler(async (req, res, next) => {
 //@route        PUT  /api/estates/categories/:id
 //@access       Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
-  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const category = await Category.findByIdAndUpdate(
+    req.params.categoryId,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!category) {
     return next(
-      new ErrorResponse(`category not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `category not found with id of ${req.params.categoryId}`,
+        404
+      )
     );
   }
 

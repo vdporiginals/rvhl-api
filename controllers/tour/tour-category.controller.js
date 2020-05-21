@@ -10,66 +10,23 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
-exports.getTourbyCategory = asyncHandler(async (req, res, next) => {
-  console.log(req.params.categoryId)
-  let tour = Tour.find({
-    category: req.params.categoryId
-  }).populate({
-    path: 'category',
-    select: 'name',
-  });
+exports.getCategory = asyncHandler(async (req, res, next) => {
+  const tour = await Category.findById(req.params.categoryId);
 
-  if (req.query.select) {
-    const fields = req.query.select.split(',').join(' ');
-    tour = tour.select(fields);
+  if (!tour) {
+    return next(
+      new ErrorResponse(
+        `tour not found with id of ${req.params.categoryId}`,
+        404
+      )
+    );
   }
 
-  if (req.query.sort) {
-    const sortBy = req.query.sort.split(',').join(' ');
-    tour = tour.sort(sortBy);
-  } else {
-    tour = tour.sort('-createdAt');
-  }
-
-  const page = parseInt(req.query.page, 10) || 0;
-  const limit = parseInt(req.query.limit, 10) || 25;
-  const startIndex = (page - 1) * limit;
-  const endIndex = page * limit;
-  const total = await Tour.countDocuments(tour);
-
-  const result = await tour;
-
-  tour = tour.skip(startIndex).limit(limit);
-
-  const pagination = {};
-  if (page < 0) {
-    page = 1;
-  }
-
-  if (endIndex < total) {
-    pagination.next = {
-      page: page + 1,
-      limit,
-    };
-  }
-
-  if (startIndex > 0) {
-    pagination.prev = {
-      page: page - 1,
-      limit,
-    };
-  }
-
-  tour = tour.skip(startIndex).limit(limit);
-  return res.status(200).json({
+  res.status(200).json({
     success: true,
-    totalRecord: result.length,
-    pagination,
-    count: total,
-    data: result,
+    data: tour,
   });
 });
-
 //@desciption   create Tour category
 //@route        POst  /api/tours/categories/:id
 //@access       Public
@@ -98,20 +55,27 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 //@route        PUT  /api/tours/categories/:id
 //@access       Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
-  const category = await Category.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const category = await Category.findByIdAndUpdate(
+    req.params.categoryId,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!category) {
     return next(
-      new ErrorResponse(`category not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `category not found with id of ${req.params.categoryId}`,
+        404
+      )
     );
   }
 
   res.status(200).json({
     success: true,
-    data: category
+    data: category,
   });
 });
 
@@ -119,7 +83,7 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
 //@route        DELETE  /api/tours/categories/:id
 //@access       Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
-  const category = await Category.findById(req.params.id);
+  const category = await Category.findById(req.params.categoryId);
 
   if (req.user.role !== 'admin' && req.user.role !== 'moderator') {
     return next(
@@ -132,7 +96,10 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
   if (!category) {
     return next(
-      new ErrorResponse(`category not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `category not found with id of ${req.params.categoryId}`,
+        404
+      )
     );
   }
 
@@ -140,6 +107,6 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: {}
+    data: {},
   });
 });
