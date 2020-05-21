@@ -14,7 +14,7 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'slider',
   }).then(async (val) => {
-    if (val) {
+    if (val[0]._id !== undefined) {
       let slider = Advertise.find({
         category: val[0]._id,
         page: 'Homepage',
@@ -239,7 +239,7 @@ exports.getVideoBanner = async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'video',
   }).then(async (val) => {
-    if (val) {
+    if (val[0]._id !== undefined) {
       let banner = Advertise.find({
         category: val[0]._id,
         page: 'Homepage',
@@ -273,7 +273,7 @@ exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'HomepageAdvertise',
   }).then(async (val) => {
-    if (val) {
+    if (val[0]._id !== undefined) {
       let banner = Advertise.find({
         category: val[0]._id,
         page: 'Homepage',
