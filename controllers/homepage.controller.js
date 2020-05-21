@@ -14,32 +14,28 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'slider',
   }).then(async (val) => {
-    if (val !== undefined || val.length != 0) {
-      let slider = Advertise.find({
-        category: val[0]._id,
-        page: 'Homepage',
-      });
-      if (req.query.select) {
-        const fields = req.query.select.split(',').join(' ');
-        slider = slider.select(fields);
-      }
-
-      if (req.query.sort) {
-        const sortBy = req.query.sort.split(',').join(' ');
-        slider = slider.sort(sortBy);
-      } else {
-        slider = slider.sort('-createdAt'); //get lastest
-      }
-
-      const result = await slider;
-
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
-    } else {
-      return next(new ErrorResponse(`No data found`, 400));
+    let slider = Advertise.find({
+      category: val[0]._id,
+      page: 'Homepage',
+    });
+    if (req.query.select) {
+      const fields = req.query.select.split(',').join(' ');
+      slider = slider.select(fields);
     }
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      slider = slider.sort(sortBy);
+    } else {
+      slider = slider.sort('-createdAt'); //get lastest
+    }
+
+    const result = await slider;
+
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
   });
 });
 
@@ -241,68 +237,64 @@ exports.getVideoBanner = async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'video',
   }).then(async (val) => {
-    if (val !== undefined || val.length != 0) {
-      let banner = Advertise.find({
-        category: val[0]._id,
-        page: 'Homepage',
-      });
-      const limit = parseInt(req.query.limit, 10) || 25;
+    let banner = Advertise.find({
+      category: val[0]._id,
+      page: 'Homepage',
+    });
+    const limit = parseInt(req.query.limit, 10) || 25;
 
-      if (req.query.select) {
-        const fields = req.query.select.split(',').join(' ');
-        banner = banner.select(fields);
-      }
-
-      if (req.query.sort) {
-        const sortBy = req.query.sort.split(',').join(' ');
-        banner = banner.sort(sortBy);
-      } else {
-        banner = banner.sort('-createdAt'); //get lastest
-      }
-      banner.limit(limit);
-      const result = await banner;
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
-    } else {
-      return next(new ErrorResponse(`No data found`, 400));
+    if (req.query.select) {
+      const fields = req.query.select.split(',').join(' ');
+      banner = banner.select(fields);
     }
+
+    if (req.query.sort) {
+      const sortBy = req.query.sort.split(',').join(' ');
+      banner = banner.sort(sortBy);
+    } else {
+      banner = banner.sort('-createdAt'); //get lastest
+    }
+    banner.limit(limit);
+    const result = await banner;
+    return res.status(200).json({
+      success: true,
+      data: result,
+    });
   });
 };
 
 //@route        GET  /api/homepage/advertise-banner
 //@access       Public
 exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
-  AdvertiseCategory.find({
+  const advCat = await AdvertiseCategory.find({
     position: 'HomepageAdvertise',
-  }).then(async (val) => {
-    if (val[0]._id !== undefined) {
-      let banner = Advertise.find({
-        category: val[0]._id,
-        page: 'Homepage',
-      });
-      const limit = parseInt(req.query.limit, 10) || 25;
+  });
 
-      if (req.query.select) {
-        const fields = req.query.select.split(',').join(' ');
-        banner = banner.select(fields);
-      }
+  if (!advCat) {
+    return next(new ErrorResponse(`Cannot found category`, 404));
+  }
 
-      if (req.query.sort) {
-        const sortBy = req.query.sort.split(',').join(' ');
-        banner = banner.sort(sortBy);
-      } else {
-        banner = banner.sort('-createdAt'); //get lastest
-      }
-      banner.limit(limit);
-      const result = await banner;
-      return res.status(200).json({
-        success: true,
-        data: result,
-      });
-    } else {
-      return next(new ErrorResponse(`No data found`, 400));
-    }
+  let banner = Advertise.find({
+    category: advCat._id,
+    page: 'Homepage',
+  });
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    banner = banner.select(fields);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    banner = banner.sort(sortBy);
+  } else {
+    banner = banner.sort('-createdAt'); //get lastest
+  }
+  banner.limit(limit);
+  const result = await banner;
+  return res.status(200).json({
+    success: true,
+    data: result,
   });
 });
