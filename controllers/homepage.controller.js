@@ -11,31 +11,35 @@ const Homestay = require('../models/estate/homestay.model');
 //@route        GET  //api/homepage/slider
 //@access       Public
 exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
-  AdvertiseCategory.find({
+  const advCat = await AdvertiseCategory.find({
     position: 'slider',
-  }).then(async (val) => {
-    let slider = Advertise.find({
-      category: val[0]._id,
-      page: 'Homepage',
-    });
-    if (req.query.select) {
-      const fields = req.query.select.split(',').join(' ');
-      slider = slider.select(fields);
-    }
+  });
 
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      slider = slider.sort(sortBy);
-    } else {
-      slider = slider.sort('-createdAt'); //get lastest
-    }
+  if (!advCat) {
+    return next(new ErrorResponse(`Cannot found category`, 404));
+  }
 
-    const result = await slider;
+  let slider = Advertise.find({
+    category: advCat._id,
+    page: 'Homepage',
+  });
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    slider = slider.select(fields);
+  }
 
-    return res.status(200).json({
-      success: true,
-      data: result,
-    });
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    slider = slider.sort(sortBy);
+  } else {
+    slider = slider.sort('-createdAt'); //get lastest
+  }
+
+  const result = await slider;
+
+  return res.status(200).json({
+    success: true,
+    data: result,
   });
 });
 
@@ -241,8 +245,9 @@ exports.getVideoBanner = async (req, res, next) => {
   if (!advCat) {
     return next(new ErrorResponse(`Cannot found category`, 404));
   }
+
   let banner = Advertise.find({
-    category: val[0]._id,
+    category: advCat._id,
     page: 'Homepage',
   });
   const limit = parseInt(req.query.limit, 10) || 25;
@@ -272,7 +277,6 @@ exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
   const advCat = await AdvertiseCategory.find({
     position: 'HomepageAdvertise',
   });
-  console.log(advCat);
   if (!advCat) {
     return next(new ErrorResponse(`Cannot found category`, 404));
   }
