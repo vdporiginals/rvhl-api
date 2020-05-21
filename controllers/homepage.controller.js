@@ -37,6 +37,8 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
         success: true,
         data: result,
       });
+    } else {
+      return next(new ErrorResponse(`No data found`, 400));
     }
   });
 });
@@ -263,6 +265,8 @@ exports.getVideoBanner = async (req, res, next) => {
         success: true,
         data: result,
       });
+    } else {
+      return next(new ErrorResponse(`No data found`, 400));
     }
   });
 };
@@ -297,6 +301,8 @@ exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
         success: true,
         data: result,
       });
+    } else {
+      return next(new ErrorResponse(`No data found`, 400));
     }
   });
 });
