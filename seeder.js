@@ -44,11 +44,11 @@ const users = JSON.parse(
 //import into DB
 const importData = async () => {
   try {
-    // await BlogCategory.create(blogCategories);
-    // await AdvertiseCategory.create(advertiseCategories);
-    // await TourCategory.create(tourCategories);
-    // await TransferCategory.create(transferCategories);
-    // await User.create(users);
+    await BlogCategory.create(blogCategories);
+    await AdvertiseCategory.create(advertiseCategories);
+    await TourCategory.create(tourCategories);
+    await TransferCategory.create(transferCategories);
+    await User.create(users);
     await Webconfig.create(webConfig);
     console.log('Data imported'.green.inverse);
     process.exit();
@@ -65,6 +65,7 @@ const deleteData = async () => {
     await TourCategory.deleteMany();
     await TransferCategory.deleteMany();
     await User.deleteMany();
+    await Webconfig.deleteMany();
     console.log('Data delete...'.red.inverse);
     process.exit();
   } catch (err) {
