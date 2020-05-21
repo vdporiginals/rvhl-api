@@ -277,6 +277,7 @@ exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
   AdvertiseCategory.find({
     position: 'HomepageAdvertise',
   }).then(async (val) => {
+    console.log(val);
     if (val[0]._id !== undefined) {
       let banner = Advertise.find({
         category: val[0]._id,
