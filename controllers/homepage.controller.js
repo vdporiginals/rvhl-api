@@ -17,30 +17,30 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
 
   if (!advCat) {
     return next(new ErrorResponse(`Cannot found category`, 404));
-  } else {
-    let slider = Advertise.find({
-      category: advCat._id,
-      page: 'Homepage',
-    });
-    if (req.query.select) {
-      const fields = req.query.select.split(',').join(' ');
-      slider = slider.select(fields);
-    }
-
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      slider = slider.sort(sortBy);
-    } else {
-      slider = slider.sort('-createdAt'); //get lastest
-    }
-
-    const result = await slider;
-
-    return res.status(200).json({
-      success: true,
-      data: result,
-    });
   }
+
+  let slider = Advertise.find({
+    category: advCat[0]._id,
+    page: 'Homepage',
+  });
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    slider = slider.select(fields);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    slider = slider.sort(sortBy);
+  } else {
+    slider = slider.sort('-createdAt'); //get lastest
+  }
+
+  const result = await slider;
+
+  return res.status(200).json({
+    success: true,
+    data: result,
+  });
 });
 
 //@route        GET  /api/homepage/popular-tour
@@ -244,31 +244,30 @@ exports.getVideoBanner = async (req, res, next) => {
 
   if (!advCat) {
     return next(new ErrorResponse(`Cannot found category`, 404));
-  } else {
-    let banner = Advertise.find({
-      category: advCat._id,
-      page: 'Homepage',
-    });
-    const limit = parseInt(req.query.limit, 10) || 25;
-
-    if (req.query.select) {
-      const fields = req.query.select.split(',').join(' ');
-      banner = banner.select(fields);
-    }
-
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      banner = banner.sort(sortBy);
-    } else {
-      banner = banner.sort('-createdAt'); //get lastest
-    }
-    banner.limit(limit);
-    const result = await banner;
-    return res.status(200).json({
-      success: true,
-      data: result,
-    });
   }
+  let banner = Advertise.find({
+    category: advCat[0]._id,
+    page: 'Homepage',
+  });
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    banner = banner.select(fields);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    banner = banner.sort(sortBy);
+  } else {
+    banner = banner.sort('-createdAt'); //get lastest
+  }
+  banner.limit(limit);
+  const result = await banner;
+  return res.status(200).json({
+    success: true,
+    data: result,
+  });
 };
 
 //@route        GET  /api/homepage/advertise-banner
@@ -279,29 +278,28 @@ exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
   });
   if (!advCat) {
     return next(new ErrorResponse(`Cannot found category`, 404));
-  } else {
-    let banner = Advertise.find({
-      category: advCat._id,
-      page: 'Homepage',
-    });
-    const limit = parseInt(req.query.limit, 10) || 25;
-
-    if (req.query.select) {
-      const fields = req.query.select.split(',').join(' ');
-      banner = banner.select(fields);
-    }
-
-    if (req.query.sort) {
-      const sortBy = req.query.sort.split(',').join(' ');
-      banner = banner.sort(sortBy);
-    } else {
-      banner = banner.sort('-createdAt'); //get lastest
-    }
-    banner.limit(limit);
-    const result = await banner;
-    return res.status(200).json({
-      success: true,
-      data: result,
-    });
   }
+  let banner = Advertise.find({
+    category: advCat[0]._id,
+    page: 'Homepage',
+  });
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    banner = banner.select(fields);
+  }
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    banner = banner.sort(sortBy);
+  } else {
+    banner = banner.sort('-createdAt'); //get lastest
+  }
+  banner.limit(limit);
+  const result = await banner;
+  return res.status(200).json({
+    success: true,
+    data: result,
+  });
 });
