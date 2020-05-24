@@ -24,8 +24,8 @@ const { protect } = require('../../middleware/auth');
 router.post('/register', apiLimiter, register);
 router.post('/login', login);
 
-router.post('/google', loginWithGoogle);
-router.post('/facebook', loginWithFacebook);
+router.post('/google', apiLimiter, loginWithGoogle);
+router.post('/facebook', apiLimiter, loginWithFacebook);
 
 router.get('/logout', logout);
 router.get('/me', protect, getMe);

@@ -22,6 +22,7 @@ const TourSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  video: String,
   description: String,
   phone: String,
   customerNum: Number,

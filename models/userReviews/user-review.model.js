@@ -5,7 +5,7 @@ const shortid = require('shortid');
 shortid.characters(
   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
 );
-const BlogSchema = new mongoose.Schema(
+const UserReviewSchema = new mongoose.Schema(
   {
     _id: {
       type: String,
@@ -27,11 +27,11 @@ const BlogSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
-    // position: {
-    //   type: String,
-    //   enum: ['Schedule', 'Food'],
-    //   required: [true, 'Please add  a position'],
-    // },
+    position: {
+      type: String,
+      enum: ['Schedule', 'Food', 'Hotel', 'Tour'],
+      required: [true, 'Please add  a position'],
+    },
     category: {
       type: mongoose.Schema.ObjectId,
       ref: 'BlogCategory',
@@ -67,12 +67,12 @@ const BlogSchema = new mongoose.Schema(
   }
 );
 
-BlogSchema.pre('save', function (next) {
+UserReviewSchema.pre('save', function (next) {
   this.seo = slug(this.title, '-');
   next();
 });
 
-BlogSchema.virtual('replyCount', {
+UserReviewSchema.virtual('replyCount', {
   ref: 'Reply',
   localField: '_id',
   foreignField: 'postId',
@@ -80,7 +80,7 @@ BlogSchema.virtual('replyCount', {
   count: true,
 });
 
-BlogSchema.virtual('commentsCount', {
+UserReviewSchema.virtual('commentsCount', {
   ref: 'Comment',
   localField: '_id',
   foreignField: 'postId',
@@ -88,7 +88,7 @@ BlogSchema.virtual('commentsCount', {
   count: true,
 });
 
-BlogSchema.pre('remove', async function (next) {
+UserReviewSchema.pre('remove', async function (next) {
   console.log(`comment being removed from blog ${this._id}`);
   await this.model('Comment').deleteMany({
     postId: this._id,
@@ -96,4 +96,4 @@ BlogSchema.pre('remove', async function (next) {
   next();
 });
 
-module.exports = new mongoose.model('Blog', BlogSchema);
+module.exports = new mongoose.model('UserReview', UserReviewSchema);

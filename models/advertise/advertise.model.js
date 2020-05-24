@@ -33,6 +33,7 @@ const AdvertiseSchema = new mongoose.Schema({
     type: String,
     default: 'no-photo.jpg',
   },
+  video: String,
   seo: String,
   status: {
     type: Boolean,

@@ -1,11 +1,11 @@
 const path = require('path');
 const ErrorResponse = require('../../middleware/utils/errorResponse');
 const asyncHandler = require('../../middleware/asyncHandler');
-const Category = require('../../models/advertise/advertiseCategory.model');
-const Advertise = require('../../models/advertise/advertise.model');
+const Category = require('../../models/restaurant/restaurantCategory.model');
+// const restaurant = require('../../models/restaurant/restaurant.model');
 //@desciption   Get all category
-//@route        GET  /api/advertises/categories
-// @route     GET /api/advertises/categories/:id
+//@route        GET  /api/Restaurants/categories
+// @route     GET /api/Restaurants/categories/:id
 //@access       Public
 exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
@@ -17,7 +17,7 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
   if (!category) {
     return next(
       new ErrorResponse(
-        `Advertise not found with id of ${req.params.categoryId}`,
+        `Restaurant not found with id of ${req.params.categoryId}`,
         404
       )
     );
@@ -29,14 +29,14 @@ exports.getCategory = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   create advertise category
-//@route        POst  /api/advertises/categories/:id
+//@desciption   create Restaurant category
+//@route        POst  /api/Restaurants/categories/:id
 //@access       Public
 exports.createCategory = asyncHandler(async (req, res, next) => {
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `The user with ID ${req.user.id} has no permission to create new advertise category`,
+        `The user with ID ${req.user.id} has no permission to create new Restaurant category`,
         400
       )
     );
@@ -50,8 +50,8 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   Update Advertise category
-//@route        PUT  /api/Advertises/categories/:id
+//@desciption   Update Restaurant category
+//@route        PUT  /api/Restaurants/categories/:id
 //@access       Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findByIdAndUpdate(
@@ -78,8 +78,8 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
   });
 });
 
-//@desciption   Delete Advertise category
-//@route        DELETE  /api/Advertises/categories/:id
+//@desciption   Delete Restaurant category
+//@route        DELETE  /api/Restaurants/categories/:id
 //@access       Private
 exports.deleteCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findById(req.params.categoryId);
