@@ -2,7 +2,7 @@ const path = require('path');
 const ErrorResponse = require('../../middleware/utils/errorResponse');
 const asyncHandler = require('../../middleware/asyncHandler');
 const geocoder = require('../../middleware/utils/geocoder');
-const UserReview = require('../../models/userReview/user-review.model');
+const UserReview = require('../../models/userReviews/user-review.model');
 //@desciption   Get all UserReviews
 //@route        GET  /api/UserReviews
 //@access       Public

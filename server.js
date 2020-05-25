@@ -3,7 +3,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
 const colors = require('colors');
-const fileupload = require('express-fileupload');
+// const fileupload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
@@ -34,6 +34,8 @@ const homepage = require('./routes/client/homepage.client');
 const comment = require('./routes/client/comment.client');
 const commentControl = require('./routes/admin/comment.admin');
 const estates = require('./routes/client/estate.client');
+const userReview = require('./routes/client/user-review.client');
+const restaurant = require('./routes/client/restaurant.client');
 const app = express();
 //Body parser
 app.use(express.json());
@@ -86,6 +88,8 @@ app.use('/api/auth', auth);
 app.use('/api/comments', comment);
 app.use('/api/estates', estates);
 app.use('/api/users', users);
+app.use('/api/user-review', userReview);
+app.use('/api/restaurant', restaurant);
 app.use('/api/web-config', webConfig);
 app.use('/api/admin', commentControl);
 app.use(errorHandler);
@@ -98,6 +102,7 @@ const server = app.listen(
       .bold
   )
 );
+
 loadModels = function () {
   // loop through all files in models directory ignoring hidden files and this file
   fs.readdirSync(config.modelsDirMongo)
@@ -110,6 +115,7 @@ loadModels = function () {
       require(path.join(config.modelsDirMongo, file));
     });
 };
+
 //handle rejecttions
 process.on('unhandledRejection', (err, promise) => {
   console.log(`Error: ${err.message}`.red);

@@ -10,7 +10,7 @@ const RestaurantCategorySchema = new mongoose.Schema(
     description: String,
     keywords: {
       type: String,
-      default: 'Danh mục chỗ ở',
+      default: 'Danh mục nhà hàng',
     },
     createdAt: {
       type: Date,

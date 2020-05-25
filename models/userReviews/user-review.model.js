@@ -54,7 +54,7 @@ const UserReviewSchema = new mongoose.Schema(
     },
     images: {
       type: [String],
-      default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
+      default: `https://api.reviewhalong.vn${process.env.PORT}/no-photo.jpg`,
     },
   },
   {
