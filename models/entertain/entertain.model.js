@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const slug = require('../../config/slug');
-const RestaurantSchema = new mongoose.Schema({
+const EntertainSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
@@ -10,24 +10,13 @@ const RestaurantSchema = new mongoose.Schema({
     type: String,
   },
   content: String,
-  image: String,
   address: String,
-  views: String,
-  menu: [
-    {
-      _id: false,
-      name: String,
-      price: Number,
-      description: String,
-      image: String,
-    },
-  ],
-  gallery: {
+  images: {
     type: [String],
   },
   category: {
     type: mongoose.Schema.ObjectId,
-    ref: 'RestaurantCategory',
+    ref: 'EntertainCategory',
   },
   phone: {
     type: String,
@@ -49,9 +38,9 @@ const RestaurantSchema = new mongoose.Schema({
   },
 });
 
-RestaurantSchema.pre('save', function (next) {
+EntertainSchema.pre('save', function (next) {
   this.seo = slug(this.name, '-');
   next();
 });
 
-module.exports = mongoose.model('Restaurant', RestaurantSchema);
+module.exports = mongoose.model('Entertain', EntertainSchema);

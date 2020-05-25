@@ -12,7 +12,12 @@ const {
 const Comment = require('../../models/comment/comment.model');
 const advancedResults = require('../../middleware/advancedResults');
 const Reply = require('../../models/comment/reply.model');
+const rateLimit = require('express-rate-limit');
 const router = express.Router();
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 10 second
+  max: 5,
+});
 
 const { protect, authorize } = require('../../middleware/auth');
 
@@ -40,13 +45,13 @@ router
     ]),
     getComments
   )
-  .post(protect, createBlogComment);
+  .post(protect, apiLimiter, createBlogComment);
 
 router
   .route('/:postId/:commentId')
   .put(protect, updateComment)
   .get(protect, advancedResults(Reply, 'commentId'), getComments)
-  .post(protect, createBlogReply)
+  .post(protect, apiLimiter, createBlogReply)
   .delete(protect, deleteComment);
 
 module.exports = router;

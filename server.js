@@ -36,6 +36,8 @@ const commentControl = require('./routes/admin/comment.admin');
 const estates = require('./routes/client/estate.client');
 const userReview = require('./routes/client/user-review.client');
 const restaurant = require('./routes/client/restaurant.client');
+const entertain = require('./routes/client/entertain.client');
+
 const app = express();
 //Body parser
 app.use(express.json());
@@ -89,7 +91,8 @@ app.use('/api/comments', comment);
 app.use('/api/estates', estates);
 app.use('/api/users', users);
 app.use('/api/user-review', userReview);
-app.use('/api/restaurant', restaurant);
+app.use('/api/restaurants', restaurant);
+app.use('/api/entertains', entertain);
 app.use('/api/web-config', webConfig);
 app.use('/api/admin', commentControl);
 app.use(errorHandler);
