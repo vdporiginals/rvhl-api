@@ -47,9 +47,14 @@ const TransferSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 TransferSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
   this.seo = slug(this.name, '-');
   next();
 });

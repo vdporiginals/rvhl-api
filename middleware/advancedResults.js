@@ -34,46 +34,22 @@ const advancedResults = (model, populate, position) => async (
     newQuery.title = {
       $regex: new RegExp(req.query.title, 'i'),
     };
-    query = model.find(
-      newQuery,
-      {
-        _id: 0,
-      },
-      function (err, data) {}
-    );
+    query = model.find(newQuery, function (err, data) {});
   } else if (req.query.name) {
     newQuery.name = {
       $regex: new RegExp(req.query.name, 'i'),
     };
-    query = model.find(
-      newQuery,
-      {
-        _id: 0,
-      },
-      function (err, data) {}
-    );
+    query = model.find(newQuery, function (err, data) {});
   } else if (req.query.locationStart) {
     newQuery.locationStart = {
       $regex: new RegExp(req.query.locationStart, 'i'),
     };
-    query = model.find(
-      newQuery,
-      {
-        _id: 0,
-      },
-      function (err, data) {}
-    );
+    query = model.find(newQuery, function (err, data) {});
   } else if (req.query.address) {
     newQuery.address = {
       $regex: new RegExp(req.query.address, 'i'),
     };
-    query = model.find(
-      newQuery,
-      {
-        _id: 0,
-      },
-      function (err, data) {}
-    );
+    query = model.find(newQuery, function (err, data) {});
   } else {
     query = model.find(newQuery);
   }

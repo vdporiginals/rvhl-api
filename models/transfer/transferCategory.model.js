@@ -16,6 +16,10 @@ const TransferCategorySchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: {
@@ -26,6 +30,10 @@ const TransferCategorySchema = new mongoose.Schema(
     },
   }
 );
+TransferCategorySchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
 
 TransferCategorySchema.virtual('transfers', {
   ref: 'Transfer',

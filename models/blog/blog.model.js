@@ -56,6 +56,10 @@ const BlogSchema = new mongoose.Schema(
       type: [String],
       default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
     },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: {
@@ -68,6 +72,7 @@ const BlogSchema = new mongoose.Schema(
 );
 
 BlogSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
   this.seo = slug(this.title, '-');
   next();
 });

@@ -15,6 +15,14 @@ const EntertainCategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+EntertainCategorySchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
 });
 
 EntertainCategorySchema.pre('remove', async function (next) {

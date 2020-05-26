@@ -36,9 +36,14 @@ const EntertainSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 EntertainSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
   this.seo = slug(this.name, '-');
   next();
 });

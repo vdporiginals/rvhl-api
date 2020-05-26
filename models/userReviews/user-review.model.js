@@ -32,6 +32,10 @@ const UserReviewSchema = new mongoose.Schema(
       enum: ['Schedule', 'Food', 'Hotel', 'Tour'],
       required: [true, 'Please add  a position'],
     },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
     category: {
       type: mongoose.Schema.ObjectId,
       ref: 'BlogCategory',
@@ -68,6 +72,7 @@ const UserReviewSchema = new mongoose.Schema(
 );
 
 UserReviewSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
   this.seo = slug(this.title, '-');
   next();
 });

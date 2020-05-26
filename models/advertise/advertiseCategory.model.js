@@ -19,6 +19,15 @@ const AdvertiseCategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+
+AdvertiseCategorySchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  return next();
 });
 
 AdvertiseCategorySchema.pre('remove', async function (next) {

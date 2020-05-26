@@ -58,9 +58,14 @@ const TourSchema = new mongoose.Schema({
     type: [String],
     default: 'no-photo.jpg',
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
 
 TourSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
   this.seo = slug(this.title, '-');
   this.schedule.sort(function (a, b) {
     return new Date(a.timeStart) - new Date(b.timeStart);

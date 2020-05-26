@@ -15,6 +15,14 @@ const BlogCategorySchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
+});
+BlogCategorySchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
 });
 
 BlogCategorySchema.pre('remove', async function (next) {

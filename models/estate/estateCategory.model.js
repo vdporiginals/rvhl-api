@@ -21,6 +21,10 @@ const EstateCategorySchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    updatedAt: {
+      type: Date,
+      default: Date.now,
+    },
   },
   {
     toJSON: {
@@ -31,6 +35,10 @@ const EstateCategorySchema = new mongoose.Schema(
     },
   }
 );
+EstateCategorySchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
 
 EstateCategorySchema.virtual('hotels', {
   ref: 'Hotel',

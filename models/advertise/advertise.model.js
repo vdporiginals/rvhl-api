@@ -22,6 +22,7 @@ const AdvertiseSchema = new mongoose.Schema({
       'TransferPage',
       'TourHalongPage',
       'SchedulePage',
+      'Entertain',
       'FoodPage',
       'HotelPage',
       'HomestayPage',
@@ -52,9 +53,13 @@ const AdvertiseSchema = new mongoose.Schema({
     type: Date,
     default: Date.now,
   },
+  updatedAt: {
+    type: Date,
+    default: Date.now,
+  },
 });
-
 AdvertiseSchema.pre('save', function (next) {
+  this.updatedAt = Date.now();
   this.seo = slug(this.title, '-');
   next();
 });
