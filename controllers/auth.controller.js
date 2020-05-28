@@ -327,7 +327,6 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
       );
     }
   );
-  console.log(social);
   if (social.socialData === undefined || social.socialData === null) {
     return next(new ErrorResponse('You must login with facebook', 400));
   }

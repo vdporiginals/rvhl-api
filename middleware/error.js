@@ -4,7 +4,7 @@ const errorHandler = (err, req, res, next) => {
   let error = { ...err };
   error.message = err.message;
   //log to console dev
-  console.log(err);
+  console.log(err.name);
 
   //moongoose bad obj id
   if (err.name === 'CastError') {
@@ -12,7 +12,7 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 404);
   }
 
-  if (err.message.indexOf('Cast to ObjectId failed') !== -1) {
+  if (err.message.indexOf('Cast to ObjectId failed')) {
     const message = 'Cast to ObjectId entered';
     error = new ErrorResponse(message, 400);
   }

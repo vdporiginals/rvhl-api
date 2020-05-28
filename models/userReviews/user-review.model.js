@@ -27,18 +27,14 @@ const UserReviewSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'User',
     },
-    position: {
-      type: String,
-      enum: ['Schedule', 'Food', 'Hotel', 'Tour'],
-      required: [true, 'Please add  a position'],
-    },
+    image: String,
     updatedAt: {
       type: Date,
       default: Date.now,
     },
     category: {
       type: mongoose.Schema.ObjectId,
-      ref: 'BlogCategory',
+      ref: 'UserReviewCategory',
     },
     isPopular: {
       type: Boolean,
@@ -55,11 +51,7 @@ const UserReviewSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       default: false,
-    },
-    images: {
-      type: [String],
-      default: `https://api.reviewhalong.vn${process.env.PORT}/no-photo.jpg`,
-    },
+    }
   },
   {
     toJSON: {

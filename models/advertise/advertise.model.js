@@ -13,7 +13,7 @@ const AdvertiseSchema = new mongoose.Schema({
   link: {
     type: String,
   },
-  page: {
+  pagePosition: {
     type: String,
     enum: [
       'Homepage',
@@ -22,7 +22,7 @@ const AdvertiseSchema = new mongoose.Schema({
       'TransferPage',
       'TourHalongPage',
       'SchedulePage',
-      'Entertain',
+      'EntertainPage',
       'FoodPage',
       'HotelPage',
       'HomestayPage',
@@ -40,10 +40,10 @@ const AdvertiseSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
+  typeAdvertise: { type: String, enum: ['BannerPage', 'Advertise'] },
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'AdvertiseCategory',
-    required: true,
   },
   isPopular: {
     type: Boolean,

@@ -3,7 +3,7 @@ const {
   getSliderAdvertise,
   getPopularReviews,
   getPopularTour,
-  getPopularHotel,
+  getPopularEstate,
   getPopularVilla,
   getPopularHomestay,
   getVideoBanner,
@@ -31,7 +31,7 @@ router.route('/video-banner').get(getVideoBanner);
 
 router.route('/advertise-banner').get(getAdvertiseBanner);
 
-router.route('/popular-hotel').get(getPopularHotel);
+router.route('/popular-estates').get(getPopularEstate);
 
 router.route('/popular-villa').get(getPopularVilla);
 

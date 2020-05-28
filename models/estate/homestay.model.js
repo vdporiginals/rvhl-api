@@ -1,6 +1,15 @@
 const mongoose = require('mongoose');
 const slug = require('../../config/slug');
+const shortid = require('shortid');
+
+shortid.characters(
+  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+);
 const HomestaySchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: shortid.generate,
+  },
   name: {
     type: String,
     trim: true,
@@ -26,6 +35,10 @@ const HomestaySchema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, 'Please add a phone'],
+    match: [
+      /(09|03|08|07|05[0-9])+([0-9]{8})\b/g,
+      'Hãy nhập đúng số điện thoại của bạn',
+    ],
   },
   facilities: {
     square: Number,
@@ -34,6 +47,8 @@ const HomestaySchema = new mongoose.Schema({
     kitchen: Boolean,
     other: [String],
   },
+  image: String,
+  showHomepage: Boolean,
   category: {
     type: mongoose.Schema.ObjectId,
     ref: 'EstateCategory',

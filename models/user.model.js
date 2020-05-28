@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const http = require("http");
+const http = require('http');
 const host = http.originalUrl;
 const UserSchema = new mongoose.Schema({
   name: {
@@ -37,7 +37,7 @@ const UserSchema = new mongoose.Schema({
   },
   avatar: {
     type: String,
-    default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
+    default: `https://api.reviewhalong.vn/no-photo.jpg`,
   },
   resetPasswordToken: String,
   resetPasswordExpire: Date,
@@ -55,12 +55,16 @@ UserSchema.pre('save', async function (next) {
 
 // Sign JWT and return
 UserSchema.methods.getSignedJwtToken = function () {
-  return jwt.sign({
-    id: this._id,
-    role: this.role
-  }, process.env.JWT_SECRET, {
-    expiresIn: process.env.JWT_USER_EXPIRE,
-  });
+  return jwt.sign(
+    {
+      id: this._id,
+      role: this.role,
+    },
+    process.env.JWT_SECRET,
+    {
+      expiresIn: process.env.JWT_USER_EXPIRE,
+    }
+  );
 };
 
 UserSchema.methods.matchPassword = async function (enteredPassword) {
@@ -90,7 +94,7 @@ UserSchema.methods.getUserById = function (id, callback) {
 
 UserSchema.methods.getUserByUsername = function (username, callback) {
   var query = {
-    username: username
+    username: username,
   };
   User.findOne(query, callback);
 };

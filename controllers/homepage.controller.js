@@ -21,7 +21,7 @@ exports.getSliderAdvertise = asyncHandler(async (req, res, next) => {
 
   let slider = Advertise.find({
     category: advCat[0]._id,
-    page: 'Homepage',
+    pagePosition: 'Homepage',
   });
   if (req.query.select) {
     const fields = req.query.select.split(',').join(' ');
@@ -194,6 +194,46 @@ exports.getPopularHomestay = asyncHandler(async (req, res, next) => {
     data: result,
   });
 });
+
+exports.getPopularEstate = asyncHandler(async (req, res, next) => {
+  let hotel = Hotel.find({
+    showHomepage: true,
+  });
+  let homestay = Homestay.find({ showHomepage: true });
+  let villa = Villa.find({ showHomepage: true });
+  (await hotel).concat(homestay, villa);
+  const limit = parseInt(req.query.limit, 10) || 25;
+
+  if (req.query.sort) {
+    const sortBy = req.query.sort.split(',').join(' ');
+    hotel = hotel.sort(sortBy);
+    homestay = homestay.sort(sortBy);
+    villa = villa.sort(sortBy);
+  } else {
+    hotel = hotel.sort('-createdAt');
+    homestay = homestay.sort('-createdAt');
+    villa = villa.sort('-createdAt');
+  }
+
+  hotel.limit(limit);
+  homestay.limit(limit);
+  villa.limit(limit);
+
+  if (req.query.select) {
+    const fields = req.query.select.split(',').join(' ');
+    hotel = hotel.select(fields);
+    homestay = homestay.select(fields);
+    villa = villa.select(fields);
+  }
+  const result1 = await hotel;
+  const result2 = await homestay;
+  const result3 = await villa;
+  return res.status(200).json({
+    success: true,
+    total: result1.length + result3.length + result2.length,
+    data: result1.concat(result2).concat(result3),
+  });
+});
 //@route        GET  //api/homepage/review
 //@access       Public
 exports.getPopularReviews = asyncHandler(async (req, res, next) => {
@@ -247,7 +287,7 @@ exports.getVideoBanner = async (req, res, next) => {
   }
   let banner = Advertise.find({
     category: advCat[0]._id,
-    page: 'Homepage',
+    pagePosition: 'Homepage',
   });
   const limit = parseInt(req.query.limit, 10) || 25;
 
@@ -281,7 +321,7 @@ exports.getAdvertiseBanner = asyncHandler(async (req, res, next) => {
   }
   let banner = Advertise.find({
     category: advCat[0]._id,
-    page: 'Homepage',
+    pagePosition: 'Homepage',
   });
   const limit = parseInt(req.query.limit, 10) || 25;
 

@@ -1,7 +1,16 @@
 const mongoose = require('mongoose');
 const slug = require('../../config/slug');
+const shortid = require('shortid');
+
+shortid.characters(
+  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+);
 
 const TourSchema = new mongoose.Schema({
+  _id: {
+    type: String,
+    default: shortid.generate,
+  },
   title: {
     type: String,
     trim: true,
@@ -30,12 +39,17 @@ const TourSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: [true, 'Please add price'],
+    match: [
+      /(09|03|08|07|05[0-9])+([0-9]{8})\b/g,
+      'Hãy nhập đúng số điện thoại của bạn',
+    ],
   },
   seo: String,
   createdAt: {
     type: Date,
     default: Date.now,
   },
+  image: String,
   status: {
     type: Boolean,
     default: false,

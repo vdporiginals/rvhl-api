@@ -90,12 +90,14 @@ app.use('/api/auth', auth);
 app.use('/api/comments', comment);
 app.use('/api/estates', estates);
 app.use('/api/users', users);
-app.use('/api/user-review', userReview);
+app.use('/api/user-reviews', userReview);
 app.use('/api/restaurants', restaurant);
 app.use('/api/entertains', entertain);
 app.use('/api/web-config', webConfig);
 app.use('/api/admin', commentControl);
+
 app.use(errorHandler);
+
 const PORT = process.env.PORT || 5000;
 
 const server = app.listen(
@@ -123,7 +125,7 @@ loadModels = function () {
 process.on('unhandledRejection', (err, promise) => {
   console.log(`Error: ${err.message}`.red);
   //close server and exit process
-  server.close(() => process.exit(1));
+  // server.close(() => process.exit(1));
 });
 
 // module.exports = server

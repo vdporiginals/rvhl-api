@@ -3,6 +3,7 @@ const ErrorResponse = require('../../middleware/utils/errorResponse');
 const asyncHandler = require('../../middleware/asyncHandler');
 const geocoder = require('../../middleware/utils/geocoder');
 const UserReview = require('../../models/userReviews/user-review.model');
+const Category = require('../../models/userReviews/userReviewCategory.model');
 //@desciption   Get all UserReviews
 //@route        GET  /api/UserReviews
 //@access       Public
@@ -43,6 +44,13 @@ exports.createUserReview = asyncHandler(async (req, res, next) => {
   //add user to req.body
   // req.body.category = req.params.categoryId;
   req.body.user = req.user.id;
+  const category = await Category.findById(req.body.category);
+  if (!category) {
+    return next(
+      new ErrorResponse(`No category with the id of ${req.params.categoryId}`),
+      404
+    );
+  }
 
   if (req.user.role !== 'moderator' && req.user.role !== 'admin') {
     return next(
