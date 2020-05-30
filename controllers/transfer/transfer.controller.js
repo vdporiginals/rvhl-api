@@ -81,11 +81,14 @@ exports.updateTransfer = asyncHandler(async (req, res, next) => {
 //@route        DELETE  /api/Transfers/:id
 //@access       Private
 exports.deleteTransfer = asyncHandler(async (req, res, next) => {
-  const transfer = await Transfer.findById(req.params.id);
+  const transfer = await Transfer.findById(req.params.transferId);
 
   if (!transfer) {
     return next(
-      new ErrorResponse(`Transfer not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `Transfer not found with id of ${req.params.transferId}`,
+        404
+      )
     );
   }
 

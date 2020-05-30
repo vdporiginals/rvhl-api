@@ -28,8 +28,7 @@ const { protect, authorize } = require('../../middleware/auth');
 router
   .route('/')
   .get(advancedResults(Transfer, null), getTransfers)
-  .post(protect, authorize('admin', 'moderator'), createTransfer)
-  .delete(protect, authorize('admin', 'moderator'), deleteTransfer);
+  .post(protect, authorize('admin', 'moderator'), createTransfer);
 
 router
   .route('/category')
@@ -39,6 +38,7 @@ router
 router
   .route('/:transferId')
   .get(getTransfer)
+  .delete(protect, authorize('admin', 'moderator'), deleteTransfer)
   .put(protect, authorize('admin', 'moderator'), updateTransfer);
 
 router
