@@ -53,14 +53,21 @@ exports.createTransfer = asyncHandler(async (req, res, next) => {
 //@route        PUT  /api/Transfers/:id
 //@access       Private
 exports.updateTransfer = asyncHandler(async (req, res, next) => {
-  const transfer = await Transfer.findByIdAndUpdate(req.params.id, req.body, {
-    new: true,
-    runValidators: true,
-  });
+  const transfer = await Transfer.findByIdAndUpdate(
+    req.params.transferId,
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
 
   if (!transfer) {
     return next(
-      new ErrorResponse(`Transfer not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `Transfer not found with id of ${req.params.transferId}`,
+        404
+      )
     );
   }
 

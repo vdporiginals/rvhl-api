@@ -29,7 +29,6 @@ router
   .route('/')
   .get(advancedResults(Transfer, null), getTransfers)
   .post(protect, authorize('admin', 'moderator'), createTransfer)
-  .put(protect, authorize('admin', 'moderator'), updateTransfer)
   .delete(protect, authorize('admin', 'moderator'), deleteTransfer);
 
 router
@@ -37,7 +36,10 @@ router
   .get(advancedResults(Category, null), getCategories)
   .post(protect, authorize('admin', 'moderator'), createCategory);
 
-router.route('/:transferId').get(getTransfer);
+router
+  .route('/:transferId')
+  .get(getTransfer)
+  .put(protect, authorize('admin', 'moderator'), updateTransfer);
 
 router
   .route('/category/:categoryId')

@@ -20,7 +20,7 @@ const TransferSchema = new mongoose.Schema({
   },
   locationStart: String,
   locationEnd: String,
-  timeStart: Date,
+  timeStart: String,
   timePerTrip: String,
   content: String,
   chairNum: String,
