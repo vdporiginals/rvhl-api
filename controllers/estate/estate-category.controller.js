@@ -92,6 +92,32 @@ exports.checkRoom = asyncHandler(async (req, res, next) => {
 exports.getCheckRoom = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
+
+exports.deleteCheckRoom = asyncHandler(async (req, res, next) => {
+  const check = await Category.findById(req.params.checkRoomId);
+
+  if (req.user.role !== 'admin' && req.user.role !== 'moderator') {
+    return next(
+      new ErrorResponse(
+        `User ${req.user.id} is not authorized to delete course ${check._id}`,
+        401
+      )
+    );
+  }
+
+  if (!check) {
+    return next(
+      new ErrorResponse(`check not found with id of ${req.params.id}`, 404)
+    );
+  }
+
+  check.remove();
+
+  res.status(200).json({
+    success: true,
+    data: {},
+  });
+});
 //@desciption   Update estate category
 //@route        PUT  /api/estates/categories/:id
 //@access       Private

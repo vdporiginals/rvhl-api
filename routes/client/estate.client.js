@@ -28,6 +28,7 @@ const {
   createCategory,
   checkRoom,
   getCheckRoom,
+  deleteCheckRoom,
   updateCategory,
   deleteCategory,
 } = require('../../controllers/estate/estate-category.controller');
@@ -64,6 +65,11 @@ router
     getCheckRoom
   )
   .post(apiLimiter, protect, checkRoom);
+
+router
+  .route('/check-room/:checkRoomId')
+  .delete(protect, authorize('admin'), deleteCheckRoom);
+
 router
   .route('/category/:categoryId')
   .put(protect, authorize('admin', 'moderator'), updateCategory)
