@@ -9,6 +9,7 @@ const {
 
 const {
   getCategories,
+  getCategory,
   createCategory,
   updateCategory,
   deleteCategory,

@@ -10,6 +10,24 @@ exports.getCategories = asyncHandler(async (req, res, next) => {
   res.status(200).json(res.advancedResults);
 });
 
+exports.getCategory = asyncHandler(async (req, res, next) => {
+  const category = await Category.findById(req.params.categoryId);
+
+  if (!category) {
+    return next(
+      new ErrorResponse(
+        `Transfer category not found with id of ${req.params.categoryId}`,
+        404
+      )
+    );
+  }
+
+  res.status(200).json({
+    success: true,
+    data: category,
+  });
+});
+
 //@desciption   create estate category
 //@route        POst  /api/estates/categories/:id
 //@access       Public
