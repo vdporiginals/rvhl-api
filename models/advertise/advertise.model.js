@@ -23,6 +23,7 @@ const AdvertiseSchema = new mongoose.Schema({
       'TourHalongPage',
       'SchedulePage',
       'EntertainPage',
+      'ReviewPage',
       'FoodPage',
       'HotelPage',
       'HomestayPage',
