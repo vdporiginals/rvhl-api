@@ -31,13 +31,6 @@ const TransferSchema = new mongoose.Schema({
     ref: 'TransferCategory',
     required: true,
   },
-  schedule: [
-    {
-      _id: false,
-      time: Date,
-      location: String,
-    },
-  ],
   image: String,
   images: {
     type: [String],
