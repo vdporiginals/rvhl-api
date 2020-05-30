@@ -18,6 +18,7 @@ const EntertainSchema = new mongoose.Schema({
   description: {
     type: String,
   },
+  price: String,
   content: String,
   address: String,
   image: String,
