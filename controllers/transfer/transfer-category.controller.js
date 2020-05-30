@@ -61,7 +61,7 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
   if (req.user.role !== 'admin' && req.user.role !== 'moderator') {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to delete course ${category._id}`,
+        `User ${req.user.id} is not authorized to delete transfer ${category._id}`,
         401
       )
     );
@@ -69,7 +69,10 @@ exports.deleteCategory = asyncHandler(async (req, res, next) => {
 
   if (!category) {
     return next(
-      new ErrorResponse(`category not found with id of ${req.params.id}`, 404)
+      new ErrorResponse(
+        `category not found with id of ${req.params.categoryId}`,
+        404
+      )
     );
   }
 
