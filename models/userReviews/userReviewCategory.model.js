@@ -35,5 +35,5 @@ UserReviewCategorySchema.pre('remove', async function (next) {
 
 module.exports = new mongoose.model(
   'UserReviewCategory',
-  userReviewCategorySchema
+  UserReviewCategorySchema
 );
