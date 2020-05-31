@@ -54,7 +54,7 @@ exports.createCategory = asyncHandler(async (req, res, next) => {
 //@access       Private
 exports.updateCategory = asyncHandler(async (req, res, next) => {
   const category = await Category.findByIdAndUpdate(
-    req.params.transferId,
+    req.params.categoryId,
     req.body,
     {
       new: true,
@@ -65,7 +65,7 @@ exports.updateCategory = asyncHandler(async (req, res, next) => {
   if (!category) {
     return next(
       new ErrorResponse(
-        `category not found with id of ${req.params.transferId}`,
+        `category not found with id of ${req.params.categoryId}`,
         404
       )
     );
