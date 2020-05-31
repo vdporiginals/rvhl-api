@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const userReviewCategorySchema = new mongoose.Schema({
+const UserReviewCategorySchema = new mongoose.Schema({
   name: {
     type: String,
     unique: false,
@@ -20,12 +20,12 @@ const userReviewCategorySchema = new mongoose.Schema({
     default: Date.now,
   },
 });
-userReviewCategorySchema.pre('save', function (next) {
+UserReviewCategorySchema.pre('save', function (next) {
   this.updatedAt = Date.now();
   next();
 });
 
-userReviewCategorySchema.pre('remove', async function (next) {
+UserReviewCategorySchema.pre('remove', async function (next) {
   console.log(`Blog being removed from BlogCategory ${this._id}`);
   await this.model('UserReview').deleteMany({
     category: this._id,
@@ -34,6 +34,6 @@ userReviewCategorySchema.pre('remove', async function (next) {
 });
 
 module.exports = new mongoose.model(
-  'userReviewCategory',
+  'UserReviewCategory',
   userReviewCategorySchema
 );
