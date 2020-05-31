@@ -36,6 +36,9 @@ const UserReviewSchema = new mongoose.Schema(
       type: mongoose.Schema.ObjectId,
       ref: 'UserReviewCategory',
     },
+    images: {
+      type: [String],
+    },
     isPopular: {
       type: Boolean,
       default: false,
@@ -51,7 +54,7 @@ const UserReviewSchema = new mongoose.Schema(
     status: {
       type: Boolean,
       default: false,
-    }
+    },
   },
   {
     toJSON: {
