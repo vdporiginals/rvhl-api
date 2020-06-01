@@ -52,7 +52,7 @@ const HotelSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a phone'],
     match: [
-      /(09|03|08|07|05[0-9])+([0-9]{8})\b/g,
+      /(09|03|020|021|022|023|024|025|026|027|028|029|08|07|05[0-9])+([0-9]{8})\b/g,
       'Hãy nhập đúng số điện thoại của bạn',
     ],
   },

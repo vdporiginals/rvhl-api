@@ -12,10 +12,10 @@ const errorHandler = (err, req, res, next) => {
     error = new ErrorResponse(message, 404);
   }
 
-  if (err.message.indexOf('Cast to ObjectId failed')) {
-    const message = 'Cast to ObjectId entered';
-    error = new ErrorResponse(message, 400);
-  }
+  // if (err.message.indexOf('Cast to ObjectId failed')) {
+  //   const message = 'Cast to ObjectId entered';
+  //   error = new ErrorResponse(message, 400);
+  // }
 
   //mongoose duplicate key
   if (err.code === 11000) {
