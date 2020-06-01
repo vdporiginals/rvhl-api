@@ -36,6 +36,7 @@ const TransferSchema = new mongoose.Schema({
       _id: false,
       locationStart: String,
       locationEnd: String,
+      price: String,
     },
   ],
   image: String,
