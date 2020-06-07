@@ -26,7 +26,9 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
       signature = data.request.params.oauth_signature;
       const url = oauth.authorizeUrl(token, 'write');
       // const verify = 'ba3c906c9ad30537';
-      res.setHeader('Location', url);
+      res.setHeader('location', url);
+      res.statusCode = 302;
+      res.end();
       const verifyUrl =
         `https://www.flickr.com/services/oauth/access_token?oauth_nonce=37026218&oauth_timestamp=1305586309` +
         `&oauth_verifier=${req.query.oauth_verifier}` +
