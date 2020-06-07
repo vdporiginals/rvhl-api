@@ -14,7 +14,7 @@ const oauth = new Flickr.OAuth(
   process.env.FLICKR_KEY,
   process.env.FLICKR_SECRET
 );
-const signature;
+let signature;
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   // const gallery = req.body;
   oauth
@@ -23,7 +23,7 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
       // console.log(data.request.params);
       const token = data.body.oauth_token;
       const secret = data.body.oauth_token_secret;
-     signature = data.request.params.oauth_signature;
+      signature = data.request.params.oauth_signature;
       const url = oauth.authorizeUrl(token, 'write');
       // const verify = 'ba3c906c9ad30537';
       return res.status(200).json({
