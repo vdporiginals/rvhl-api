@@ -54,11 +54,11 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
     `https://www.flickr.com/services/oauth/access_token` +
     `?oauth_nonce=37026218` +
     `&oauth_timestamp=1305586309` +
-    `&oauth_verifier=${oauthToken}` +
+    `&oauth_verifier=${oauthVerifier}` +
     `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
     `&oauth_signature_method=HMAC-SHA1` +
     `&oauth_version=1.0` +
-    `&oauth_token=${oauthVerifier}`;
+    `&oauth_token=${oauthToken}`;
   request.get(verifyUrl);
   // oauth
   //   .verify(oauthToken, oauthVerifier, tokenSecret)
