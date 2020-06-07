@@ -17,7 +17,7 @@ const oauth = new Flickr.OAuth(
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   // const gallery = req.body;
   oauth
-    .request('https://admin.reviewhalong.vn/image')
+    .request('https://api.reviewhalong.vn/api/image/oauth')
     .then(function (data) {
       const token = data.body.oauth_token;
       const secret = data.body.oauth_token_secret;
@@ -54,11 +54,11 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
     `https://www.flickr.com/services/oauth/access_token` +
     `?oauth_nonce=37026218` +
     `&oauth_timestamp=1305586309` +
-    `&oauth_verifier=${oauthVerifier}` +
+    `&oauth_verifier=${req.query.oauth_verifier}` +
     `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
     `&oauth_signature_method=HMAC-SHA1` +
     `&oauth_version=1.0` +
-    `&oauth_token=${oauthToken}`;
+    `&oauth_token=${req.query.oauth_token}`;
   request.get(verifyUrl);
   // oauth
   //   .verify(oauthToken, oauthVerifier, tokenSecret)
