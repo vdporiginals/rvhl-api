@@ -9,7 +9,7 @@ const { protect, authorize } = require('../../middleware/auth');
 
 const router = express.Router();
 
-router.route('/auth').get(protect, authorize('admin'), authFlickr);
+router.route('/auth').get(authFlickr);
 //   .post(protect, authorize('admin'), verifyToken);
 
 router.route('/oauth').get(verifyToken);
