@@ -19,7 +19,7 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
   oauth
     .request('https://api.reviewhalong.vn/api/image/oauth')
     .then(function (data) {
-      console.log(data.request.params);
+      // console.log(data.request.params);
       const token = data.body.oauth_token;
       const secret = data.body.oauth_token_secret;
       const signature = data.request.params.oauth_signature;
@@ -34,17 +34,17 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
       });
     })
     .catch(function (err) {});
-  const url =
-    `https://www.flickr.com/services/oauth/request_token` +
-    `?oauth_nonce=89601180` +
-    `&oauth_timestamp=1305583298` +
-    `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
-    `&oauth_signature_method=HMAC-SHA1` +
-    `&oauth_version=1.0` +
-    `&``&oauth_callback=https%3A%2F%2Fwww.api.reviewhalong.vn/api/image/oauth`;
-  request.get(url, function (err, res, body) {
-    console.log(body);
-  });
+  // const url =
+  //   `https://www.flickr.com/services/oauth/request_token` +
+  //   `?oauth_nonce=89601180` +
+  //   `&oauth_timestamp=1305583298` +
+  //   `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
+  //   `&oauth_signature_method=HMAC-SHA1` +
+  //   `&oauth_version=1.0` +
+  //   `&``&oauth_callback=https%3A%2F%2Fwww.api.reviewhalong.vn/api/image/oauth`;
+  // request.get(url, function (err, res, body) {
+  //   console.log(body);
+  // });
 
   // flickConf.galleries
   //   .create({
