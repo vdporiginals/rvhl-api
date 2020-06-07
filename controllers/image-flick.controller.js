@@ -51,15 +51,30 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
   const { oauthToken, oauthVerifier } = req.body;
   const tokenSecret = process.env.FLICKR_SECRET;
   const verifyUrl =
-    `https://www.flickr.com/services/oauth/access_token` +
-    `?oauth_nonce=37026218` +
-    `&oauth_timestamp=1305586309` +
+    `https://www.flickr.com/services/oauth/access_token?` +
     `&oauth_verifier=${req.query.oauth_verifier}` +
     `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
     `&oauth_signature_method=HMAC-SHA1` +
     `&oauth_version=1.0` +
     `&oauth_token=${req.query.oauth_token}`;
   request.get(verifyUrl);
+  request.get(verifyUrl, async function (err, res, body) {
+    //nếu có lỗi
+    if (err) throw err;
+    let data = JSON.parse(body);
+    isValid = await data.data.is_valid;
+    console.log(data);
+    if (isValid !== true) {
+      return next(
+        new ErrorResponse('Not authorized to access this route', 401)
+      );
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: isValid,
+    });
+  });
   // oauth
   //   .verify(oauthToken, oauthVerifier, tokenSecret)
   //   .then(function (res) {
