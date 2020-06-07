@@ -16,19 +16,30 @@ const oauth = new Flickr.OAuth(
 );
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   // const gallery = req.body;
-  oauth
-    .request('https://api.reviewhalong.vn/api/image/oauth')
-    .then(function (data) {
-      const token = data.body.oauth_token;
-      const secret = data.body.oauth_token_secret;
-      const url = oauth.authorizeUrl(token, 'write');
-      // const verify = 'ba3c906c9ad30537';
-      return res.status(200).json({
-        success: true,
-        data: url,
-      });
-    })
-    .catch(function (err) {});
+  const url =
+    `https://www.flickr.com/services/oauth/request_token` +
+    `?oauth_nonce=89601180` +
+    `&oauth_timestamp=1305583298` +
+    `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
+    `&oauth_signature_method=HMAC-SHA1` +
+    `&oauth_version=1.0` +
+    `&oauth_callback=https%3A%2F%2Fwww.api.reviewhalong.vn/api/image/oauth`;
+  request.get(url, function (err, res, body) {
+    console.log(body);
+  });
+  // oauth
+  //   .request('https://api.reviewhalong.vn/api/image/oauth')
+  //   .then(function (data) {
+  //     const token = data.body.oauth_token;
+  //     const secret = data.body.oauth_token_secret;
+  //     const url = oauth.authorizeUrl(token, 'write');
+  //     // const verify = 'ba3c906c9ad30537';
+  //     return res.status(200).json({
+  //       success: true,
+  //       data: url,
+  //     });
+  //   })
+  //   .catch(function (err) {});
 
   // flickConf.galleries
   //   .create({
@@ -61,10 +72,10 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
   request.get(verifyUrl, async function (err, res, body) {
     //nếu có lỗi
     if (err) throw err;
-    let data = JSON.parse(body);
-    isValid = await data.data.is_valid;
-    console.log(data);
-    if (isValid !== true) {
+    // let data = JSON.parse(body);
+    // isValid = await body.data.is_valid;
+    console.log(body);
+    if (body) {
       return next(
         new ErrorResponse('Not authorized to access this route', 401)
       );
