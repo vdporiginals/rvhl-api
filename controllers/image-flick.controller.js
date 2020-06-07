@@ -32,7 +32,6 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
         `&oauth_verifier=${req.query.oauth_verifier}` +
         `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
         `&oauth_signature_method=HMAC-SHA1` +
-        `&oauth_signature=${signature}` +
         `&oauth_version=1.0` +
         `&oauth_token=${req.query.oauth_token}`;
       // request.get(verifyUrl);
