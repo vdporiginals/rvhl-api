@@ -50,17 +50,27 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
 exports.verifyToken = asyncHandler(async (req, res, next) => {
   const { oauthToken, oauthVerifier } = req.body;
   const tokenSecret = process.env.FLICKR_SECRET;
-  oauth
-    .verify(oauthToken, oauthVerifier, tokenSecret)
-    .then(function (res) {
-      console.log('oauth token:', res.body.oauth_token);
-      console.log('oauth token secret:', res.body.oauth_token_secret);
-      return res.status(200).json({
-        success: true,
-        flickrToken: res.body.oauth_token,
-      });
-    })
-    .catch(function (err) {
-      console.log('bonk', err);
-    });
+  const verifyUrl =
+    `https://www.flickr.com/services/oauth/access_token` +
+    `?oauth_nonce=37026218` +
+    `&oauth_timestamp=1305586309` +
+    `&oauth_verifier=${oauthToken}` +
+    `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
+    `&oauth_signature_method=HMAC-SHA1` +
+    `&oauth_version=1.0` +
+    `&oauth_token=${oauthVerifier}`;
+  request.get(verifyUrl);
+  // oauth
+  //   .verify(oauthToken, oauthVerifier, tokenSecret)
+  //   .then(function (res) {
+  //     console.log('oauth token:', res.body.oauth_token);
+  //     console.log('oauth token secret:', res.body.oauth_token_secret);
+  //     return res.status(200).json({
+  //       success: true,
+  //       flickrToken: res.body.oauth_token,
+  //     });
+  //   })
+  //   .catch(function (err) {
+  //     console.log('bonk', err);
+  //   });
 });
