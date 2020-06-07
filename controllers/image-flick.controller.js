@@ -16,9 +16,9 @@ const oauth = new Flickr.OAuth(
 );
 let secret;
 exports.authFlickr = asyncHandler(async (req, res, next) => {
-  // const gallery = req.body;
+  //
   oauth
-    .request('https://api.reviewhalong.vn/api/image/oauth')
+    .request('http://localhost:5001/api/image/oauth')
     .then(function (data) {
       // console.log(data.request.params);
       const token = data.body.oauth_token;
@@ -51,22 +51,6 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
   // request.get(url, function (err, res, body) {
   //   console.log(body);
   // });
-
-  // flickConf.galleries
-  //   .create({
-  //     title: gallery.title,
-  //     description: gallery.description,
-  //   })
-  //   .then((data) => {
-  //     return res.status(200).json({
-  //       success: true,
-  //       data,
-  //     });
-  //   })
-  //   .catch((err) => {
-  //     console.log(err.message);
-  //     return next(new ErrorResponse(err.message, err.code));
-  //   });
 });
 
 exports.verifyToken = asyncHandler(async (req, res, next) => {
@@ -74,50 +58,34 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
   const tokenSecret = secret;
   oauth
     .verify(req.query.oauth_token, req.query.oauth_verifier, tokenSecret)
-    .then(function (res) {
-      console.log('oauth token:', res.body.oauth_token);
-      console.log('oauth token secret:', res.body.oauth_token_secret);
+    .then(function (data) {
+      console.log('oauth token:', data.body.oauth_token);
+      console.log('oauth token secret:', data.body.oauth_token_secret);
+      return res.status(200).json({
+        success: true,
+        data: data.body,
+      });
     })
     .catch(function (err) {
       console.log('bonk', err);
     });
-  // const verifyUrl =
-  //   `https://www.flickr.com/services/oauth/access_token?oauth_nonce=37026218&oauth_timestamp=1305586309` +
-  //   `&oauth_verifier=${}` +
-  //   `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
-  //   `&oauth_signature_method=HMAC-SHA1` +
-  //   `&oauth_signature=${data.request.params.oauth_signature}` +
-  //   `&oauth_version=1.0` +
-  //   `&oauth_token=${}`;
-  // request.get(verifyUrl);
-  // request.get(verifyUrl, async function (err, res, body) {
-  //   //nếu có lỗi
-  //   if (err) throw err;
-  //   // let data = JSON.parse(body);
-  //   // isValid = await body.data.is_valid;
-  //   console.log(body);
-  //   // if (body) {
-  //   //   return next(
-  //   //     new ErrorResponse('Not authorized to access this route', 401)
-  //   //   );
-  //   // }
+});
 
-  //   // return res.status(200).json({
-  //   //   success: true,
-  //   //   // data: isValid,
-  //   // });
-  // });
-  // oauth
-  //   .verify(oauthToken, oauthVerifier, tokenSecret)
-  //   .then(function (res) {
-  //     console.log('oauth token:', res.body.oauth_token);
-  //     console.log('oauth token secret:', res.body.oauth_token_secret);
-  //     return res.status(200).json({
-  //       success: true,
-  //       flickrToken: res.body.oauth_token,
-  //     });
-  //   })
-  //   .catch(function (err) {
-  //     console.log('bonk', err);
-  //   });
+exports.createGallery = asyncHandler(async (req, res, next) => {
+  const gallery = req.body;
+  flickConf.galleries
+    .create({
+      title: gallery.title,
+      description: gallery.description,
+    })
+    .then((data) => {
+      return res.status(200).json({
+        success: true,
+        data,
+      });
+    })
+    .catch((err) => {
+      console.log(err.message);
+      return next(new ErrorResponse(err.message, err.code));
+    });
 });
