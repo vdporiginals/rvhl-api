@@ -25,7 +25,7 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
       secret = data.body.oauth_token_secret;
       console.log(data);
       signature = data.request.params.oauth_signature;
-      const url = oauth.authorizeUrl(token, 'write');
+      const url = oauth.authorizeUrl(token, 'delete');
       // const verify = 'ba3c906c9ad30537';
       res.setHeader('location', url);
       res.statusCode = 302;
