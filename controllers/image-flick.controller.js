@@ -57,7 +57,7 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
     `&oauth_signature_method=HMAC-SHA1` +
     `&oauth_version=1.0` +
     `&oauth_token=${req.query.oauth_token}`;
-  request.get(verifyUrl);
+  // request.get(verifyUrl);
   request.get(verifyUrl, async function (err, res, body) {
     //nếu có lỗi
     if (err) throw err;
