@@ -26,6 +26,33 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
       signature = data.request.params.oauth_signature;
       const url = oauth.authorizeUrl(token, 'write');
       // const verify = 'ba3c906c9ad30537';
+      res.setHeader('Location', url);
+      const verifyUrl =
+        `https://www.flickr.com/services/oauth/access_token?oauth_nonce=37026218&oauth_timestamp=1305586309` +
+        `&oauth_verifier=${req.query.oauth_verifier}` +
+        `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
+        `&oauth_signature_method=HMAC-SHA1` +
+        `&oauth_signature=${signature}` +
+        `&oauth_version=1.0` +
+        `&oauth_token=${token}`;
+      // request.get(verifyUrl);
+      request.get(verifyUrl, async function (err, res, body) {
+        //nếu có lỗi
+        if (err) throw err;
+        // let data = JSON.parse(body);
+        // isValid = await body.data.is_valid;
+        console.log(body);
+        // if (body) {
+        //   return next(
+        //     new ErrorResponse('Not authorized to access this route', 401)
+        //   );
+        // }
+
+        // return res.status(200).json({
+        //   success: true,
+        //   // data: isValid,
+        // });
+      });
       return res.status(200).json({
         success: true,
         data: {
@@ -68,32 +95,7 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
   const { oauthToken, oauthVerifier } = req.body;
   const tokenSecret = process.env.FLICKR_SECRET;
   console.log(signature);
-  const verifyUrl =
-    `https://www.flickr.com/services/oauth/access_token?oauth_nonce=37026218&oauth_timestamp=1305586309` +
-    `&oauth_verifier=${req.query.oauth_verifier}` +
-    `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
-    `&oauth_signature_method=HMAC-SHA1` +
-    `&oauth_signature=${signature}` +
-    `&oauth_version=1.0` +
-    `&oauth_token=${req.query.oauth_token}`;
-  // request.get(verifyUrl);
-  request.get(verifyUrl, async function (err, res, body) {
-    //nếu có lỗi
-    if (err) throw err;
-    // let data = JSON.parse(body);
-    // isValid = await body.data.is_valid;
-    console.log(body);
-    // if (body) {
-    //   return next(
-    //     new ErrorResponse('Not authorized to access this route', 401)
-    //   );
-    // }
 
-    // return res.status(200).json({
-    //   success: true,
-    //   // data: isValid,
-    // });
-  });
   // oauth
   //   .verify(oauthToken, oauthVerifier, tokenSecret)
   //   .then(function (res) {
