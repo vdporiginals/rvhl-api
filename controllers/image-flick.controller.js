@@ -16,6 +16,24 @@ const oauth = new Flickr.OAuth(
 );
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   // const gallery = req.body;
+  oauth
+    .request('https://api.reviewhalong.vn/api/image/oauth')
+    .then(function (data) {
+      console.log(data.request.params);
+      const token = data.body.oauth_token;
+      const secret = data.body.oauth_token_secret;
+      const signature = data.request.params.oauth_signature;
+      const url = oauth.authorizeUrl(token, 'write');
+      // const verify = 'ba3c906c9ad30537';
+      return res.status(200).json({
+        success: true,
+        data: {
+          url,
+          signature,
+        },
+      });
+    })
+    .catch(function (err) {});
   const url =
     `https://www.flickr.com/services/oauth/request_token` +
     `?oauth_nonce=89601180` +
@@ -23,23 +41,10 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
     `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
     `&oauth_signature_method=HMAC-SHA1` +
     `&oauth_version=1.0` +
-    `&oauth_callback=https%3A%2F%2Fwww.api.reviewhalong.vn/api/image/oauth`;
+    `&``&oauth_callback=https%3A%2F%2Fwww.api.reviewhalong.vn/api/image/oauth`;
   request.get(url, function (err, res, body) {
     console.log(body);
   });
-  // oauth
-  //   .request('https://api.reviewhalong.vn/api/image/oauth')
-  //   .then(function (data) {
-  //     const token = data.body.oauth_token;
-  //     const secret = data.body.oauth_token_secret;
-  //     const url = oauth.authorizeUrl(token, 'write');
-  //     // const verify = 'ba3c906c9ad30537';
-  //     return res.status(200).json({
-  //       success: true,
-  //       data: url,
-  //     });
-  //   })
-  //   .catch(function (err) {});
 
   // flickConf.galleries
   //   .create({
@@ -66,6 +71,7 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
     `&oauth_verifier=${req.query.oauth_verifier}` +
     `&oauth_consumer_key=${process.env.FLICKR_KEY}` +
     `&oauth_signature_method=HMAC-SHA1` +
+    `&oauth_signature=${signature}` +
     `&oauth_version=1.0` +
     `&oauth_token=${req.query.oauth_token}`;
   // request.get(verifyUrl);
@@ -83,7 +89,7 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
 
     return res.status(200).json({
       success: true,
-      data: isValid,
+      // data: isValid,
     });
   });
   // oauth
