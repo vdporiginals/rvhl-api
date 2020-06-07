@@ -37,7 +37,7 @@ const estates = require('./routes/client/estate.client');
 const userReview = require('./routes/client/user-review.client');
 const restaurant = require('./routes/client/restaurant.client');
 const entertain = require('./routes/client/entertain.client');
-
+const imageFlick = require('./routes/admin/image-flick.admin');
 const app = express();
 //Body parser
 app.use(express.json());
@@ -94,6 +94,7 @@ app.use('/api/user-reviews', userReview);
 app.use('/api/restaurants', restaurant);
 app.use('/api/entertains', entertain);
 app.use('/api/web-config', webConfig);
+app.use('/api/image', imageFlick);
 app.use('/api/admin', commentControl);
 
 app.use(errorHandler);
