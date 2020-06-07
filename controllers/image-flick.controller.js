@@ -17,7 +17,7 @@ const oauth = new Flickr.OAuth(
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   // const gallery = req.body;
   oauth
-    .request('http://localhost:5001/')
+    .request('https://admin.reviewhalong.vn/image')
     .then(function (data) {
       const token = data.body.oauth_token;
       const secret = data.body.oauth_token_secret;
