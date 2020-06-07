@@ -30,7 +30,7 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
         success: true,
         data: {
           url,
-          signature,
+          // signature,
         },
       });
     })
@@ -67,6 +67,7 @@ exports.authFlickr = asyncHandler(async (req, res, next) => {
 exports.verifyToken = asyncHandler(async (req, res, next) => {
   const { oauthToken, oauthVerifier } = req.body;
   const tokenSecret = process.env.FLICKR_SECRET;
+  console.log(signature);
   const verifyUrl =
     `https://www.flickr.com/services/oauth/access_token?oauth_nonce=37026218&oauth_timestamp=1305586309` +
     `&oauth_verifier=${req.query.oauth_verifier}` +
