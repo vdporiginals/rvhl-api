@@ -18,7 +18,7 @@ let signature;
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   // const gallery = req.body;
   oauth
-    .request('https://api.reviewhalong.vn/api/image/oauth')
+    .request('https://api.reviewhalong.vn/api/image/auth')
     .then(function (data) {
       // console.log(data.request.params);
       const token = data.body.oauth_token;
@@ -95,7 +95,7 @@ exports.verifyToken = asyncHandler(async (req, res, next) => {
   const { oauthToken, oauthVerifier } = req.body;
   const tokenSecret = process.env.FLICKR_SECRET;
   console.log(signature);
-
+  res.status(200);
   // oauth
   //   .verify(oauthToken, oauthVerifier, tokenSecret)
   //   .then(function (res) {
