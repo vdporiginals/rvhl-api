@@ -18,7 +18,7 @@ let secret;
 exports.authFlickr = asyncHandler(async (req, res, next) => {
   //
   oauth
-    .request('http://api.reviewhalong.vn/api/image/oauth')
+    .request('https://api.reviewhalong.vn/api/image/oauth')
     .then(function (data) {
       // console.log(data.request.params);
       const token = data.body.oauth_token;
