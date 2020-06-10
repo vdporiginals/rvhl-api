@@ -180,7 +180,7 @@ exports.getListPhoto = asyncHandler(async (req, res, next) => {
 });
 
 //@route        GET  /api/image/photos/:id
-//@access       Public
+//@access       private
 //@description  Get Single
 exports.getPhotos = asyncHandler(async (req, res, next) => {
   const size = req.query.size;
@@ -213,6 +213,8 @@ exports.getPhotos = asyncHandler(async (req, res, next) => {
     });
 });
 
+//@route        GET  /api/image/gallery
+//@access       private
 exports.getListGallery = asyncHandler(async (req, res, next) => {
   const query = req.query;
   const page = parseInt(query.page, 10) || 1;
@@ -249,6 +251,8 @@ exports.getListGallery = asyncHandler(async (req, res, next) => {
     });
 });
 
+//@route        GET  /api/image/gallery/:id
+//@access       private
 exports.getPhotoByGallery = asyncHandler(async (req, res, next) => {
   const query = req.query;
   const page = parseInt(query.page, 10) || 1;
@@ -258,7 +262,6 @@ exports.getPhotoByGallery = asyncHandler(async (req, res, next) => {
     .then(function (data) {
       const galleryList = data.body.galleries.gallery;
       let results = [];
-      console.log(data.body);
       galleryList.forEach((val) => {
         results.push({
           galleryId: val.gallery_id,
@@ -276,6 +279,24 @@ exports.getPhotoByGallery = asyncHandler(async (req, res, next) => {
           totalPages: data.body.galleries.pages,
           galleryList: results,
         },
+      });
+    })
+    .catch(function (err) {
+      return next(new ErrorResponse(err.message, err.statusCode));
+
+      // console.error('bonk', err);
+    });
+});
+
+//@route        DELETE  /api/image/photos/:id
+//@access       private
+exports.deletePhotos = asyncHandler(async (req, res, next) => {
+  flickr.photos
+    .delete({ photo_id: req.params.id })
+    .then(function (data) {
+      return res.status(200).json({
+        success: true,
+        data: {},
       });
     })
     .catch(function (err) {
