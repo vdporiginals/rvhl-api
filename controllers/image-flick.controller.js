@@ -91,7 +91,7 @@ exports.createGallery = asyncHandler(async (req, res, next) => {
 //@route        POST  /api/image/photos
 //@access       private
 exports.uploadPhotos = asyncHandler(async (req, res, next) => {
-  console.log(req);
+  // console.log(req);
   if (!req.files) {
     return next(new ErrorResponse(`Please upload a file`, 400));
   }
