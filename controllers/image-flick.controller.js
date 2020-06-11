@@ -91,7 +91,7 @@ exports.createGallery = asyncHandler(async (req, res, next) => {
 //@route        POST  /api/image/photos
 //@access       private
 exports.uploadPhotos = asyncHandler(async (req, res, next) => {
-  console.log(req.body);
+  console.log(req);
   if (!req.files) {
     return next(new ErrorResponse(`Please upload a file`, 400));
   }
@@ -225,7 +225,6 @@ exports.getListGallery = asyncHandler(async (req, res, next) => {
     .then(function (data) {
       const galleryList = data.body.galleries.gallery;
       let results = [];
-      console.log(data.body.galleries.gallery);
       galleryList.forEach((val) => {
         results.push({
           galleryId: val.gallery_id,
