@@ -48,7 +48,9 @@ exports.createRestaurant = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: restaurant._id,
+    data: {
+      _id: restaurant._id,
+    },
   });
 });
 
@@ -73,7 +75,9 @@ exports.updateRestaurant = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: restaurant._id,
+    data: {
+      _id: restaurant._id,
+    },
   });
 });
 

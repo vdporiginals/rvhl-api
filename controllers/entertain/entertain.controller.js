@@ -65,7 +65,9 @@ exports.createEntertain = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: entertain._id,
+    data: {
+      _id: entertain._id,
+    },
   });
 });
 
@@ -97,7 +99,9 @@ exports.updateEntertain = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: entertain._id,
+    data: {
+      _id: entertain._id,
+    },
   });
 });
 
@@ -110,7 +114,7 @@ exports.deleteEntertain = asyncHandler(async (req, res, next) => {
   if (req.user.role !== 'admin') {
     return next(
       new ErrorResponse(
-        `User ${req.user.id} is not authorized to delete entertain ${course._id}`,
+        `User ${req.user.id} is not authorized to delete entertain ${entertain._id}`,
         401
       )
     );

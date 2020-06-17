@@ -57,7 +57,9 @@ exports.createTour = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: tour._id,
+    data: {
+      _id: tour._id,
+    },
   });
 });
 
@@ -78,7 +80,9 @@ exports.updateTour = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: tour._id,
+    data: {
+      _id: tour._id,
+    },
   });
 });
 

@@ -48,7 +48,9 @@ exports.createVilla = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: villa._id,
+    data: {
+      _id: villa._id,
+    },
   });
 });
 
@@ -69,7 +71,9 @@ exports.updateVilla = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: villa._id,
+    data: {
+      _id: villa._id,
+    },
   });
 });
 

@@ -65,7 +65,9 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: blog._id,
+    data: {
+      _id: blog._id,
+    },
   });
 });
 
@@ -97,7 +99,9 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: blog._id,
+    data: {
+      _id: blog._id,
+    },
   });
 });
 

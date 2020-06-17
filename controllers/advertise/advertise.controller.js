@@ -48,7 +48,9 @@ exports.createAdvertise = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: advertise._id,
+    data: {
+      _id: advertise._id,
+    },
   });
 });
 
@@ -69,7 +71,9 @@ exports.updateAdvertise = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: advertise._id,
+    data: {
+      _id: advertise._id,
+    },
   });
 });
 

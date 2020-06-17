@@ -65,7 +65,9 @@ exports.createUserReview = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: userReview._id,
+    data: {
+      _id: userReview._id,
+    },
   });
 });
 
@@ -101,7 +103,9 @@ exports.updateUserReview = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: userReview._id,
+    data: {
+      _id: userReview._id,
+    },
   });
 });
 

@@ -45,7 +45,9 @@ exports.createTransfer = asyncHandler(async (req, res, next) => {
 
   res.status(201).json({
     success: true,
-    data: transfer._id,
+    data: {
+      _id: transfer._id,
+    },
   });
 });
 
@@ -73,7 +75,9 @@ exports.updateTransfer = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: transfer._id,
+    data: {
+      _id: transfer._id,
+    },
   });
 });
 
