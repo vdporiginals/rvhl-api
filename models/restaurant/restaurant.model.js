@@ -42,6 +42,10 @@ const RestaurantSchema = new mongoose.Schema({
   phone: {
     type: String,
     required: [true, 'Please add a phone'],
+    match: [
+      /^[0]{1}[2]{1}[0-9]\d{8}$|^[0]{1}([3]|[5]|[9]|[7]|[8]){1}[0-9]\d{7}$/g,
+      'Hãy nhập đúng số điện thoại của bạn',
+    ],
   },
   isPopular: {
     type: Boolean,
