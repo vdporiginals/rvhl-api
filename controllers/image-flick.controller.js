@@ -232,7 +232,7 @@ exports.getListGallery = asyncHandler(async (req, res, next) => {
           // id: val.id,
         });
       });
-
+      
       return res.status(200).json({
         success: true,
         data: {
