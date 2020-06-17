@@ -48,7 +48,7 @@ const TransferSchema = new mongoose.Schema({
     type: String,
     required: [true, 'Please add a phone'],
     match: [
-      /(09|03|02|08|07|05[0-9])+([0-9]{8,9})\b/g,
+      /(09|03|02|08|07|05[0-9])+([0-9]{8,9}?)\b/g,
       'Hãy nhập đúng số điện thoại của bạn',
     ],
   },
