@@ -39,10 +39,6 @@ const TourSchema = new mongoose.Schema({
   price: {
     type: Number,
     required: [true, 'Please add price'],
-    match: [
-      /(09|03|02|08|07|05[0-9])+([0-9]{8,9}?)\b/g,
-      'Hãy nhập đúng số điện thoại của bạn',
-    ],
   },
   seo: String,
   createdAt: {
