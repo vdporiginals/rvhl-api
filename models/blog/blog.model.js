@@ -40,10 +40,6 @@ const BlogSchema = new mongoose.Schema(
     tags: [String],
     address: String,
     seo: String,
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
     status: {
       type: Boolean,
       default: false,
@@ -51,10 +47,6 @@ const BlogSchema = new mongoose.Schema(
     images: {
       type: [String],
       default: `${process.env.HOST_URL}${process.env.PORT}/no-photo.jpg`,
-    },
-    updatedAt: {
-      type: Date,
-      // default: Date.now,
     },
   },
   {
@@ -64,11 +56,11 @@ const BlogSchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  }
+  },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 
 BlogSchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
   this.seo = slug(this.title, '-');
   next();
 });

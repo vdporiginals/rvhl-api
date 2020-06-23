@@ -1,32 +1,26 @@
 const mongoose = require('mongoose');
-const AdvertiseCategorySchema = new mongoose.Schema({
-  name: {
-    type: String,
-    unique: false,
-    required: [true, 'please add a category'],
+const AdvertiseCategorySchema = new mongoose.Schema(
+  {
+    name: {
+      type: String,
+      unique: false,
+      required: [true, 'please add a category'],
+    },
+    description: String,
+    keywords: {
+      type: String,
+      default: 'Danh mục quảng cáo hạ long',
+    },
+    position: {
+      type: String,
+      unique: true,
+      enum: ['slider', 'video', 'HomepageAdvertise', 'AdvertisePage'],
+    },
   },
-  description: String,
-  keywords: {
-    type: String,
-    default: 'Danh mục quảng cáo hạ long',
-  },
-  position: {
-    type: String,
-    unique: true,
-    enum: ['slider', 'video', 'HomepageAdvertise', 'AdvertisePage'],
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-  updatedAt: {
-    type: Date,
-    // default: Date.now,
-  },
-});
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
+);
 
 AdvertiseCategorySchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
   return next();
 });
 

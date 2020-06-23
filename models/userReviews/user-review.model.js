@@ -28,10 +28,6 @@ const UserReviewSchema = new mongoose.Schema(
       ref: 'User',
     },
     image: String,
-    updatedAt: {
-      type: Date,
-      // default: Date.now,
-    },
     category: {
       type: mongoose.Schema.ObjectId,
       ref: 'UserReviewCategory',
@@ -47,10 +43,6 @@ const UserReviewSchema = new mongoose.Schema(
     tags: [String],
     address: String,
     seo: String,
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
     status: {
       type: Boolean,
       default: false,
@@ -63,11 +55,11 @@ const UserReviewSchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  }
+  },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 
 UserReviewSchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
   this.seo = slug(this.title, '-');
   next();
 });

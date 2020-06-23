@@ -17,14 +17,6 @@ const EstateCategorySchema = new mongoose.Schema(
       enum: ['Hotel', 'Villa', 'Homestay'],
       required: [true, 'Please add a position'],
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      // default: Date.now,
-    },
   },
   {
     toJSON: {
@@ -33,12 +25,9 @@ const EstateCategorySchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  }
+  },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
-EstateCategorySchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
-  next();
-});
 
 EstateCategorySchema.virtual('hotels', {
   ref: 'Hotel',

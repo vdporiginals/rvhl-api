@@ -12,14 +12,6 @@ const RestaurantCategorySchema = new mongoose.Schema(
       type: String,
       default: 'Danh mục nhà hàng',
     },
-    createdAt: {
-      type: Date,
-      default: Date.now,
-    },
-    updatedAt: {
-      type: Date,
-      // default: Date.now,
-    },
   },
   {
     toJSON: {
@@ -28,12 +20,9 @@ const RestaurantCategorySchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  }
+  },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
-RestaurantCategorySchema.pre('save', function (next) {
-  this.updatedAt = Date.now();
-  next();
-});
 
 RestaurantCategorySchema.pre('remove', async function (next) {
   console.log(`Restaurant being removed from RestaurantCategory ${this._id}`);

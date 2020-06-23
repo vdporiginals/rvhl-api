@@ -6,12 +6,6 @@ const CommentSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
-    createdAt: {
-      type: Date,
-    },
-    updatedAt: {
-      type: Date,
-    },
     status: Boolean,
     author: {
       type: mongoose.Schema.ObjectId,
@@ -35,7 +29,8 @@ const CommentSchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  }
+  },
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 
 CommentSchema.virtual('answer', {
@@ -54,15 +49,6 @@ CommentSchema.virtual('answerCount', {
 });
 
 // Use a regular function here to avoid issues with this!
-CommentSchema.pre('save', function (next) {
-  const date = new Date();
-  this.updatedAt = date;
-  if (!this.createdAt) {
-    this.createdAt = date;
-  }
-  next();
-});
-
 CommentSchema.pre('remove', async function (next) {
   console.log(`reply being removed from comment ${this._id}`);
   await this.model('Reply').deleteMany({
