@@ -60,7 +60,7 @@ const AdvertiseSchema = new mongoose.Schema(
     //   // default: Date.now,
     // },
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } }
+  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
 );
 AdvertiseSchema.pre('save', function (next) {
   // this.updatedAt = Date.now();
