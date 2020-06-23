@@ -55,8 +55,8 @@ const UserReviewSchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  },
-  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+  }
 );
 
 UserReviewSchema.pre('save', function (next) {

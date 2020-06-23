@@ -56,8 +56,8 @@ const BlogSchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  },
-  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+  }
 );
 
 BlogSchema.pre('save', function (next) {

@@ -25,8 +25,8 @@ const EstateCategorySchema = new mongoose.Schema(
     toObject: {
       virtuals: true,
     },
-  },
-  { timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' } }
+    timestamps: { createdAt: 'createdAt', updatedAt: 'updatedAt' },
+  }
 );
 
 EstateCategorySchema.virtual('hotels', {
