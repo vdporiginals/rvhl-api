@@ -17,7 +17,7 @@ const BlogCategorySchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
 });
 BlogCategorySchema.pre('save', function (next) {

@@ -56,7 +56,7 @@ const AdvertiseSchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
 });
 AdvertiseSchema.pre('save', function (next) {

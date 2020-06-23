@@ -17,7 +17,7 @@ const EntertainCategorySchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
 });
 EntertainCategorySchema.pre('save', function (next) {

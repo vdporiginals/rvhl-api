@@ -17,7 +17,7 @@ const UserReviewCategorySchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
 });
 UserReviewCategorySchema.pre('save', function (next) {

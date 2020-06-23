@@ -66,7 +66,7 @@ const HomestaySchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
 });
 

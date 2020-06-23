@@ -17,7 +17,7 @@ const TourCategorySchema = new mongoose.Schema({
   },
   updatedAt: {
     type: Date,
-    default: Date.now,
+    // default: Date.now,
   },
 });
 TourCategorySchema.pre('save', function (next) {

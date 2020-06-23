@@ -30,7 +30,7 @@ const UserReviewSchema = new mongoose.Schema(
     image: String,
     updatedAt: {
       type: Date,
-      default: Date.now,
+      // default: Date.now,
     },
     category: {
       type: mongoose.Schema.ObjectId,
