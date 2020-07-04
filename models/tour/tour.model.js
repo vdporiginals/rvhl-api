@@ -41,7 +41,7 @@ const TourSchema = new mongoose.Schema(
       type: Number,
       required: [true, 'Please add price'],
       match: [
-        /^[0]{1}[2]{1}[0-9]\d{8}$|^[0]{1}([3]|[5]|[9]|[7]|[8]){1}[0-9]\d{7}$/g,
+        /^[0]{1}[2]{1}[0-9]\d{8}$|^[0]{1}([3]|[5]|[9]|[7]|[8]){1}[0-9]\d{7}?$/g,
         'Hãy nhập đúng số điện thoại của bạn',
       ],
     },
