@@ -41,23 +41,23 @@ router
     ]),
     getUserReviews
   )
-  .post(protect, authorize('moderator', 'admin'), createUserReview);
+  .post(protect, authorize('write', 'moderator', 'admin'), createUserReview);
 
 router
   .route('/category')
-  .post(protect, authorize('moderator', 'admin'), createCategory)
+  .post(protect, authorize('write', 'moderator', 'admin'), createCategory)
   .get(advancedResults(Category, null), getCategories);
 
 router
   .route('/category/:categoryId')
   .get(getCategory)
-  .put(protect, authorize('moderator', 'admin'), updateCategory)
-  .delete(protect, authorize('moderator', 'admin'), deleteCategory);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateCategory)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteCategory);
 
 router
   .route('/:id')
   .get(getUserReview)
-  .put(protect, authorize('moderator', 'admin'), updateUserReview)
-  .delete(protect, authorize('moderator', 'admin'), deleteUserReview);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateUserReview)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteUserReview);
 
 module.exports = router;

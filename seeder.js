@@ -14,6 +14,7 @@ const TourCategory = require('./models/tour/tourCategory.model');
 const TransferCategory = require('./models/transfer/transferCategory.model');
 const Webconfig = require('./models/web-config.model');
 const User = require('./models/user.model');
+const Authorize = require('./models/authorization/authorize.model');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -37,19 +38,22 @@ const transferCategories = JSON.parse(
 const webConfig = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/webConfig.json`, 'utf-8')
 );
-const users = JSON.parse(
+let users = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/user.json`, 'utf-8')
 );
 
 //import into DB
 const importData = async () => {
   try {
-    await BlogCategory.create(blogCategories);
-    await AdvertiseCategory.create(advertiseCategories);
-    await TourCategory.create(tourCategories);
-    await TransferCategory.create(transferCategories);
+    let authorize = await Authorize.create({});
+    users.authorizeId = authorize._id;
+    console.log(users);
+    // await BlogCategory.create(blogCategories);
+    // await AdvertiseCategory.create(advertiseCategories);
+    // await TourCategory.create(tourCategories);
+    // await TransferCategory.create(transferCategories);
     await User.create(users);
-    await Webconfig.create(webConfig);
+    // await Webconfig.create(webConfig);
     console.log('Data imported'.green.inverse);
     process.exit();
   } catch (err) {
@@ -73,8 +77,20 @@ const deleteData = async () => {
   }
 };
 
+const deleteUser = async () => {
+  try {
+    await User.deleteMany();
+    console.log('User delete...'.red.inverse);
+    process.exit();
+  } catch (err) {
+    console.error(err);
+  }
+};
+
 if (process.argv[2] === '-i') {
   importData();
 } else if (process.argv[2] === '-d') {
   deleteData();
+} else if (process.argv[2] === '-ud') {
+  deleteUser();
 }

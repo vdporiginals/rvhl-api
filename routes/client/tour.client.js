@@ -33,23 +33,23 @@ router
     }),
     getTours
   )
-  .post(protect, authorize('moderator', 'admin'), createTour);
+  .post(protect, authorize('write', 'moderator', 'admin'), createTour);
 
 router
   .route('/category')
   .get(advancedResults(Category, null), getCategories)
-  .post(protect, authorize('moderator', 'admin'), createCategory);
+  .post(protect, authorize('write', 'moderator', 'admin'), createCategory);
 
 router
   .route('/category/:categoryId')
   .get(getCategory)
-  .put(protect, authorize('moderator', 'admin'), updateCategory)
-  .delete(protect, authorize('moderator', 'admin'), deleteCategory);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateCategory)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteCategory);
 
 router
   .route('/:id')
   .get(getTour)
-  .put(protect, authorize('moderator', 'admin'), updateTour)
-  .delete(protect, authorize('moderator', 'admin'), deleteTour);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateTour)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteTour);
 
 module.exports = router;

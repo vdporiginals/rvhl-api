@@ -54,13 +54,13 @@ const apiLimiter = rateLimit({
 router
   .route('/category')
   .get(advancedResults(Estate, null), getCategories)
-  .post(protect, authorize('admin', 'moderator'), createCategory);
+  .post(protect, authorize('write', 'admin', 'moderator'), createCategory);
 
 router
   .route('/check-room')
   .get(
     protect,
-    authorize('admin', 'moderator'),
+    authorize('read', 'admin', 'moderator'),
     advancedResults(CheckRoom, ['user', 'roomId', 'roomCategory']),
     getCheckRoom
   )
@@ -68,12 +68,12 @@ router
 
 router
   .route('/check-room/:checkRoomId')
-  .delete(protect, authorize('admin'), deleteCheckRoom);
+  .delete(protect, authorize('delete', 'admin'), deleteCheckRoom);
 
 router
   .route('/category/:categoryId')
-  .put(protect, authorize('admin', 'moderator'), updateCategory)
-  .delete(protect, authorize('admin', 'moderator'), deleteCategory);
+  .put(protect, authorize('write', 'admin', 'moderator'), updateCategory)
+  .delete(protect, authorize('delete', 'admin', 'moderator'), deleteCategory);
 
 router
   .route('/category/villa')
@@ -90,34 +90,34 @@ router
 router
   .route('/hotel')
   .get(advancedResults(Hotel, null, null), getHotels)
-  .post(protect, authorize('admin', 'moderator'), createHotel);
+  .post(protect, authorize('write', 'admin', 'moderator'), createHotel);
 
 router
   .route('/hotel/:id')
   .get(getHotel)
-  .put(protect, authorize('admin', 'moderator'), updateHotel)
-  .delete(protect, authorize('admin', 'moderator'), deleteHotel);
+  .put(protect, authorize('write', 'admin', 'moderator'), updateHotel)
+  .delete(protect, authorize('delete', 'admin', 'moderator'), deleteHotel);
 
 router
   .route('/homestay')
   .get(advancedResults(Homestay, null), getHomestays)
-  .post(protect, authorize('admin', 'moderator'), createHomestay);
+  .post(protect, authorize('write', 'admin', 'moderator'), createHomestay);
 
 router
   .route('/homestay/:id')
   .get(getHomestay)
-  .put(protect, authorize('admin', 'moderator'), updateHomestay)
-  .delete(protect, authorize('admin', 'moderator'), deleteHomestay);
+  .put(protect, authorize('write', 'admin', 'moderator'), updateHomestay)
+  .delete(protect, authorize('delete', 'admin', 'moderator'), deleteHomestay);
 
 router
   .route('/villa')
   .get(advancedResults(Villa, null), getVillas)
-  .post(protect, authorize('admin', 'moderator'), createVilla);
+  .post(protect, authorize('write', 'admin', 'moderator'), createVilla);
 
 router
   .route('/villa/:id')
   .get(getVilla)
-  .put(protect, authorize('admin', 'moderator'), updateVilla)
-  .delete(protect, authorize('admin', 'moderator'), deleteVilla);
+  .put(protect, authorize('write', 'admin', 'moderator'), updateVilla)
+  .delete(protect, authorize('delete', 'admin', 'moderator'), deleteVilla);
 
 module.exports = router;

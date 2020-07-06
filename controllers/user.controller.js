@@ -1,7 +1,7 @@
 const ErrorResponse = require('../middleware/utils/errorResponse');
 const asyncHandler = require('../middleware/asyncHandler');
 const User = require('../models/user.model');
-
+const Authorize = require('../models/authorization/authorize.model');
 // @desc      Get all users
 // @route     GET /api/users
 // @access    Private/Admin
@@ -17,7 +17,7 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
-    data: user
+    data: user,
   });
 });
 
@@ -25,11 +25,18 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @route     POST /api/users
 // @access    Private/Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
+  let authorize = await Authorize.create(req.body.authorizeData);
+
+  if (!authorize) {
+    authorize = await Authorize.create({});
+  }
+
+  req.body.authorizeId = authorize._id;
   const user = await User.create(req.body);
 
   res.status(201).json({
     success: true,
-    data: user
+    data: user,
   });
 });
 
@@ -39,12 +46,12 @@ exports.createUser = asyncHandler(async (req, res, next) => {
 exports.updateUser = asyncHandler(async (req, res, next) => {
   const user = await User.findByIdAndUpdate(req.params.id, req.body, {
     new: true,
-    runValidators: true
+    runValidators: true,
   });
 
   res.status(200).json({
     success: true,
-    data: user
+    data: user._id,
   });
 });
 
@@ -52,10 +59,14 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
 // @route     DELETE /api/users/:id
 // @access    Private/Admin
 exports.deleteUser = asyncHandler(async (req, res, next) => {
+  await User.findById(req.params.id, async (err, val) => {
+    await Authorize.findByIdAndDelete(val.authorizeId);
+  });
+
   await User.findByIdAndDelete(req.params.id);
 
   res.status(200).json({
     success: true,
-    data: {}
+    data: {},
   });
 });

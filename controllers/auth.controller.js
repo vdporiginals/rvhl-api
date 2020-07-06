@@ -5,7 +5,8 @@ const randomstring = require('randomstring');
 const { OAuth2Client } = require('google-auth-library');
 const client = new OAuth2Client(process.env.GOOGLE_APP_ID);
 const request = require('request');
-
+const { authorize } = require('../middleware/auth');
+const Authorize = require('../models/authorization/authorize.model');
 exports.authApp = asyncHandler(async (req, res, next) => {
   const { email, password } = req.query;
   const appId = req.query.appId;
@@ -36,16 +37,15 @@ exports.authApp = asyncHandler(async (req, res, next) => {
 // @route     POST /api/auth/register
 // @access    Public
 exports.register = asyncHandler(async (req, res, next) => {
-  const { name, email, password, role } = req.body;
-
+  const { name, email, password } = req.body;
+  let authorize = await await Authorize.create({});
   // Create user
   const user = await User.create({
     name,
     email,
     password,
-    role,
+    authorizeId: authorize._id,
   });
-
   sendTokenResponse(user, 200, res);
 });
 
@@ -111,6 +111,7 @@ exports.updateDetails = asyncHandler(async (req, res, next) => {
   const fieldsToUpdate = {
     name: req.body.name,
     email: req.body.email,
+    avatar: req.body.avatar,
   };
 
   const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
@@ -269,7 +270,7 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
     });
     sendTokenResponse(uptUser, 200, res);
   } else {
-    User.findOne({ googleId: social.socialData.google.id }, function (
+    User.findOne({ googleId: social.socialData.google.id }, async function (
       err,
       user
     ) {
@@ -282,12 +283,15 @@ exports.loginWithGoogle = asyncHandler(async (req, res, next) => {
           charset: 'alphabetic',
         });
 
+        const defAuth = await User.generateDefaultAuthorize(null);
+
         let newUser = new User({
           name: social.socialData.google.name,
           password: randomPassword,
           email: social.socialData.google.email,
           googleId: social.socialData.google.id,
           avatar: social.socialData.google.avatar,
+          authorizeId: defAuth._id,
         });
 
         newUser.save(function (err) {
@@ -346,7 +350,10 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
     });
     sendTokenResponse(uptUser, 200, res);
   } else {
-    User.findOne({ facebookId: social.socialData.id }, function (err, user) {
+    User.findOne({ facebookId: social.socialData.id }, async function (
+      err,
+      user
+    ) {
       if (err) return next(new ErrorResponse(err, err.status));
       if (user) sendTokenResponse(user, 200, res);
       else {
@@ -355,6 +362,7 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
           length: 12,
           charset: 'alphabetic',
         });
+        const defAuth = await User.generateDefaultAuthorize(null);
 
         let newUser = new User({
           name: social.socialData.name,
@@ -362,6 +370,7 @@ exports.loginWithFacebook = asyncHandler(async (req, res, next) => {
           email: social.socialData.email,
           facebookId: social.socialData.id,
           avatar: social.socialData.picture.data.url,
+          authorizeId: defAuth._id,
         });
 
         newUser.save(function (err) {

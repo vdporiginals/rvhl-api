@@ -41,23 +41,23 @@ router
     ]),
     getBlogs
   )
-  .post(protect, authorize('moderator', 'admin'), createBlog);
+  .post(protect, authorize('write', 'moderator', 'admin'), createBlog);
 
 router
   .route('/category')
-  .post(protect, authorize('moderator', 'admin'), createCategory)
+  .post(protect, authorize('write', 'moderator', 'admin'), createCategory)
   .get(advancedResults(Category, null), getCategories);
 
 router
   .route('/category/:categoryId')
   .get(getCategory)
-  .put(protect, authorize('moderator', 'admin'), updateCategory)
-  .delete(protect, authorize('moderator', 'admin'), deleteCategory);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateCategory)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteCategory);
 
 router
   .route('/:id')
   .get(getBlog)
-  .put(protect, authorize('moderator', 'admin'), updateBlog)
-  .delete(protect, authorize('moderator', 'admin'), deleteBlog);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateBlog)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteBlog);
 
 module.exports = router;

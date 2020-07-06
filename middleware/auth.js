@@ -2,6 +2,8 @@ const jwt = require('jsonwebtoken');
 const asyncHandler = require('./asyncHandler');
 const ErrorResponse = require('./utils/errorResponse');
 const User = require('../models/user.model');
+const Authorize = require('../models/authorization/authorize.model');
+const Route = require('../models/authorization/route.model');
 
 //Proteced routes
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -26,6 +28,8 @@ exports.protect = asyncHandler(async (req, res, next) => {
     req.user = await User.findById(decoded.id);
     req.user.role = await decoded.role;
     req.user._id = await decoded.id;
+    req.user.reqPath = req.baseUrl.replace('/api', '');
+    req.user.authorizeId = await decoded.authorizeId;
     next();
   } catch (err) {
     console.log(err);
@@ -34,8 +38,10 @@ exports.protect = asyncHandler(async (req, res, next) => {
 });
 
 //Grant access to specific role
-exports.authorize = (...roles) => {
-  return (req, res, next) => {
+exports.authorize = (perm, ...roles) => {
+  return asyncHandler(async (req, res, next) => {
+    const authorization = await Authorize.findById(req.user.authorizeId);
+    const routeAccept = await Route.find({ path: req.user.reqPath });
     if (!roles.includes(req.user.role)) {
       return next(
         new ErrorResponse(
@@ -44,6 +50,36 @@ exports.authorize = (...roles) => {
         )
       );
     }
+
+    if (!authorization) {
+      return next(
+        new ErrorResponse(`User is not authorized to access this route`, 403)
+      );
+    }
+
+    if (
+      !authorization.routeAccept.includes(routeAccept._id) &&
+      req.user.role !== 'admin'
+    ) {
+      return next(
+        new ErrorResponse(`User is not authorized to access this route`, 403)
+      );
+    }
+
+    if (authorization.permission !== 'delete' && req.user.role !== 'admin') {
+      if (
+        authorization.permission === 'read' &&
+        authorization.permission !== perm
+      ) {
+        return next(
+          new ErrorResponse(
+            `User is not have permission to access this route`,
+            403
+          )
+        );
+      }
+    }
+
     next();
-  };
+  });
 };

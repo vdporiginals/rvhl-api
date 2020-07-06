@@ -27,23 +27,23 @@ const { protect, authorize } = require('../../middleware/auth');
 router
   .route('/')
   .get(advancedResults(Entertain, null), getEntertains)
-  .post(protect, authorize('admin'), createEntertain);
+  .post(protect, authorize('write', 'admin'), createEntertain);
 
 router
   .route('/category')
-  .post(protect, authorize('moderator', 'admin'), createCategory)
+  .post(protect, authorize('write', 'moderator', 'admin'), createCategory)
   .get(advancedResults(Category, null), getCategories);
 
 router
   .route('/category/:categoryId')
   .get(getCategory)
-  .put(protect, authorize('moderator', 'admin'), updateCategory)
-  .delete(protect, authorize('moderator', 'admin'), deleteCategory);
+  .put(protect, authorize('write', 'moderator', 'admin'), updateCategory)
+  .delete(protect, authorize('delete', 'moderator', 'admin'), deleteCategory);
 
 router
   .route('/:id')
   .get(getEntertain)
-  .put(protect, authorize('admin'), updateEntertain)
-  .delete(protect, authorize('admin'), deleteEntertain);
+  .put(protect, authorize('write', 'admin'), updateEntertain)
+  .delete(protect, authorize('delete', 'admin'), deleteEntertain);
 
 module.exports = router;
