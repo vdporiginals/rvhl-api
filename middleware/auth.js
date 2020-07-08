@@ -59,7 +59,7 @@ exports.authorize = (perm, ...roles) => {
     }
 
     //Check user route accept
-    if (routeAccept[0]._id !== null) {
+    if (routeAccept[0]._id !== undefined) {
       if (
         !authorization.routeAccept.includes(routeAccept[0]._id) &&
         req.user.role !== 'admin' &&
