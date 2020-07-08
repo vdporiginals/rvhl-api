@@ -54,7 +54,7 @@ exports.updateUser = asyncHandler(async (req, res, next) => {
     role: req.body.role,
   };
 
-  const user = await User.findByIdAndUpdate(req.params.id, req.body, {
+  const user = await User.findByIdAndUpdate(req.params.id, updateData, {
     new: true,
     runValidators: true,
   });
