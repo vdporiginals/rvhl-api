@@ -59,7 +59,7 @@ const importData = async () => {
     // await TourCategory.create(tourCategories);
     // await TransferCategory.create(transferCategories);
     // await User.create(users);
-    await Router.create(routes);
+    await Routes.create(routes);
     // await Webconfig.create(webConfig);
     console.log('Data imported'.green.inverse);
     process.exit();
