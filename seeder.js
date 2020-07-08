@@ -13,8 +13,11 @@ const AdvertiseCategory = require('./models/advertise/advertiseCategory.model');
 const TourCategory = require('./models/tour/tourCategory.model');
 const TransferCategory = require('./models/transfer/transferCategory.model');
 const Webconfig = require('./models/web-config.model');
+
+const Routes = require('./models/authorization/route.model');
 const User = require('./models/user.model');
 const Authorize = require('./models/authorization/authorize.model');
+const { Router } = require('express');
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useCreateIndex: true,
@@ -38,6 +41,9 @@ const transferCategories = JSON.parse(
 const webConfig = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/webConfig.json`, 'utf-8')
 );
+const routes = JSON.parse(
+  fs.readFileSync(`${__dirname}/_data/route.json`, 'utf-8')
+);
 let users = JSON.parse(
   fs.readFileSync(`${__dirname}/_data/user.json`, 'utf-8')
 );
@@ -52,7 +58,8 @@ const importData = async () => {
     // await AdvertiseCategory.create(advertiseCategories);
     // await TourCategory.create(tourCategories);
     // await TransferCategory.create(transferCategories);
-    await User.create(users);
+    // await User.create(users);
+    await Router.create(routes);
     // await Webconfig.create(webConfig);
     console.log('Data imported'.green.inverse);
     process.exit();

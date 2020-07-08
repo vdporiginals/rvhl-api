@@ -1,0 +1,37 @@
+[
+  {
+    "path": "/blogs",
+    "status": true,
+    "_id": "pua3GaQ@H"
+  },
+  {
+    "path": "/advertises",
+    "status": true,
+    "_id": "JJ7aOr93n"
+  },
+  {
+    "path": "/transfers",
+    "status": true,
+    "_id": "krRyu8aZD"
+  },
+  {
+    "path": "/restaurants",
+    "status": true,
+    "_id": "GMIdQz6op"
+  },
+  {
+    "path": "/entertains",
+    "status": true,
+    "_id": "lOyMK871q"
+  },
+  {
+    "path": "/user-reviews",
+    "status": true,
+    "_id": "Zuv2V5zMp"
+  },
+  {
+    "path": "/tours",
+    "status": true,
+    "_id": "FgSezNvXa"
+  }
+]
