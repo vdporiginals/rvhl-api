@@ -1,7 +1,7 @@
-const ErrorResponse = require('../middleware/utils/errorResponse');
-const asyncHandler = require('../middleware/asyncHandler');
-const Authorize = require('../models/authorization/authorize.model');
-const Route = require('../models/authorization/route.model');
+const ErrorResponse = require('../../middleware/utils/errorResponse');
+const asyncHandler = require('../../middleware/asyncHandler');
+const Authorize = require('../../models/authorization/authorize.model');
+const Route = require('../../models/authorization/route.model');
 
 exports.getAuthorize = asyncHandler(async (req, res, next) => {
   const authorize = await Authorize.findById(req.query.authorizeId);

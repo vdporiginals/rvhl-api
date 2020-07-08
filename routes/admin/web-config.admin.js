@@ -5,15 +5,19 @@ const {
   createWebconfig,
   updateWebconfig,
   deleteWebconfig,
+} = require('../../controllers/web-config.controller');
+
+const {
+  getAuthorize,
+  updateAuthorize,
+} = require('../../controllers/authorization/authorize.controller');
+
+const {
   getRoutes,
   createRoute,
   updateRoute,
   deleteRoute,
-} = require('../../controllers/web-config.controller');
-const {
-  getAuthorize,
-  updateAuthorize,
-} = require('../../controllers/authorize.controller');
+} = require('../../controllers/authorization/route.controller');
 
 const router = express.Router();
 const Config = require('../../models/web-config.model');
@@ -26,7 +30,7 @@ router
   .route('/')
   .get(
     protect,
-    authorize('read', 'admin'),
+    authorize('read', 'moderator', 'admin'),
     advancedResults(Config, null),
     getWebconfig
   )
@@ -38,7 +42,7 @@ router
   .route('/routes')
   .get(
     protect,
-    authorize('read', 'admin'),
+    authorize('read', 'moderator', 'admin'),
     advancedResults(Route, null),
     getRoutes
   )
@@ -53,7 +57,7 @@ router
   .route('/authorize')
   .get(
     protect,
-    authorize('read', 'admin'),
+    authorize('read', 'user', 'moderator', 'admin'),
     advancedResults(Authorize, null),
     getAuthorize
   )

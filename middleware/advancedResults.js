@@ -50,6 +50,11 @@ const advancedResults = (model, populate, position) => async (
       $regex: new RegExp(req.query.address, 'i'),
     };
     query = model.find(newQuery, function (err, data) {});
+  } else if (req.query.email) {
+    newQuery.email = {
+      $regex: new RegExp(req.query.email, 'i'),
+    };
+    query = model.find(newQuery, function (err, data) {});
   } else {
     query = model.find(newQuery);
   }

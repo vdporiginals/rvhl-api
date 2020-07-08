@@ -3,6 +3,7 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const Authorize = require('../models/authorization/authorize.model');
 const http = require('http');
+const { stringify } = require('querystring');
 const host = http.originalUrl;
 const UserSchema = new mongoose.Schema(
   {
@@ -21,6 +22,18 @@ const UserSchema = new mongoose.Schema(
     },
     facebookId: String,
     googleId: String,
+    phone: {
+      type: String,
+      required: [true, 'Please add a phone'],
+      validate: {
+        validator: function (v) {
+          return /^[0]{1}[2]{1}[0-9]\d{8}$|^[0]{1}([3]|[5]|[9]|[7]|[8]){1}[0-9]\d{7}?$/g.test(
+            v
+          );
+        },
+        message: (props) => `${props.value} Không phải là 1 số điện thoại!`,
+      },
+    },
     role: {
       type: String,
       enum: ['user', 'moderator', 'admin'],
