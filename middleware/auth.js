@@ -42,7 +42,6 @@ exports.authorize = (perm, ...roles) => {
   return asyncHandler(async (req, res, next) => {
     const authorization = await Authorize.findById(req.user.authorizeId);
     const routeAccept = await Route.find({ path: req.user.reqPath });
-    console.log(req.user.reqPath);
     if (!roles.includes(req.user.role)) {
       return next(
         new ErrorResponse(
@@ -60,17 +59,26 @@ exports.authorize = (perm, ...roles) => {
     }
 
     //Check user route accept
-    console.log(authorization.routeAccept, routeAccept._id);
-    if (
-      !authorization.routeAccept.includes(
-        routeAccept._id || routeAccept[0]._id
-      ) &&
-      req.user.role !== 'admin' &&
-      req.user.reqPath !== '/web-config'
-    ) {
-      return next(
-        new ErrorResponse(`User is not authorized to access this route`, 403)
-      );
+    if (routeAccept[0].id !== null) {
+      if (
+        !authorization.routeAccept.includes(routeAccept[0]._id) &&
+        req.user.role !== 'admin' &&
+        req.user.reqPath !== '/web-config'
+      ) {
+        return next(
+          new ErrorResponse(`User is not authorized to access this route`, 403)
+        );
+      }
+    } else {
+      if (
+        !authorization.routeAccept.includes(routeAccept._id) &&
+        req.user.role !== 'admin' &&
+        req.user.reqPath !== '/web-config'
+      ) {
+        return next(
+          new ErrorResponse(`User is not authorized to access this route`, 403)
+        );
+      }
     }
 
     //Check user permission
