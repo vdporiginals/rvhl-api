@@ -26,6 +26,9 @@ exports.getUser = asyncHandler(async (req, res, next) => {
 // @access    Private/Admin
 exports.createUser = asyncHandler(async (req, res, next) => {
   let authorize = await Authorize.create(req.body.authorizeData);
+  if (req.body.phone === '') {
+    delete req.body.phone;
+  }
 
   if (!authorize) {
     authorize = await Authorize.create({});
