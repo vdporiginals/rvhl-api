@@ -57,7 +57,7 @@ exports.authorize = (perm, ...roles) => {
         new ErrorResponse(`User is not authorized to access this route`, 403)
       );
     }
-    console.log(routeAccept);
+    console.log(routeAccept.length);
     //Check user route accept
     if (routeAccept !== null) {
       if (
