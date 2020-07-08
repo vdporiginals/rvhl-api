@@ -57,9 +57,9 @@ exports.authorize = (perm, ...roles) => {
         new ErrorResponse(`User is not authorized to access this route`, 403)
       );
     }
-    console.log(routeAccept.length);
+    // console.log(routeAccept.length);
     //Check user route accept
-    if (routeAccept !== null) {
+    if (routeAccept.length !== 0) {
       if (
         !authorization.routeAccept.includes(routeAccept[0]._id) &&
         req.user.role !== 'admin' &&
