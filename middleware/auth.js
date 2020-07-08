@@ -62,7 +62,7 @@ exports.authorize = (perm, ...roles) => {
     //Check user route accept
     console.log(authorization.routeAccept, routeAccept);
     if (
-      !authorization.routeAccept.includes(routeAccept[0]._id || []) &&
+      !authorization.routeAccept.includes(routeAccept._id || []) &&
       req.user.role !== 'admin' &&
       req.user.reqPath !== '/web-config'
     ) {
