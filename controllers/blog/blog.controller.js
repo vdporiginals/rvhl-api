@@ -77,7 +77,11 @@ exports.createBlog = asyncHandler(async (req, res, next) => {
 exports.updateBlog = asyncHandler(async (req, res, next) => {
   const user = await Blog.findById(req.params.id);
 
-  if (user.user.toString() !== req.user._id && req.user.role !== 'admin') {
+  if (
+    user.user.toString() !== req.user._id &&
+    req.user.role !== 'admin' &&
+    req.user.role !== 'moderator'
+  ) {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to update this blog ${user._id}`,
@@ -111,7 +115,11 @@ exports.updateBlog = asyncHandler(async (req, res, next) => {
 exports.deleteBlog = asyncHandler(async (req, res, next) => {
   const blog = await Blog.findById(req.params.id);
 
-  if (blog.user.toString() !== req.user._id && req.user.role !== 'admin') {
+  if (
+    blog.user.toString() !== req.user._id &&
+    req.user.role !== 'admin' &&
+    req.user.role !== 'moderator'
+  ) {
     return next(
       new ErrorResponse(
         `User ${req.user.id} is not authorized to delete course ${course._id}`,
